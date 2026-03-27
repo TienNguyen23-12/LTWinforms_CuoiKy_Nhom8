@@ -181,6 +181,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="BACKUP_DATA\QLTT_TheThao.bak" />
     <None Include="DAL\QLTT.dbml.layout">
       <DependentUpon>QLTT.dbml</DependentUpon>
     </None>
@@ -269,7 +270,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BACKUP_DATA\" />
     <Folder Include="SQL_QUERY\" />
   </ItemGroup>
   <ItemGroup>
