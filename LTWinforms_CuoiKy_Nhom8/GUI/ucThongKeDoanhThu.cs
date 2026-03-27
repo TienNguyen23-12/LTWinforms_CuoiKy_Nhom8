@@ -37,13 +37,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (dgvThongKe.Columns.Count > 0)
             {
-                dgvThongKe.Columns["TenGoi"].HeaderText = "Tên Gói Tập";
+                dgvThongKe.Columns["TenDichVu"].HeaderText = "Tên Dịch Vụ / Lớp Học";
                 dgvThongKe.Columns["SoLuongBan"].HeaderText = "Số Lượng Bán Được";
                 dgvThongKe.Columns["TongDoanhThu"].HeaderText = "Tổng Doanh Thu (VNĐ)";
 
                 dgvThongKe.Columns["TongDoanhThu"].DefaultCellStyle.Format = "N0";
 
-                dgvThongKe.Columns["TenGoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvThongKe.Columns["TenDichVu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
 
             decimal tongTien = tkBUS.TinhTongDoanhThu(tuNgay, denNgay);
