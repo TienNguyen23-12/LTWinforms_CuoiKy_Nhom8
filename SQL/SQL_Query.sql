@@ -1,0 +1,157 @@
+CREATE DATABASE QLTT_TheThao
+GO
+
+USE QLTT_TheThao
+GO
+
+CREATE TABLE TaiKhoan (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL,
+    Password NVARCHAR(255) NOT NULL,
+    Role INT NOT NULL, -- 1 Admin, 2 NV, 3 User, 4 HLV
+    IsActive BIT DEFAULT 1,
+    FailedLogin INT DEFAULT 0,
+    LastLogin DATETIME
+)
+
+INSERT INTO TaiKhoan (Username, Password, Role, IsActive, FailedLogin, LastLogin)
+VALUES 
+('admin', '123456', 1, 1, 0, GETDATE()),
+('nhanvien', '123456', 2, 1, 0, GETDATE()),
+('user1', '123456', 3, 1, 0, GETDATE()),
+('hlv1', '123456', 4, 1, 0, GETDATE())
+
+CREATE TABLE GoiTap (
+    MaGoi VARCHAR(20) PRIMARY KEY,
+    TenGoi NVARCHAR(100) NOT NULL,
+    ThoiHanThang INT DEFAULT 1,
+    GiaTien DECIMAL(18,0) NOT NULL,
+    IsActive BIT DEFAULT 1
+)
+GO
+
+CREATE TABLE HuanLuyenVien (
+    MaHLV VARCHAR(20) PRIMARY KEY,
+    TenHLV NVARCHAR(100) NOT NULL,
+    ChuyenMon NVARCHAR(100),
+    SDT VARCHAR(15),
+    IdTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoan(Id),
+    IsActive BIT DEFAULT 1
+)
+GO
+
+CREATE TABLE HoiVien (
+    MaHoiVien VARCHAR(20) PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    NgaySinh DATE,
+    GioiTinh NVARCHAR(10),
+    SDT VARCHAR(15),
+    NgayDangKy DATETIME DEFAULT GETDATE(),
+    NgayHetHan DATE,
+    IdTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoan(Id),
+    IsActive BIT DEFAULT 1
+)
+GO
+
+CREATE TABLE LopHoc (
+    MaLop VARCHAR(20) PRIMARY KEY,
+    TenLop NVARCHAR(100) NOT NULL,
+    MaHLV VARCHAR(20) FOREIGN KEY REFERENCES HuanLuyenVien(MaHLV),
+    ThoiGian NVARCHAR(100),
+    PhongTap NVARCHAR(50),
+    IsActive BIT DEFAULT 1
+)
+GO
+
+CREATE TABLE DangKyLop (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    MaHoiVien VARCHAR(20) FOREIGN KEY REFERENCES HoiVien(MaHoiVien),
+    MaLop VARCHAR(20) FOREIGN KEY REFERENCES LopHoc(MaLop),
+    NgayDangKy DATETIME DEFAULT GETDATE()
+)
+GO
+
+CREATE TABLE HoaDon (
+    MaHoaDon INT IDENTITY(1,1) PRIMARY KEY,
+    MaHoiVien VARCHAR(20) FOREIGN KEY REFERENCES HoiVien(MaHoiVien),
+    MaGoi VARCHAR(20) FOREIGN KEY REFERENCES GoiTap(MaGoi),
+    IdNhanVien INT FOREIGN KEY REFERENCES TaiKhoan(Id), 
+    SoTien DECIMAL(18,0) NOT NULL,
+    NgayThanhToan DATETIME DEFAULT GETDATE(),
+    TrangThai NVARCHAR(50) DEFAULT N'Đã thanh toán' 
+)
+GO
+
+CREATE TABLE VeVangLai (
+    MaVe INT IDENTITY(1,1) PRIMARY KEY,
+    TenKhach NVARCHAR(100) DEFAULT N'Khách lẻ',
+    LoaiDichVu NVARCHAR(100), 
+    GiaVe DECIMAL(18,0) NOT NULL,
+    NgayBanVe DATETIME DEFAULT GETDATE(),
+    IdNhanVien INT FOREIGN KEY REFERENCES TaiKhoan(Id) 
+)
+GO
+
+CREATE TABLE TinNhan (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    IdSender INT NOT NULL FOREIGN KEY REFERENCES TaiKhoan(Id),
+    IdReceiver INT NOT NULL FOREIGN KEY REFERENCES TaiKhoan(Id),
+    NoiDung NVARCHAR(MAX) NOT NULL,
+    ThoiGian DATETIME DEFAULT GETDATE(),
+    DaDoc BIT DEFAULT 0
+)
+GO
+
+INSERT INTO HuanLuyenVien (MaHLV, TenHLV, ChuyenMon, SDT, IdTaiKhoan, IsActive) VALUES
+('HLV001', N'Trần Cơ Bắp', N'Thể hình', '0988111222', 4, 1)
+
+INSERT INTO HoiVien (MaHoiVien, HoTen, NgaySinh, GioiTinh, SDT, IdTaiKhoan, IsActive) VALUES
+('HV001', N'Nguyễn Văn Khách', '2000-01-01', N'Nam', '0900333444', 3, 1)
+GO
+
+INSERT INTO GoiTap (MaGoi, TenGoi, ThoiHanThang, GiaTien, IsActive) VALUES
+('G01', N'Gym Phổ Thông (1 Tháng)', 1, 500000, 1),
+('G02', N'Yoga VIP (3 Tháng)', 3, 1200000, 1),
+('G03', N'Bơi Lội (1 Tháng)', 1, 400000, 1)
+GO
+
+ALTER TABLE HuanLuyenVien 
+ADD LuongCoBan DECIMAL(18,0) DEFAULT 300000
+GO
+
+UPDATE HuanLuyenVien SET LuongCoBan = 500000 WHERE MaHLV = 'HLV001'
+GO
+
+ALTER TABLE HuanLuyenVien 
+ADD NgaySinh DATE, GioiTinh NVARCHAR(10);
+GO
+
+CREATE TABLE PhongTap (
+    MaPhong VARCHAR(10) PRIMARY KEY,
+    TenPhong NVARCHAR(100),
+    GhiChu NVARCHAR(255),
+    IsActive BIT DEFAULT 1
+)
+GO
+
+ALTER TABLE LopHoc 
+DROP COLUMN PhongTap;
+GO
+
+ALTER TABLE LopHoc 
+ADD PhongTap VARCHAR(20);
+GO
+
+ALTER TABLE LopHoc
+ADD CONSTRAINT FK_LopHoc_PhongTap 
+FOREIGN KEY (PhongTap) REFERENCES PhongTap(MaPhong);
+GO
+
+ALTER TABLE PhongTap
+ADD IdNguoiPhuTrach INT NULL;
+GO
+
+ALTER TABLE PhongTap
+ADD CONSTRAINT FK_PhongTap_TaiKhoan
+FOREIGN KEY (IdNguoiPhuTrach) REFERENCES TaiKhoan(Id);
+GO
