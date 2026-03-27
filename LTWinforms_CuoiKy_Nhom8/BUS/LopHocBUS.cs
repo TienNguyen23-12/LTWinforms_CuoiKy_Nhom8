@@ -27,7 +27,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 TenHLV = x.HuanLuyenVien.TenHLV,
                 x.ThoiGian,
                 x.PhongTap,
-                x.GiaTien
+                x.GiaTien,
+                x.SoLuongToiDa
             }).ToList();
         }
 
@@ -66,6 +67,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 lop.ThoiGian = lopSua.ThoiGian;
                 lop.PhongTap = lopSua.PhongTap;
                 lop.GiaTien = lopSua.GiaTien;
+                lop.SoLuongToiDa = lopSua.SoLuongToiDa;
 
                 db.SubmitChanges();
                 return "";

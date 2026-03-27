@@ -35,6 +35,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvLopChuaDangKy.Columns["TenHLV"].HeaderText = "Huấn Luyện Viên";
                 dgvLopChuaDangKy.Columns["ThoiGian"].HeaderText = "Thời Gian";
                 dgvLopChuaDangKy.Columns["PhongTap"].HeaderText = "Phòng Tập";
+                dgvLopChuaDangKy.Columns["SiSo"].HeaderText = "Sĩ Số";
+                dgvLopChuaDangKy.Columns["SlotCon"].HeaderText = "Slot Còn Lại";
+
+                dgvLopChuaDangKy.Columns["SlotCon"].DefaultCellStyle.ForeColor = Color.Red;
+                dgvLopChuaDangKy.Columns["SlotCon"].DefaultCellStyle.Font = new Font(dgvLopChuaDangKy.Font, FontStyle.Bold);
             }
 
             if (dgvLopDaDangKy.Columns.Count > 0)
@@ -101,6 +106,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 string maLop = dgvLopChuaDangKy.CurrentRow.Cells["MaLop"].Value.ToString();
                 string tenLop = dgvLopChuaDangKy.CurrentRow.Cells["TenLop"].Value.ToString();
+
+                string slotCon = dgvLopChuaDangKy.CurrentRow.Cells["SlotCon"].Value.ToString();
+                if (slotCon == "Đã đầy")
+                {
+                    MessageBox.Show($"Rất tiếc! Lớp {tenLop} đã hết chỗ. Vui lòng chọn lớp khác nhé!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 decimal giaTien = 0;
                 if (dgvLopChuaDangKy.CurrentRow.Cells["GiaTien"].Value != null)

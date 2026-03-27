@@ -45,9 +45,6 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
     partial void InsertHuanLuyenVien(HuanLuyenVien instance);
     partial void UpdateHuanLuyenVien(HuanLuyenVien instance);
     partial void DeleteHuanLuyenVien(HuanLuyenVien instance);
-    partial void InsertLopHoc(LopHoc instance);
-    partial void UpdateLopHoc(LopHoc instance);
-    partial void DeleteLopHoc(LopHoc instance);
     partial void InsertNhanVien(NhanVien instance);
     partial void UpdateNhanVien(NhanVien instance);
     partial void DeleteNhanVien(NhanVien instance);
@@ -63,6 +60,9 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
     partial void InsertHoaDon(HoaDon instance);
     partial void UpdateHoaDon(HoaDon instance);
     partial void DeleteHoaDon(HoaDon instance);
+    partial void InsertLopHoc(LopHoc instance);
+    partial void UpdateLopHoc(LopHoc instance);
+    partial void DeleteLopHoc(LopHoc instance);
     #endregion
 		
 		public QLTTDataContext() : 
@@ -135,14 +135,6 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<LopHoc> LopHocs
-		{
-			get
-			{
-				return this.GetTable<LopHoc>();
-			}
-		}
-		
 		public System.Data.Linq.Table<NhanVien> NhanViens
 		{
 			get
@@ -180,6 +172,14 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
 			get
 			{
 				return this.GetTable<HoaDon>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LopHoc> LopHocs
+		{
+			get
+			{
+				return this.GetTable<LopHoc>();
 			}
 		}
 	}
@@ -1504,322 +1504,6 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
 		{
 			this.SendPropertyChanging();
 			entity.HuanLuyenVien = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LopHoc")]
-	public partial class LopHoc : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _MaLop;
-		
-		private string _TenLop;
-		
-		private string _MaHLV;
-		
-		private string _ThoiGian;
-		
-		private System.Nullable<bool> _IsActive;
-		
-		private string _PhongTap;
-		
-		private System.Nullable<decimal> _GiaTien;
-		
-		private EntitySet<DangKyLop> _DangKyLops;
-		
-		private EntityRef<HuanLuyenVien> _HuanLuyenVien;
-		
-		private EntityRef<PhongTap> _PhongTap1;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnMaLopChanging(string value);
-    partial void OnMaLopChanged();
-    partial void OnTenLopChanging(string value);
-    partial void OnTenLopChanged();
-    partial void OnMaHLVChanging(string value);
-    partial void OnMaHLVChanged();
-    partial void OnThoiGianChanging(string value);
-    partial void OnThoiGianChanged();
-    partial void OnIsActiveChanging(System.Nullable<bool> value);
-    partial void OnIsActiveChanged();
-    partial void OnPhongTapChanging(string value);
-    partial void OnPhongTapChanged();
-    partial void OnGiaTienChanging(System.Nullable<decimal> value);
-    partial void OnGiaTienChanged();
-    #endregion
-		
-		public LopHoc()
-		{
-			this._DangKyLops = new EntitySet<DangKyLop>(new Action<DangKyLop>(this.attach_DangKyLops), new Action<DangKyLop>(this.detach_DangKyLops));
-			this._HuanLuyenVien = default(EntityRef<HuanLuyenVien>);
-			this._PhongTap1 = default(EntityRef<PhongTap>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaLop", DbType="VarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string MaLop
-		{
-			get
-			{
-				return this._MaLop;
-			}
-			set
-			{
-				if ((this._MaLop != value))
-				{
-					this.OnMaLopChanging(value);
-					this.SendPropertyChanging();
-					this._MaLop = value;
-					this.SendPropertyChanged("MaLop");
-					this.OnMaLopChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TenLop", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string TenLop
-		{
-			get
-			{
-				return this._TenLop;
-			}
-			set
-			{
-				if ((this._TenLop != value))
-				{
-					this.OnTenLopChanging(value);
-					this.SendPropertyChanging();
-					this._TenLop = value;
-					this.SendPropertyChanged("TenLop");
-					this.OnTenLopChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaHLV", DbType="VarChar(20)")]
-		public string MaHLV
-		{
-			get
-			{
-				return this._MaHLV;
-			}
-			set
-			{
-				if ((this._MaHLV != value))
-				{
-					if (this._HuanLuyenVien.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnMaHLVChanging(value);
-					this.SendPropertyChanging();
-					this._MaHLV = value;
-					this.SendPropertyChanged("MaHLV");
-					this.OnMaHLVChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThoiGian", DbType="NVarChar(100)")]
-		public string ThoiGian
-		{
-			get
-			{
-				return this._ThoiGian;
-			}
-			set
-			{
-				if ((this._ThoiGian != value))
-				{
-					this.OnThoiGianChanging(value);
-					this.SendPropertyChanging();
-					this._ThoiGian = value;
-					this.SendPropertyChanged("ThoiGian");
-					this.OnThoiGianChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsActive", DbType="Bit")]
-		public System.Nullable<bool> IsActive
-		{
-			get
-			{
-				return this._IsActive;
-			}
-			set
-			{
-				if ((this._IsActive != value))
-				{
-					this.OnIsActiveChanging(value);
-					this.SendPropertyChanging();
-					this._IsActive = value;
-					this.SendPropertyChanged("IsActive");
-					this.OnIsActiveChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PhongTap", DbType="VarChar(20)")]
-		public string PhongTap
-		{
-			get
-			{
-				return this._PhongTap;
-			}
-			set
-			{
-				if ((this._PhongTap != value))
-				{
-					if (this._PhongTap1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnPhongTapChanging(value);
-					this.SendPropertyChanging();
-					this._PhongTap = value;
-					this.SendPropertyChanged("PhongTap");
-					this.OnPhongTapChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GiaTien", DbType="Decimal(18,0)")]
-		public System.Nullable<decimal> GiaTien
-		{
-			get
-			{
-				return this._GiaTien;
-			}
-			set
-			{
-				if ((this._GiaTien != value))
-				{
-					this.OnGiaTienChanging(value);
-					this.SendPropertyChanging();
-					this._GiaTien = value;
-					this.SendPropertyChanged("GiaTien");
-					this.OnGiaTienChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LopHoc_DangKyLop", Storage="_DangKyLops", ThisKey="MaLop", OtherKey="MaLop")]
-		public EntitySet<DangKyLop> DangKyLops
-		{
-			get
-			{
-				return this._DangKyLops;
-			}
-			set
-			{
-				this._DangKyLops.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="HuanLuyenVien_LopHoc", Storage="_HuanLuyenVien", ThisKey="MaHLV", OtherKey="MaHLV", IsForeignKey=true)]
-		public HuanLuyenVien HuanLuyenVien
-		{
-			get
-			{
-				return this._HuanLuyenVien.Entity;
-			}
-			set
-			{
-				HuanLuyenVien previousValue = this._HuanLuyenVien.Entity;
-				if (((previousValue != value) 
-							|| (this._HuanLuyenVien.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._HuanLuyenVien.Entity = null;
-						previousValue.LopHocs.Remove(this);
-					}
-					this._HuanLuyenVien.Entity = value;
-					if ((value != null))
-					{
-						value.LopHocs.Add(this);
-						this._MaHLV = value.MaHLV;
-					}
-					else
-					{
-						this._MaHLV = default(string);
-					}
-					this.SendPropertyChanged("HuanLuyenVien");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PhongTap_LopHoc", Storage="_PhongTap1", ThisKey="PhongTap", OtherKey="MaPhong", IsForeignKey=true)]
-		public PhongTap PhongTap1
-		{
-			get
-			{
-				return this._PhongTap1.Entity;
-			}
-			set
-			{
-				PhongTap previousValue = this._PhongTap1.Entity;
-				if (((previousValue != value) 
-							|| (this._PhongTap1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._PhongTap1.Entity = null;
-						previousValue.LopHocs.Remove(this);
-					}
-					this._PhongTap1.Entity = value;
-					if ((value != null))
-					{
-						value.LopHocs.Add(this);
-						this._PhongTap = value.MaPhong;
-					}
-					else
-					{
-						this._PhongTap = default(string);
-					}
-					this.SendPropertyChanged("PhongTap1");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_DangKyLops(DangKyLop entity)
-		{
-			this.SendPropertyChanging();
-			entity.LopHoc = this;
-		}
-		
-		private void detach_DangKyLops(DangKyLop entity)
-		{
-			this.SendPropertyChanging();
-			entity.LopHoc = null;
 		}
 	}
 	
@@ -3365,6 +3049,346 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LopHoc")]
+	public partial class LopHoc : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _MaLop;
+		
+		private string _TenLop;
+		
+		private string _MaHLV;
+		
+		private string _ThoiGian;
+		
+		private System.Nullable<bool> _IsActive;
+		
+		private string _PhongTap;
+		
+		private System.Nullable<decimal> _GiaTien;
+		
+		private System.Nullable<int> _SoLuongToiDa;
+		
+		private EntitySet<DangKyLop> _DangKyLops;
+		
+		private EntityRef<HuanLuyenVien> _HuanLuyenVien;
+		
+		private EntityRef<PhongTap> _PhongTap1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMaLopChanging(string value);
+    partial void OnMaLopChanged();
+    partial void OnTenLopChanging(string value);
+    partial void OnTenLopChanged();
+    partial void OnMaHLVChanging(string value);
+    partial void OnMaHLVChanged();
+    partial void OnThoiGianChanging(string value);
+    partial void OnThoiGianChanged();
+    partial void OnIsActiveChanging(System.Nullable<bool> value);
+    partial void OnIsActiveChanged();
+    partial void OnPhongTapChanging(string value);
+    partial void OnPhongTapChanged();
+    partial void OnGiaTienChanging(System.Nullable<decimal> value);
+    partial void OnGiaTienChanged();
+    partial void OnSoLuongToiDaChanging(System.Nullable<int> value);
+    partial void OnSoLuongToiDaChanged();
+    #endregion
+		
+		public LopHoc()
+		{
+			this._DangKyLops = new EntitySet<DangKyLop>(new Action<DangKyLop>(this.attach_DangKyLops), new Action<DangKyLop>(this.detach_DangKyLops));
+			this._HuanLuyenVien = default(EntityRef<HuanLuyenVien>);
+			this._PhongTap1 = default(EntityRef<PhongTap>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaLop", DbType="VarChar(20) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string MaLop
+		{
+			get
+			{
+				return this._MaLop;
+			}
+			set
+			{
+				if ((this._MaLop != value))
+				{
+					this.OnMaLopChanging(value);
+					this.SendPropertyChanging();
+					this._MaLop = value;
+					this.SendPropertyChanged("MaLop");
+					this.OnMaLopChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TenLop", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string TenLop
+		{
+			get
+			{
+				return this._TenLop;
+			}
+			set
+			{
+				if ((this._TenLop != value))
+				{
+					this.OnTenLopChanging(value);
+					this.SendPropertyChanging();
+					this._TenLop = value;
+					this.SendPropertyChanged("TenLop");
+					this.OnTenLopChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaHLV", DbType="VarChar(20)")]
+		public string MaHLV
+		{
+			get
+			{
+				return this._MaHLV;
+			}
+			set
+			{
+				if ((this._MaHLV != value))
+				{
+					if (this._HuanLuyenVien.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMaHLVChanging(value);
+					this.SendPropertyChanging();
+					this._MaHLV = value;
+					this.SendPropertyChanged("MaHLV");
+					this.OnMaHLVChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThoiGian", DbType="NVarChar(100)")]
+		public string ThoiGian
+		{
+			get
+			{
+				return this._ThoiGian;
+			}
+			set
+			{
+				if ((this._ThoiGian != value))
+				{
+					this.OnThoiGianChanging(value);
+					this.SendPropertyChanging();
+					this._ThoiGian = value;
+					this.SendPropertyChanged("ThoiGian");
+					this.OnThoiGianChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsActive", DbType="Bit")]
+		public System.Nullable<bool> IsActive
+		{
+			get
+			{
+				return this._IsActive;
+			}
+			set
+			{
+				if ((this._IsActive != value))
+				{
+					this.OnIsActiveChanging(value);
+					this.SendPropertyChanging();
+					this._IsActive = value;
+					this.SendPropertyChanged("IsActive");
+					this.OnIsActiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PhongTap", DbType="VarChar(20)")]
+		public string PhongTap
+		{
+			get
+			{
+				return this._PhongTap;
+			}
+			set
+			{
+				if ((this._PhongTap != value))
+				{
+					if (this._PhongTap1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPhongTapChanging(value);
+					this.SendPropertyChanging();
+					this._PhongTap = value;
+					this.SendPropertyChanged("PhongTap");
+					this.OnPhongTapChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GiaTien", DbType="Decimal(18,0)")]
+		public System.Nullable<decimal> GiaTien
+		{
+			get
+			{
+				return this._GiaTien;
+			}
+			set
+			{
+				if ((this._GiaTien != value))
+				{
+					this.OnGiaTienChanging(value);
+					this.SendPropertyChanging();
+					this._GiaTien = value;
+					this.SendPropertyChanged("GiaTien");
+					this.OnGiaTienChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoLuongToiDa", DbType="Int")]
+		public System.Nullable<int> SoLuongToiDa
+		{
+			get
+			{
+				return this._SoLuongToiDa;
+			}
+			set
+			{
+				if ((this._SoLuongToiDa != value))
+				{
+					this.OnSoLuongToiDaChanging(value);
+					this.SendPropertyChanging();
+					this._SoLuongToiDa = value;
+					this.SendPropertyChanged("SoLuongToiDa");
+					this.OnSoLuongToiDaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LopHoc_DangKyLop", Storage="_DangKyLops", ThisKey="MaLop", OtherKey="MaLop")]
+		public EntitySet<DangKyLop> DangKyLops
+		{
+			get
+			{
+				return this._DangKyLops;
+			}
+			set
+			{
+				this._DangKyLops.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="HuanLuyenVien_LopHoc", Storage="_HuanLuyenVien", ThisKey="MaHLV", OtherKey="MaHLV", IsForeignKey=true)]
+		public HuanLuyenVien HuanLuyenVien
+		{
+			get
+			{
+				return this._HuanLuyenVien.Entity;
+			}
+			set
+			{
+				HuanLuyenVien previousValue = this._HuanLuyenVien.Entity;
+				if (((previousValue != value) 
+							|| (this._HuanLuyenVien.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._HuanLuyenVien.Entity = null;
+						previousValue.LopHocs.Remove(this);
+					}
+					this._HuanLuyenVien.Entity = value;
+					if ((value != null))
+					{
+						value.LopHocs.Add(this);
+						this._MaHLV = value.MaHLV;
+					}
+					else
+					{
+						this._MaHLV = default(string);
+					}
+					this.SendPropertyChanged("HuanLuyenVien");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PhongTap_LopHoc", Storage="_PhongTap1", ThisKey="PhongTap", OtherKey="MaPhong", IsForeignKey=true)]
+		public PhongTap PhongTap1
+		{
+			get
+			{
+				return this._PhongTap1.Entity;
+			}
+			set
+			{
+				PhongTap previousValue = this._PhongTap1.Entity;
+				if (((previousValue != value) 
+							|| (this._PhongTap1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._PhongTap1.Entity = null;
+						previousValue.LopHocs.Remove(this);
+					}
+					this._PhongTap1.Entity = value;
+					if ((value != null))
+					{
+						value.LopHocs.Add(this);
+						this._PhongTap = value.MaPhong;
+					}
+					else
+					{
+						this._PhongTap = default(string);
+					}
+					this.SendPropertyChanged("PhongTap1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_DangKyLops(DangKyLop entity)
+		{
+			this.SendPropertyChanging();
+			entity.LopHoc = this;
+		}
+		
+		private void detach_DangKyLops(DangKyLop entity)
+		{
+			this.SendPropertyChanging();
+			entity.LopHoc = null;
 		}
 	}
 }

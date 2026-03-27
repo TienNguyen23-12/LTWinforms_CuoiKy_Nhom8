@@ -77,7 +77,10 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             try
             {
                 var gt = db.GoiTaps.SingleOrDefault(x => x.MaGoi == maGoi);
-                if (gt == null) return "Không tìm thấy gói tập!";
+                if (gt == null)
+                {
+                    return "Không tìm thấy gói tập!";
+                }
 
                 gt.IsActive = false;
                 db.SubmitChanges();

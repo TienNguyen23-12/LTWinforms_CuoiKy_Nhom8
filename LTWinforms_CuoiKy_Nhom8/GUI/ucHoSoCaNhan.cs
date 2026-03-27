@@ -25,6 +25,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucHoSoCaNhan_Load(object sender, EventArgs e)
         {
+            db = new QLTTDataContext();
+
             lblXinChao.Text = "Tài khoản: " + Session.Username;
             lblThongTinThem.Text = "";
 

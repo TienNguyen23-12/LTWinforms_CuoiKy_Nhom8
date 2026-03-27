@@ -44,6 +44,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     dgvLopHoc.Columns["GiaTien"].DefaultCellStyle.Format = "N0"; 
                 }
 
+                if (dgvLopHoc.Columns.Contains("SoLuongToiDa"))
+                {
+                    dgvLopHoc.Columns["SoLuongToiDa"].HeaderText = "Sĩ Số Tối Đa";
+                }
+
                 dgvLopHoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
@@ -75,6 +80,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtTenLop.Clear();
             txtThoiGian.Clear();
             txtGiaTien.Clear();
+            txtSoLuongToiDa.Clear();
             txtMaLop.Enabled = true;
 
             cboHLV.SelectedIndex = 0; 
@@ -99,6 +105,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
+            int siSo = 1;
+            if (!string.IsNullOrEmpty(txtSoLuongToiDa.Text) && !int.TryParse(txtSoLuongToiDa.Text, out siSo))
+            {
+                MessageBox.Show("Sĩ số tối đa phải là số nguyên!", "Lỗi");
+                return;
+            }
+
             string hlvChon = cboHLV.SelectedValue?.ToString();
             string phongChon = cboPhongTap.SelectedValue?.ToString();
 
@@ -110,6 +123,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 ThoiGian = txtThoiGian.Text.Trim(),
                 PhongTap = string.IsNullOrEmpty(phongChon) ? null : phongChon,
                 GiaTien = giaTien,
+                SoLuongToiDa = siSo,
                 IsActive = true
             };
 
@@ -139,6 +153,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
+            int siSo = 1;
+            if (!string.IsNullOrEmpty(txtSoLuongToiDa.Text) && !int.TryParse(txtSoLuongToiDa.Text, out siSo))
+            {
+                MessageBox.Show("Sĩ số tối đa phải là số nguyên!", "Lỗi");
+                return;
+            }
+
             string hlvChon = cboHLV.SelectedValue?.ToString();
             string phongChon = cboPhongTap.SelectedValue?.ToString();
 
@@ -149,6 +170,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 MaHLV = string.IsNullOrEmpty(hlvChon) ? null : hlvChon,
                 ThoiGian = txtThoiGian.Text.Trim(),
                 GiaTien = giaTien,
+                SoLuongToiDa = siSo,
                 PhongTap = string.IsNullOrEmpty(phongChon) ? null : phongChon
             };
 
@@ -208,7 +230,16 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 else
                 {
                     txtGiaTien.Text = "0";
-                }   
+                }
+
+                if (row.Cells["SoLuongToiDa"].Value != null)
+                {
+                    txtSoLuongToiDa.Text = row.Cells["SoLuongToiDa"].Value.ToString();
+                }    
+                else
+                {
+                    txtSoLuongToiDa.Text = "1";
+                }
 
                 string tenHLV = row.Cells["TenHLV"].Value?.ToString();
                 int idxHLV = cboHLV.FindStringExact(tenHLV);

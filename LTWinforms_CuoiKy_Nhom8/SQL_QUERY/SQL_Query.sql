@@ -179,6 +179,9 @@ ALTER TABLE DangKyLop
 ADD TrangThaiThanhToan NVARCHAR(50) DEFAULT N'Chưa thanh toán';
 GO
 
-
 ALTER TABLE HoaDon
 ADD GhiChu NVARCHAR(255)
+
+ALTER TABLE LopHoc 
+ADD SoLuongToiDa INT DEFAULT 1; 
+GO

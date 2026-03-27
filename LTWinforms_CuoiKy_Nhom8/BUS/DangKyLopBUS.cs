@@ -28,14 +28,27 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 query = query.Where(x => x.TenLop.Contains(tuKhoa));
             }
 
-            return query.Select(x => new { 
-                            x.MaLop, 
-                            x.TenLop, 
-                            TenHLV = x.HuanLuyenVien.TenHLV, 
-                            x.ThoiGian, 
-                            x.PhongTap,
-                            GiaTien = x.GiaTien 
-                        }).ToList();
+            var listTam = query.Select(x => new {
+                x.MaLop,
+                x.TenLop,
+                TenHLV = x.HuanLuyenVien.TenHLV,
+                x.ThoiGian,
+                x.PhongTap,
+                x.GiaTien,
+                DaDangKy = db.DangKyLops.Count(dk => dk.MaLop == x.MaLop),
+                ToiDa = x.SoLuongToiDa ?? 1
+            }).ToList();
+
+            return listTam.Select(x => new {
+                x.MaLop,
+                x.TenLop,
+                x.TenHLV,
+                x.ThoiGian,
+                x.PhongTap,
+                x.GiaTien,
+                SiSo = $"{x.DaDangKy} / {x.ToiDa}",
+                SlotCon = (x.ToiDa - x.DaDangKy) > 0 ? (x.ToiDa - x.DaDangKy).ToString() : "Đã đầy"
+            }).ToList();
         }
 
         public object LayCacLopDaDangKy(string maHoiVien)
@@ -60,6 +73,20 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             try
             {
+                var lop = db.LopHocs.SingleOrDefault(x => x.MaLop == maLop);
+                if (lop == null)
+                {
+                    return "Lớp học không tồn tại!";
+                }
+
+                int soNguoiHienTai = db.DangKyLops.Count(x => x.MaLop == maLop);
+                int maxSoLuong = lop.SoLuongToiDa ?? 0; 
+
+                if (maxSoLuong > 0 && soNguoiHienTai >= maxSoLuong)
+                {
+                    return $"Rất tiếc! Lớp {lop.TenLop} đã đủ {maxSoLuong}/{maxSoLuong} học viên. Vui lòng chọn lớp khác!";
+                }
+
                 DangKyLop dk = new DangKyLop();
                 dk.MaHoiVien = maHoiVien;
                 dk.MaLop = maLop;
