@@ -46,6 +46,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.cboHLV = new System.Windows.Forms.ComboBox();
             this.cboPhongTap = new System.Windows.Forms.ComboBox();
+            this.txtGiaTien = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLopHoc)).BeginInit();
             this.SuspendLayout();
             // 
@@ -208,10 +210,28 @@
             this.cboPhongTap.Size = new System.Drawing.Size(217, 24);
             this.cboPhongTap.TabIndex = 44;
             // 
+            // txtGiaTien
+            // 
+            this.txtGiaTien.Location = new System.Drawing.Point(535, 148);
+            this.txtGiaTien.Name = "txtGiaTien";
+            this.txtGiaTien.Size = new System.Drawing.Size(217, 22);
+            this.txtGiaTien.TabIndex = 46;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(445, 151);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 16);
+            this.label5.TabIndex = 45;
+            this.label5.Text = "Giá tiền";
+            // 
             // ucQuanLyLopHoc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.txtGiaTien);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.cboPhongTap);
             this.Controls.Add(this.cboHLV);
             this.Controls.Add(this.label4);
@@ -259,5 +279,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cboHLV;
         private System.Windows.Forms.ComboBox cboPhongTap;
+        private System.Windows.Forms.TextBox txtGiaTien;
+        private System.Windows.Forms.Label label5;
     }
 }

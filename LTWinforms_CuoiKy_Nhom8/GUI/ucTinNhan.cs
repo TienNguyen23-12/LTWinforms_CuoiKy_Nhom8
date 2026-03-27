@@ -92,6 +92,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             LoadTinNhan();
+            txtSoanTin.Clear();
         }
 
         private void btnGui_Click(object sender, EventArgs e)

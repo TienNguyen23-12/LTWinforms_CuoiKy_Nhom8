@@ -27,7 +27,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (dgvLichSu.Columns.Count > 0)
             {
                 dgvLichSu.Columns["MaHoaDon"].HeaderText = "Mã Hóa Đơn";
-                dgvLichSu.Columns["TenGoi"].HeaderText = "Gói Tập Đã Mua";
+                dgvLichSu.Columns["TenGoi"].HeaderText = "Dịch Vụ / Lớp Học";
                 dgvLichSu.Columns["SoTien"].HeaderText = "Số Tiền (VNĐ)";
                 dgvLichSu.Columns["NgayThanhToan"].HeaderText = "Ngày Giao Dịch";
                 dgvLichSu.Columns["TrangThai"].HeaderText = "Trạng Thái";

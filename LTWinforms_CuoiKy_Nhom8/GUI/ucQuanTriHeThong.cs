@@ -92,6 +92,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo");
                 LoadData();
+                btnResetPass_Click(sender, e);
             }
             else
             {
@@ -125,7 +126,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (kq == "")
             {
                 MessageBox.Show("Cập nhật lương thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadData(); 
+                LoadData();
+                btnResetPass_Click(sender, e);
             }
             else
             {
@@ -149,6 +151,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 {
                     MessageBox.Show($"Đã {hanhDong} thành công!");
                     LoadData();
+                    btnResetPass_Click(sender, e);
                 }
                 else
                 {

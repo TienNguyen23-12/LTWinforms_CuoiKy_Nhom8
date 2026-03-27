@@ -1,4 +1,4 @@
-﻿using LTWinforms_CuoiKy_Nhom8.DAL;
+﻿    using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 x.TenLop,
                 TenHLV = x.HuanLuyenVien.TenHLV,
                 x.ThoiGian,
-                x.PhongTap
+                x.PhongTap,
+                x.GiaTien
             }).ToList();
         }
 
@@ -64,6 +65,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 lop.MaHLV = lopSua.MaHLV;
                 lop.ThoiGian = lopSua.ThoiGian;
                 lop.PhongTap = lopSua.PhongTap;
+                lop.GiaTien = lopSua.GiaTien;
 
                 db.SubmitChanges();
                 return "";
@@ -96,14 +98,16 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object LayDanhSachLopChuaCoHLV()
         {
-            return db.LopHocs.Where(x => x.IsActive == true && (x.MaHLV == "0" || x.MaHLV == "-- Chưa phân công --"))
-                             .Select(x => new
-                             {
-                                 x.MaLop,
-                                 x.TenLop,
-                                 x.ThoiGian,
-                                 x.PhongTap
-                             }).ToList();
+            var query = from lop in db.LopHocs
+                        where lop.MaHLV == null || lop.MaHLV == ""
+                        select new
+                        {
+                            lop.MaLop,
+                            lop.TenLop,
+                            lop.ThoiGian,
+                            PhongTap = lop.PhongTap1 != null ? lop.PhongTap1.TenPhong : lop.PhongTap
+                        };
+            return query.ToList();
         }
     }
 }

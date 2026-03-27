@@ -64,28 +64,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            if (dgvLopChuaDangKy.CurrentRow != null)
-            {
-                string maLop = dgvLopChuaDangKy.CurrentRow.Cells["MaLop"].Value.ToString();
-                string tenLop = dgvLopChuaDangKy.CurrentRow.Cells["TenLop"].Value.ToString();
-
-                if (MessageBox.Show($"Bạn muốn đăng ký tham gia {tenLop}?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    string kq = dkBUS.DangKy(maHoiVienDangLogin, maLop);
-                    if (kq == "")
-                    {
-                        MessageBox.Show("Đăng ký thành công!", "Chúc mừng");
-                    }
-                    else
-                    {
-                        MessageBox.Show(kq, "Lỗi");
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng chọn 1 lớp ở bảng trên để đăng ký!", "Nhắc nhở");
-            }
+            LoadData(txtTimKiem.Text.Trim());
         }
 
         private void btnHuyDangKy_Click(object sender, EventArgs e)
@@ -113,6 +92,41 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             else
             {
                 MessageBox.Show("Vui lòng chọn 1 lớp ở bảng dưới để hủy!", "Nhắc nhở");
+            }
+        }
+
+        private void btnDangKy_Click(object sender, EventArgs e)
+        {
+            if (dgvLopChuaDangKy.CurrentRow != null)
+            {
+                string maLop = dgvLopChuaDangKy.CurrentRow.Cells["MaLop"].Value.ToString();
+                string tenLop = dgvLopChuaDangKy.CurrentRow.Cells["TenLop"].Value.ToString();
+
+                decimal giaTien = 0;
+                if (dgvLopChuaDangKy.CurrentRow.Cells["GiaTien"].Value != null)
+                {
+                    giaTien = Convert.ToDecimal(dgvLopChuaDangKy.CurrentRow.Cells["GiaTien"].Value);
+                }
+
+                string thongBao = $"Lớp học [{tenLop}] có học phí là: {giaTien.ToString("N0")} VNĐ.\n\nBạn có chắc chắn muốn đăng ký và thanh toán ngay?";
+
+                if (MessageBox.Show(thongBao, "Xác nhận thanh toán", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string kq = dkBUS.DangKy(maHoiVienDangLogin, maLop);
+                    if (kq == "")
+                    {
+                        MessageBox.Show("Thanh toán và Ghi danh thành công!", "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadData();
+                    }
+                    else
+                    {
+                        MessageBox.Show(kq, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn 1 lớp ở bảng trên để đăng ký!", "Nhắc nhở");
             }
         }
     }

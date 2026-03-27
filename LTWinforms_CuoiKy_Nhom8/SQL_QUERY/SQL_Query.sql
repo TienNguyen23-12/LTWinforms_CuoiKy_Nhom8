@@ -155,3 +155,30 @@ ALTER TABLE PhongTap
 ADD CONSTRAINT FK_PhongTap_TaiKhoan
 FOREIGN KEY (IdNguoiPhuTrach) REFERENCES TaiKhoan(Id);
 GO
+
+CREATE TABLE NhanVien (
+    MaNhanVien VARCHAR(20) PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    NgaySinh DATE,
+    GioiTinh NVARCHAR(10),
+    SDT VARCHAR(15),
+    IdTaiKhoan INT FOREIGN KEY REFERENCES TaiKhoan(Id),
+    IsActive BIT DEFAULT 1
+)
+GO
+
+ALTER TABLE NhanVien 
+ADD Luong DECIMAL(18,0);
+GO
+
+ALTER TABLE LopHoc 
+ADD GiaTien DECIMAL(18,0) DEFAULT 0;
+GO
+
+ALTER TABLE DangKyLop 
+ADD TrangThaiThanhToan NVARCHAR(50) DEFAULT N'Chưa thanh toán';
+GO
+
+
+ALTER TABLE HoaDon
+ADD GhiChu NVARCHAR(255)

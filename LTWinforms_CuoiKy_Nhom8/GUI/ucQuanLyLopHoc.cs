@@ -38,6 +38,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvLopHoc.Columns["TenHLV"].HeaderText = "Huấn Luyện Viên";
                 dgvLopHoc.Columns["ThoiGian"].HeaderText = "Thời Gian";
                 dgvLopHoc.Columns["PhongTap"].HeaderText = "Phòng Tập";
+                if (dgvLopHoc.Columns.Contains("GiaTien"))
+                {
+                    dgvLopHoc.Columns["GiaTien"].HeaderText = "Giá Tiền";
+                    dgvLopHoc.Columns["GiaTien"].DefaultCellStyle.Format = "N0"; 
+                }
 
                 dgvLopHoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
@@ -69,6 +74,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtMaLop.Clear();
             txtTenLop.Clear();
             txtThoiGian.Clear();
+            txtGiaTien.Clear();
             txtMaLop.Enabled = true;
 
             cboHLV.SelectedIndex = 0; 
@@ -86,6 +92,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
+            decimal giaTien = 0;
+            if (!string.IsNullOrEmpty(txtGiaTien.Text) && !decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaTien))
+            {
+                MessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi");
+                return;
+            }
+
             string hlvChon = cboHLV.SelectedValue?.ToString();
             string phongChon = cboPhongTap.SelectedValue?.ToString();
 
@@ -96,6 +109,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 MaHLV = string.IsNullOrEmpty(hlvChon) ? null : hlvChon,
                 ThoiGian = txtThoiGian.Text.Trim(),
                 PhongTap = string.IsNullOrEmpty(phongChon) ? null : phongChon,
+                GiaTien = giaTien,
                 IsActive = true
             };
 
@@ -118,6 +132,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
+            decimal giaTien = 0;
+            if (!string.IsNullOrEmpty(txtGiaTien.Text) && !decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaTien))
+            {
+                MessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi");
+                return;
+            }
+
             string hlvChon = cboHLV.SelectedValue?.ToString();
             string phongChon = cboPhongTap.SelectedValue?.ToString();
 
@@ -127,6 +148,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 TenLop = txtTenLop.Text.Trim(),
                 MaHLV = string.IsNullOrEmpty(hlvChon) ? null : hlvChon,
                 ThoiGian = txtThoiGian.Text.Trim(),
+                GiaTien = giaTien,
                 PhongTap = string.IsNullOrEmpty(phongChon) ? null : phongChon
             };
 
@@ -178,6 +200,15 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 txtMaLop.Text = row.Cells["MaLop"].Value?.ToString();
                 txtTenLop.Text = row.Cells["TenLop"].Value?.ToString();
                 txtThoiGian.Text = row.Cells["ThoiGian"].Value?.ToString();
+
+                if (row.Cells["GiaTien"].Value != null)
+                {
+                    txtGiaTien.Text = Convert.ToDecimal(row.Cells["GiaTien"].Value).ToString("0"); // Bỏ số thập phân thừa
+                }
+                else
+                {
+                    txtGiaTien.Text = "0";
+                }   
 
                 string tenHLV = row.Cells["TenHLV"].Value?.ToString();
                 int idxHLV = cboHLV.FindStringExact(tenHLV);

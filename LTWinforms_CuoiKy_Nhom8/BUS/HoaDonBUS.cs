@@ -13,15 +13,21 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object LayLichSuGiaoDich()
         {
-            return db.HoaDons.OrderByDescending(x => x.NgayThanhToan)
-                             .Select(x => new {
-                                 x.MaHoaDon,
-                                 TenKhach = x.HoiVien.HoTen,
-                                 TenGoi = x.GoiTap.TenGoi,
-                                 x.SoTien,
-                                 x.NgayThanhToan,
-                                 NguoiThu = x.TaiKhoan.Username 
-                             }).ToList();
+            var query = from hd in db.HoaDons
+                        join hv in db.HoiViens on hd.MaHoiVien equals hv.MaHoiVien
+                        join nv in db.TaiKhoans on hd.IdNhanVien equals nv.Id
+                        orderby hd.NgayThanhToan descending
+                        select new
+                        {
+                            Mã_HĐ = hd.MaHoaDon,
+                            Tên_Khách = hv.HoTen,
+                            Dịch_Vụ = hd.GoiTap != null ? hd.GoiTap.TenGoi : hd.GhiChu,
+                            Thu_Ngân = nv.Username,
+                            SoTien = hd.SoTien,
+                            NgayThanhToan = hd.NgayThanhToan
+                        };
+
+            return query.ToList();
         }
 
         public string ThanhToanGiaHan(string maHoiVien, string maGoi, int idNhanVien)
@@ -49,6 +55,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 hd.SoTien = goi.GiaTien;
                 hd.NgayThanhToan = DateTime.Now;
                 hd.TrangThai = "Đã thanh toán";
+                hd.GhiChu = "Đăng ký gói " + goi.TenGoi;
 
                 db.HoaDons.InsertOnSubmit(hd);
 
@@ -70,15 +77,32 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return null;
             }
 
-            return db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
-                             .OrderByDescending(x => x.NgayThanhToan) 
+            var listDaThanhToan = db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
                              .Select(x => new {
-                                 x.MaHoaDon,
-                                 TenGoi = x.GoiTap.TenGoi,
-                                 x.SoTien,
-                                 x.NgayThanhToan,
-                                 x.TrangThai
+                                 MaHoaDon = x.MaHoaDon.ToString(), 
+                                 TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
+                                 SoTien = x.SoTien,
+                                 NgayThanhToan = x.NgayThanhToan,
+                                 TrangThai = x.TrangThai ?? "Đã thanh toán"
                              }).ToList();
+
+            var listDangNo = (from dk in db.DangKyLops
+                              join lop in db.LopHocs on dk.MaLop equals lop.MaLop
+                              where dk.MaHoiVien == hv.MaHoiVien && dk.TrangThaiThanhToan == "Chờ thanh toán"
+                              select new
+                              {
+                                  MaHoaDon = "---", 
+                                  TenGoi = "Chưa đóng học phí: " + lop.TenLop,
+                                  SoTien = lop.GiaTien ?? 0, 
+                                  NgayThanhToan = dk.NgayDangKy,
+                                  TrangThai = dk.TrangThaiThanhToan
+                              }).ToList();
+
+            var lichSuTongHop = listDaThanhToan.Concat(listDangNo)
+                                               .OrderByDescending(x => x.NgayThanhToan)
+                                               .ToList();
+
+            return lichSuTongHop;
         }
     }
 }

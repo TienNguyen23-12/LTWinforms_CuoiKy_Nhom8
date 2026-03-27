@@ -33,21 +33,27 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                             x.TenLop, 
                             TenHLV = x.HuanLuyenVien.TenHLV, 
                             x.ThoiGian, 
-                            x.PhongTap 
+                            x.PhongTap,
+                            GiaTien = x.GiaTien 
                         }).ToList();
         }
 
         public object LayCacLopDaDangKy(string maHoiVien)
         {
-            return db.DangKyLops.Where(d => d.MaHoiVien == maHoiVien)
-                                .Select(x => new {
-                                    x.Id,
-                                    x.LopHoc.MaLop,
-                                    x.LopHoc.TenLop,
-                                    TenHLV = x.LopHoc.HuanLuyenVien.TenHLV,
-                                    x.LopHoc.ThoiGian,
-                                    x.NgayDangKy
-                                }).ToList();
+            var query = from dk in db.DangKyLops
+                        join lop in db.LopHocs on dk.MaLop equals lop.MaLop
+                        where dk.MaHoiVien == maHoiVien
+                        select new
+                        {
+                            Id = dk.Id, 
+                            MaLop = lop.MaLop,
+                            TenLop = lop.TenLop,
+                            TenHLV = lop.HuanLuyenVien != null ? lop.HuanLuyenVien.TenHLV : "Đang chờ phân công",
+                            ThoiGian = lop.ThoiGian,
+                            NgayDangKy = dk.NgayDangKy,
+                            TrangThai = dk.TrangThaiThanhToan
+                        };
+            return query.ToList();
         }
 
         public string DangKy(string maHoiVien, string maLop)
@@ -58,6 +64,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 dk.MaHoiVien = maHoiVien;
                 dk.MaLop = maLop;
                 dk.NgayDangKy = DateTime.Now;
+                dk.TrangThaiThanhToan = "Chờ thanh toán";
 
                 db.DangKyLops.InsertOnSubmit(dk);
                 db.SubmitChanges();
@@ -81,9 +88,60 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 }
                 return "";
             }
-            catch (Exception ex) 
-            { 
-                return "Lỗi hủy lớp: " + ex.Message; 
+            catch (Exception ex)
+            {
+                return "Lỗi hủy lớp: " + ex.Message;
+            }
+        }
+
+        public object LayTatCaDangKy_ChoAdmin()
+        {
+            var query = from dk in db.DangKyLops
+                        join lop in db.LopHocs on dk.MaLop equals lop.MaLop
+                        join hv in db.HoiViens on dk.MaHoiVien equals hv.MaHoiVien
+                        select new
+                        {
+                            Id = dk.Id,
+                            MaHoiVien = hv.MaHoiVien,
+                            TenHoiVien = hv.HoTen,
+                            TenLop = lop.TenLop,
+                            GiaTien = lop.GiaTien,
+                            NgayDangKy = dk.NgayDangKy,
+                            TrangThai = dk.TrangThaiThanhToan
+                        };
+            return query.OrderByDescending(x => x.TrangThai == "Chờ thanh toán").ToList();
+        }
+
+        public string XacNhanThuTien(int idDangKy, int idNhanVienThuTien)
+        {
+            try
+            {
+                var dk = db.DangKyLops.SingleOrDefault(x => x.Id == idDangKy);
+                if (dk == null)
+                {
+                    return "Không tìm thấy giao dịch này!";
+                }
+
+                dk.TrangThaiThanhToan = "Đã thanh toán";
+
+                var lop = db.LopHocs.SingleOrDefault(x => x.MaLop == dk.MaLop);
+
+                HoaDon hdMoi = new HoaDon();
+                hdMoi.MaHoiVien = dk.MaHoiVien;
+                hdMoi.IdNhanVien = idNhanVienThuTien;
+                hdMoi.SoTien = lop != null ? (lop.GiaTien ?? 0) : 0;
+                hdMoi.NgayThanhToan = DateTime.Now;
+                hdMoi.MaGoi = null;
+                hdMoi.GhiChu = "Thanh toán lớp học: " + dk.MaLop;
+
+                db.HoaDons.InsertOnSubmit(hdMoi); 
+
+                db.SubmitChanges();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "Lỗi xác nhận: " + ex.Message;
             }
         }
     }

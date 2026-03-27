@@ -37,10 +37,34 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
             else if (Session.Role == 2) // NHÂN VIÊN
             {
-                lblQuyen.Text = "Vai trò: Nhân viên Lễ tân";
-                lblThongTinThem.Text = $"ID Hệ thống: {Session.IdTaiKhoan}\nQuyền hạn: Quản lý khách hàng, Hóa đơn, Lớp học";
+                lblQuyen.Text = "Vai trò: Nhân viên";
 
-                groupBox2.Visible = false;
+                groupBox2.Visible = true;
+
+                var nv = db.NhanViens.FirstOrDefault(x => x.IdTaiKhoan == Session.IdTaiKhoan);
+                if (nv != null)
+                {
+                    string luong = nv.Luong.HasValue ? nv.Luong.Value.ToString("N0") + " VNĐ" : "Chưa cập nhật";
+                    string sdt = string.IsNullOrEmpty(nv.SDT) ? "Chưa cập nhật" : nv.SDT;
+
+                    lblThongTinThem.Text = $"Mã Nhân Viên: {nv.MaNhanVien}\n" +
+                                           $"Họ và tên: {nv.HoTen}\n" +
+                                           $"Số điện thoại: {sdt}\n" +
+                                           $"Lương: {luong}";
+
+                    txtHoTen.Text = nv.HoTen;
+                    txtSDT.Text = nv.SDT;
+                    cboGioiTinh.Text = nv.GioiTinh;
+                    if (nv.NgaySinh.HasValue)
+                    {
+                        dtpNgaySinh.Value = nv.NgaySinh.Value;
+                    }
+                }
+                else
+                {
+                    lblThongTinThem.Text = $"ID Hệ thống: {Session.IdTaiKhoan}\n" +
+                                            "Chưa có thông tin hồ sơ nhân viên. Vui lòng cập nhật ở ô bên cạnh.";
+                }
             }
             else if (Session.Role == 4) // HUẤN LUYỆN VIÊN
             {
@@ -60,7 +84,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     txtHoTen.Text = hlv.TenHLV;
                     txtSDT.Text = hlv.SDT;
                     cboGioiTinh.Text = hlv.GioiTinh;
-                    if (hlv.NgaySinh.HasValue) dtpNgaySinh.Value = hlv.NgaySinh.Value;
+                    if (hlv.NgaySinh.HasValue)
+                    {
+                        dtpNgaySinh.Value = hlv.NgaySinh.Value;
+                    }
                 }
             }
             else if (Session.Role == 3) // HỘI VIÊN
@@ -83,7 +110,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     txtHoTen.Text = hoiVien.HoTen;
                     txtSDT.Text = hoiVien.SDT;
                     cboGioiTinh.Text = hoiVien.GioiTinh;
-                    if (hoiVien.NgaySinh.HasValue) dtpNgaySinh.Value = hoiVien.NgaySinh.Value;
+                    if (hoiVien.NgaySinh.HasValue)
+                    {
+                        dtpNgaySinh.Value = hoiVien.NgaySinh.Value;
+                    }
                 }
             }
         }

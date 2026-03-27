@@ -30,12 +30,14 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.cboHoiVien = new System.Windows.Forms.ComboBox();
-            this.cboGoiTap = new System.Windows.Forms.ComboBox();
+            this.cboDichVu = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtSoTien = new System.Windows.Forms.TextBox();
             this.btnThanhToan = new System.Windows.Forms.Button();
             this.dgvLichSu = new System.Windows.Forms.DataGridView();
+            this.radGoiTap = new System.Windows.Forms.RadioButton();
+            this.radLopHoc = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLichSu)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,23 +59,23 @@
             this.cboHoiVien.TabIndex = 1;
             this.cboHoiVien.SelectedIndexChanged += new System.EventHandler(this.cboHoiVien_SelectedIndexChanged);
             // 
-            // cboGoiTap
+            // cboDichVu
             // 
-            this.cboGoiTap.FormattingEnabled = true;
-            this.cboGoiTap.Location = new System.Drawing.Point(570, 69);
-            this.cboGoiTap.Name = "cboGoiTap";
-            this.cboGoiTap.Size = new System.Drawing.Size(172, 24);
-            this.cboGoiTap.TabIndex = 3;
-            this.cboGoiTap.SelectedIndexChanged += new System.EventHandler(this.cboGoiTap_SelectedIndexChanged);
+            this.cboDichVu.FormattingEnabled = true;
+            this.cboDichVu.Location = new System.Drawing.Point(570, 69);
+            this.cboDichVu.Name = "cboDichVu";
+            this.cboDichVu.Size = new System.Drawing.Size(172, 24);
+            this.cboDichVu.TabIndex = 3;
+            this.cboDichVu.SelectedIndexChanged += new System.EventHandler(this.cboDichVu_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(486, 72);
+            this.label2.Location = new System.Drawing.Point(420, 72);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 16);
+            this.label2.Size = new System.Drawing.Size(137, 16);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Gói tập";
+            this.label2.Text = "Chọn dịch vụ / Lớp nợ:";
             // 
             // label3
             // 
@@ -113,15 +115,41 @@
             this.dgvLichSu.TabIndex = 7;
             this.dgvLichSu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLichSu_CellClick);
             // 
+            // radGoiTap
+            // 
+            this.radGoiTap.AutoSize = true;
+            this.radGoiTap.Checked = true;
+            this.radGoiTap.Location = new System.Drawing.Point(385, 15);
+            this.radGoiTap.Name = "radGoiTap";
+            this.radGoiTap.Size = new System.Drawing.Size(129, 20);
+            this.radGoiTap.TabIndex = 8;
+            this.radGoiTap.TabStop = true;
+            this.radGoiTap.Text = "Mua gói tập Gym";
+            this.radGoiTap.UseVisualStyleBackColor = true;
+            this.radGoiTap.CheckedChanged += new System.EventHandler(this.radGoiTap_CheckedChanged);
+            // 
+            // radLopHoc
+            // 
+            this.radLopHoc.AutoSize = true;
+            this.radLopHoc.Location = new System.Drawing.Point(548, 15);
+            this.radLopHoc.Name = "radLopHoc";
+            this.radLopHoc.Size = new System.Drawing.Size(142, 20);
+            this.radLopHoc.TabIndex = 9;
+            this.radLopHoc.Text = "Thanh toán lớp học";
+            this.radLopHoc.UseVisualStyleBackColor = true;
+            this.radLopHoc.CheckedChanged += new System.EventHandler(this.radLopHoc_CheckedChanged);
+            // 
             // ucBanVeThuNgan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.radLopHoc);
+            this.Controls.Add(this.radGoiTap);
             this.Controls.Add(this.dgvLichSu);
             this.Controls.Add(this.btnThanhToan);
             this.Controls.Add(this.txtSoTien);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.cboGoiTap);
+            this.Controls.Add(this.cboDichVu);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboHoiVien);
             this.Controls.Add(this.label1);
@@ -138,11 +166,13 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cboHoiVien;
-        private System.Windows.Forms.ComboBox cboGoiTap;
+        private System.Windows.Forms.ComboBox cboDichVu;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSoTien;
         private System.Windows.Forms.Button btnThanhToan;
         private System.Windows.Forms.DataGridView dgvLichSu;
+        private System.Windows.Forms.RadioButton radGoiTap;
+        private System.Windows.Forms.RadioButton radLopHoc;
     }
 }
