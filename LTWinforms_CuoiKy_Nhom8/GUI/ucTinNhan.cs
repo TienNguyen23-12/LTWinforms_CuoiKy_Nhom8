@@ -33,19 +33,19 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             lbxNoiDungChat.Items.Clear();
-            var listTinNhan = (List<TinNhan>)chatBUS.LayLichSuChat(idKhachHangDangChat);
+            var listTinNhan = (List<dynamic>)chatBUS.LayLichSuChat(Session.IdTaiKhoan, idKhachHangDangChat);
 
             foreach (var tn in listTinNhan)
             {
-                string nguoiGui = (tn.IdSender == idKhachHangDangChat) ? "👤 Khách" : "🏢 Trung tâm";
-                string thoiGian = tn.ThoiGian.Value.ToString("HH:mm dd/MM");
+                string icon = tn.LaToi ? "👤" : (tn.TenHienThi == "Trung tâm" ? "🏢" : "💬");
+                string thoiGian = Convert.ToDateTime(tn.ThoiGian).ToString("HH:mm dd/MM");
 
                 TinNhanItem item = new TinNhanItem()
                 {
                     Id = tn.Id,
-                    IdSender = tn.IdSender,
+                    LaToi = tn.LaToi, 
                     NoiDungGoc = tn.NoiDung,
-                    TextHienThi = $"[{thoiGian}] {nguoiGui}: {tn.NoiDung}"
+                    TextHienThi = $"[{thoiGian}] {icon} {tn.TenHienThi}: {tn.NoiDung}"
                 };
 
                 lbxNoiDungChat.Items.Add(item);
@@ -59,23 +59,23 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucTinNhan_Load(object sender, EventArgs e)
         {
-            if (Session.Role == 1 || Session.Role == 2)
+            dgvDanhSachLienHe.Visible = true;
+
+            dgvDanhSachLienHe.DataSource = chatBUS.LayDanhSachLienHe(Session.Role);
+
+            if (dgvDanhSachLienHe.Columns.Count > 0)
             {
-                dgvDanhSachLienHe.Visible = true;
-                dgvDanhSachLienHe.DataSource = chatBUS.LayDanhSachLienHe();
-                if (dgvDanhSachLienHe.Columns.Count > 0)
-                {
-                    dgvDanhSachLienHe.Columns["Id"].Visible = false;
-                    dgvDanhSachLienHe.Columns["TenHienThi"].HeaderText = "Danh sách Khách/HLV";
-                    dgvDanhSachLienHe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    dgvDanhSachLienHe.RowHeadersVisible = false;
-                    dgvDanhSachLienHe.AllowUserToAddRows = false;
-                }
+                dgvDanhSachLienHe.Columns["Id"].Visible = false;
+                dgvDanhSachLienHe.Columns["TenHienThi"].HeaderText = "Danh sách liên hệ";
+                dgvDanhSachLienHe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dgvDanhSachLienHe.RowHeadersVisible = false;
+                dgvDanhSachLienHe.AllowUserToAddRows = false;
             }
-            else
+
+            if (dgvDanhSachLienHe.Rows.Count > 0)
             {
-                dgvDanhSachLienHe.Visible = false;
-                idKhachHangDangChat = Session.IdTaiKhoan; 
+                dgvDanhSachLienHe.Rows[0].Selected = true;
+                idKhachHangDangChat = Convert.ToInt32(dgvDanhSachLienHe.Rows[0].Cells["Id"].Value);
                 LoadTinNhan();
             }
         }
@@ -103,27 +103,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
+            if (idKhachHangDangChat == 0)
+            {
+                MessageBox.Show("Vui lòng chọn 1 người bên trái để nhắn tin!", "Cảnh báo");
+                return;
+            }
+
             if (idTinNhanDangSua > 0)
             {
                 chatBUS.SuaTinNhan(idTinNhanDangSua, noiDung);
-                idTinNhanDangSua = 0; 
-                btnGui.Text = "Gửi";  
+                idTinNhanDangSua = 0;
+                btnGui.Text = "Gửi";
             }
-            else 
+            else
             {
-                if (Session.Role == 3 || Session.Role == 4)
-                {
-                    chatBUS.GuiTinNhan(Session.IdTaiKhoan, 1, noiDung);
-                }
-                else
-                {
-                    if (idKhachHangDangChat == 0)
-                    {
-                        MessageBox.Show("Vui lòng chọn 1 người bên trái để trả lời!", "Cảnh báo");
-                        return;
-                    }
-                    chatBUS.GuiTinNhan(Session.IdTaiKhoan, idKhachHangDangChat, noiDung);
-                }
+                chatBUS.GuiTinNhan(Session.IdTaiKhoan, idKhachHangDangChat, noiDung);
             }
 
             txtSoanTin.Clear();
@@ -156,7 +150,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             TinNhanItem selectedMsg = lbxNoiDungChat.SelectedItem as TinNhanItem;
             if (selectedMsg != null)
             {
-                if (selectedMsg.IdSender != Session.IdTaiKhoan)
+                if (!selectedMsg.LaToi) 
                 {
                     MessageBox.Show("Chỉ được sửa tin nhắn của chính mình!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -174,7 +168,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             TinNhanItem selectedMsg = lbxNoiDungChat.SelectedItem as TinNhanItem;
             if (selectedMsg != null)
             {
-                if (selectedMsg.IdSender != Session.IdTaiKhoan)
+                if (!selectedMsg.LaToi)
                 {
                     MessageBox.Show("Chỉ được xóa tin nhắn của chính mình!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -192,7 +186,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
     public class TinNhanItem
     {
         public int Id { get; set; }
-        public int IdSender { get; set; }
+        public bool LaToi { get; set; }
         public string NoiDungGoc { get; set; }
         public string TextHienThi { get; set; }
 
