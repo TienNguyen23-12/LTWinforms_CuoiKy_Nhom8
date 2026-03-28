@@ -29,67 +29,64 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             lblXinChao.Text = "Xin chào: " + Session.Username;
 
-            btnQuanTriHeThong.Visible = true;
-            btnThongKeDoanhThu.Visible = true;
-            btnQuanLyHoiVien.Visible = true;
-            btnQuanLyGoiTap.Visible = true;
-            btnBanVeThuNgan.Visible = true;
-            btnTinNhan.Visible = true;
-            btnDangKyDichVu.Visible = true;
-            btnLichSuGiaoDich.Visible = true;
-            btnLuongThuong.Visible = true;
-            btnHoSoCaNhan.Visible = true;
-            btnLichHoc.Visible = true;
-            btnQuanLyLopHoc.Visible = true;
+            btnQuanTriHeThong.Visible = false;
+            btnThongKeDoanhThu.Visible = false;
+            btnQuanLyHoiVien.Visible = false;
+            btnQuanLyGoiTap.Visible = false;
+            btnBanVeThuNgan.Visible = false;
+            btnTinNhan.Visible = false;
+            btnDangKyDichVu.Visible = false;
+            btnLichSuGiaoDich.Visible = false;
+            btnLuongThuong.Visible = false;
+            btnHoSoCaNhan.Visible = true; 
+            btnLichHoc.Visible = false;
+            btnQuanLyLopHoc.Visible = false;
+            btnQuanLyPhongTap.Visible = false;
+            btnChamCong.Visible = false;
+            btnQuanLySanPham.Visible = false;
 
-            if (Session.Role == 3) // HỘI VIÊN
+            if (Session.Role == 1) // ADMIN (Full quyền)
+            {
+                btnLichHoc.Text = "Lịch toàn Trung tâm";
+                btnQuanTriHeThong.Visible = true;
+                btnThongKeDoanhThu.Visible = true;
+                btnQuanLyHoiVien.Visible = true;
+                btnQuanLyGoiTap.Visible = true;
+                btnBanVeThuNgan.Visible = true;
+                btnTinNhan.Visible = true;
+                btnLichHoc.Visible = true;
+                btnQuanLyLopHoc.Visible = true;
+                btnQuanLyPhongTap.Visible = true;
+                btnChamCong.Visible = true;
+                btnQuanLySanPham.Visible = true;
+            }
+            else if (Session.Role == 2) // NHÂN VIÊN 
+            {
+                btnLichHoc.Text = "Lịch toàn Trung tâm";
+                btnQuanLyHoiVien.Visible = true;
+                btnBanVeThuNgan.Visible = true;
+                btnTinNhan.Visible = true;
+                btnLichHoc.Visible = true;
+                btnLuongThuong.Visible = true;
+                btnQuanLySanPham.Visible = true; 
+            }
+            else if (Session.Role == 3) // HỘI VIÊN
             {
                 btnLichHoc.Text = "Lịch học của tôi";
-
                 btnDangKyDichVu.Text = "Đăng ký lớp";
-
-                btnQuanTriHeThong.Visible = false;
-                btnThongKeDoanhThu.Visible = false;
-                btnQuanLyHoiVien.Visible = false;
-                btnQuanLyGoiTap.Visible = false;
-                btnBanVeThuNgan.Visible = false;
-                btnLuongThuong.Visible = false;
-                btnQuanLyLopHoc.Visible = false;
-                btnQuanLyPhongTap.Visible = false;
+                btnLichHoc.Visible = true;
+                btnDangKyDichVu.Visible = true;
+                btnLichSuGiaoDich.Visible = true;
+                btnTinNhan.Visible = true; 
             }
-            else if (Session.Role == 4) // HUẤN LUYỆN VIÊN
+            else if (Session.Role == 4) // HUẤN LUYỆN VIÊN (HLV)
             {
                 btnLichHoc.Text = "Lịch dạy & Điểm danh";
-
-                btnDangKyDichVu.Text = "Đăng ký nhận lớp"; 
-                btnDangKyDichVu.Visible = true; 
-
-                btnQuanTriHeThong.Visible = false;
-                btnThongKeDoanhThu.Visible = false;
-                btnQuanLyHoiVien.Visible = false;
-                btnQuanLyGoiTap.Visible = false;
-                btnBanVeThuNgan.Visible = false;
-                btnLichSuGiaoDich.Visible = false;
-                btnQuanLyLopHoc.Visible = false;
-                btnQuanLyPhongTap.Visible = false;
-            }
-            else if (Session.Role == 2) // NHÂN VIÊN
-            {
-                btnLichHoc.Text = "Lịch toàn Trung tâm"; 
-
-                btnQuanTriHeThong.Visible = false;
-                btnThongKeDoanhThu.Visible = false;
-                btnDangKyDichVu.Visible = false;
-                btnLichSuGiaoDich.Visible = false;
-                btnLuongThuong.Visible = false;
-            }
-            else if (Session.Role == 1) // ADMIN
-            {
-                btnLichHoc.Text = "Lịch toàn Trung tâm"; 
-
-                btnDangKyDichVu.Visible = false;
-                btnLichSuGiaoDich.Visible = false;
-                btnLuongThuong.Visible = false;
+                btnDangKyDichVu.Text = "Đăng ký nhận lớp";
+                btnLichHoc.Visible = true;
+                btnDangKyDichVu.Visible = true;
+                btnLuongThuong.Visible = true; 
+                btnTinNhan.Visible = true;
             }
         }
 
