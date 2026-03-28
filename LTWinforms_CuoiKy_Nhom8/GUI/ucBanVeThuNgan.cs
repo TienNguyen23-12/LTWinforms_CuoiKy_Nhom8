@@ -17,6 +17,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
     {
         HoaDonBUS hdBUS = new HoaDonBUS();
         DangKyLopBUS dkBUS = new DangKyLopBUS();
+        HoiVienBUS hvBUS = new HoiVienBUS();
         QLTTDataContext db = new QLTTDataContext();
 
         public ucBanVeThuNgan()
@@ -38,6 +39,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void LoadDichVu()
         {
+            cboDichVu.DataSource = null;
+            txtSoTien.Text = "0 VNĐ";
+
             if (radGoiTap.Checked)
             {
                 cboDichVu.DataSource = db.GoiTaps.Where(x => x.IsActive == true).ToList();
@@ -72,6 +76,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     txtSoTien.Text = "0 VNĐ";
                 }
             }
+            else if (radSanPham.Checked)
+            {
+                cboDichVu.DataSource = db.SanPhams.Where(x => x.IsActive == true).ToList();
+                cboDichVu.DisplayMember = "TenSP";
+                cboDichVu.ValueMember = "MaSP";
+            }
         }
 
         private void cboHoiVien_SelectedIndexChanged(object sender, EventArgs e)
@@ -95,23 +105,18 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             try
             {
-                if (radGoiTap.Checked)
+                var type = cboDichVu.SelectedItem.GetType();
+                var prop = type.GetProperty("GiaTien");
+
+                if (prop != null)
                 {
-                    var goiDangChon = (GoiTap)cboDichVu.SelectedItem;
-                    decimal giaTien = Convert.ToDecimal(goiDangChon.GiaTien);
+                    var giaTienObj = prop.GetValue(cboDichVu.SelectedItem, null);
+                    decimal giaTien = Convert.ToDecimal(giaTienObj);
                     txtSoTien.Text = giaTien.ToString("N0") + " VNĐ";
                 }
-                else if (radLopHoc.Checked)
+                else
                 {
-                    var type = cboDichVu.SelectedItem.GetType();
-                    var prop = type.GetProperty("GiaTien");
-
-                    if (prop != null)
-                    {
-                        var giaTienObj = prop.GetValue(cboDichVu.SelectedItem, null);
-                        decimal giaTien = Convert.ToDecimal(giaTienObj);
-                        txtSoTien.Text = giaTien.ToString("N0") + " VNĐ";
-                    }
+                    txtSoTien.Text = "0 VNĐ";
                 }
             }
             catch (Exception)
@@ -161,6 +166,24 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     else MessageBox.Show(kq, "Lỗi hệ thống");
                 }
             }
+            else if (radSanPham.Checked)
+            {
+                string tenSP = cboDichVu.Text; 
+
+                decimal giaTien = Convert.ToDecimal(txtSoTien.Text.Replace(" VNĐ", "").Replace(",", ""));
+
+                if (MessageBox.Show($"Xác nhận bán [{tenSP}] cho khách {cboHoiVien.Text}?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    string kq = hdBUS.BanSanPhamTaiQuay(maHV, tenSP, giaTien, Session.IdTaiKhoan);
+
+                    if (kq == "")
+                    {
+                        MessageBox.Show("Thanh toán thành công!", "Thành công");
+                        LoadLichSu(); 
+                    }
+                    else MessageBox.Show(kq, "Lỗi hệ thống");
+                }
+            }
         }
 
         private void dgvLichSu_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -183,6 +206,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (radGoiTap.Checked)
             {
                 LoadDichVu();
+                btnDuyetOnline.Enabled = true;
             }
         }
 
@@ -191,6 +215,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (radLopHoc.Checked)
             {
                 LoadDichVu();
+                btnDuyetOnline.Enabled = true;
             }
         }
 
@@ -238,6 +263,77 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 {
                     e.CellStyle.ForeColor = Color.Green;
                 }
+            }
+        }
+
+        private void tcThuNgan_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tcThuNgan.SelectedIndex == 0) 
+            {
+                LoadLichSu();
+                LoadDichVu();
+            }
+            else if (tcThuNgan.SelectedIndex == 1) 
+            {
+                LoadPhanHoi();
+            }
+        }
+
+        private void LoadPhanHoi()
+        {
+             dgvPhanHoi.DataSource = hvBUS.LayTatCaPhanHoi();
+
+            if (dgvPhanHoi.Columns.Count > 0)
+            {
+                dgvPhanHoi.Columns["Ngày_Gửi"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvPhanHoi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+        }
+
+        private void btnDaDoc_Click(object sender, EventArgs e)
+        {
+            if (dgvPhanHoi.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvPhanHoi.CurrentRow.Cells["Mã_PH"].Value);
+                string trangThai = dgvPhanHoi.CurrentRow.Cells["Trạng_Thái"].Value.ToString();
+
+                if (trangThai == "Đã xử lý")
+                {
+                    MessageBox.Show("Tin nhắn này đã được xử lý rồi!", "Thông báo");
+                    return;
+                }
+
+                if (hvBUS.DaXuLyPhanHoi(id))
+                {
+                    MessageBox.Show("Đã đánh dấu xử lý xong!", "Thành công");
+                    LoadPhanHoi();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn 1 tin nhắn để xử lý.");
+            }
+        }
+
+        private void dgvPhanHoi_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvPhanHoi.Columns[e.ColumnIndex].Name == "Trạng_Thái" && e.Value != null)
+            {
+                if (e.Value.ToString() == "Chưa đọc")
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(dgvPhanHoi.Font, FontStyle.Bold);
+                }
+                else e.CellStyle.ForeColor = Color.Green;
+            }
+        }
+
+        private void radSanPham_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radSanPham.Checked)
+            {
+                LoadDichVu();
+                btnDuyetOnline.Enabled = false;
             }
         }
     }

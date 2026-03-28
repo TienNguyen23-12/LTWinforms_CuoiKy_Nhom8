@@ -220,7 +220,7 @@ GO
 
 CREATE TABLE PhanHoi (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    IdTaiKhoan INT, -- Để biết user nào gửi
+    IdTaiKhoan INT, 
     NoiDung NVARCHAR(MAX),
     NgayGui DATETIME DEFAULT GETDATE(),
     TrangThai NVARCHAR(50) DEFAULT N'Chưa đọc' 
@@ -234,3 +234,19 @@ GO
 
 ALTER TABLE GoiTap ADD KemPhongTap BIT DEFAULT 1; 
 GO
+
+CREATE TABLE SanPham (
+    MaSP INT IDENTITY(1,1) PRIMARY KEY,
+    TenSP NVARCHAR(100) NOT NULL,
+    GiaTien DECIMAL(18,0) NOT NULL,
+    IsActive BIT DEFAULT 1 
+);
+
+INSERT INTO SanPham (TenSP, GiaTien, IsActive) VALUES 
+(N'Nước suối Aquafina', 10000, 1),
+(N'Bò húc Redbull', 15000, 1),
+(N'Nước ép trái cây', 25000, 1),
+(N'Thuê khăn tắm', 5000, 1),
+(N'Trứng luộc (2 quả)', 12000, 1);
+
+ALTER TABLE HoaDon ALTER COLUMN MaGoi VARCHAR(20) NULL;

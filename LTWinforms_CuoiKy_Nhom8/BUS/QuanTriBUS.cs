@@ -14,18 +14,25 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         public object LayDanhSachTaiKhoan()
         {
             var query = from tk in db.TaiKhoans
-                        where tk.Role != 1
+                        where tk.Role != 1 
                         join hlv in db.HuanLuyenViens on tk.Id equals hlv.IdTaiKhoan into hlvGroup
                         from h in hlvGroup.DefaultIfEmpty()
                         join hv in db.HoiViens on tk.Id equals hv.IdTaiKhoan into hvGroup
                         from v in hvGroup.DefaultIfEmpty()
+
+                        join nv in db.NhanViens on tk.Id equals nv.IdTaiKhoan into nvGroup
+                        from n in nvGroup.DefaultIfEmpty()
+
                         select new
                         {
                             tk.Id,
                             tk.Username,
                             VaiTro = tk.Role == 2 ? "Nhân viên" : (tk.Role == 4 ? "Huấn Luyện Viên" : "Hội Viên"),
-                            TenHienThi = h != null ? h.TenHLV : (v != null ? v.HoTen : "N/A"),
-                            LuongCoBan = h != null ? h.LuongCoBan : 0,
+
+                            TenHienThi = h != null ? h.TenHLV : (n != null ? n.HoTen : (v != null ? v.HoTen : "N/A")),
+
+                            LuongCoBan = h != null ? h.LuongCoBan : (n != null ? n.Luong : 0),
+
                             TrangThai = tk.IsActive == true ? "Hoạt động" : "Bị khóa"
                         };
             return query.ToList();
@@ -35,13 +42,24 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             try
             {
-                var hlv = db.HuanLuyenViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
-                if (hlv == null)
+                var tk = db.TaiKhoans.SingleOrDefault(x => x.Id == idTaiKhoan);
+                if (tk.Role == 4)
                 {
-                    return "Lỗi: Người này không phải Huấn Luyện Viên!";
+                    var hlv = db.HuanLuyenViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                    if (hlv != null)
+                    {
+                        hlv.LuongCoBan = luongMoi;
+                    }
+                }
+                else if (tk.Role == 2)
+                {
+                    var nv = db.NhanViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                    if (nv != null)
+                    {
+                        nv.Luong = luongMoi;
+                    }
                 }
 
-                hlv.LuongCoBan = luongMoi;
                 db.SubmitChanges();
                 return "";
             }
@@ -115,7 +133,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
                 tk.Role = roleMoi;
 
-                if (roleMoi == 4) 
+                if (roleMoi == 4)
                 {
                     var hlv = db.HuanLuyenViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                     if (hlv != null)
@@ -132,7 +150,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         db.HuanLuyenViens.InsertOnSubmit(hlvMoi);
                     }
                 }
-                else if (roleMoi == 3) 
+                else if (roleMoi == 3)
                 {
                     var hv = db.HoiViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                     if (hv != null)
@@ -142,12 +160,30 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     else
                     {
                         HoiVien hvMoi = new HoiVien();
-                        hvMoi.MaHoiVien = "HV" + idTaiKhoan.ToString("D4"); 
+                        hvMoi.MaHoiVien = "HV" + idTaiKhoan.ToString("D4");
                         hvMoi.IdTaiKhoan = idTaiKhoan;
                         hvMoi.HoTen = string.IsNullOrEmpty(tenHienThi) ? username : tenHienThi;
                         hvMoi.NgayDangKy = DateTime.Now;
                         hvMoi.IsActive = true;
                         db.HoiViens.InsertOnSubmit(hvMoi);
+                    }
+                }
+                else if (roleMoi == 2)
+                {
+                    var nv = db.NhanViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                    if (nv != null)
+                    {
+                        nv.HoTen = tenHienThi;
+                    }
+                    else
+                    {
+                        NhanVien nvMoi = new NhanVien();
+                        nvMoi.MaNhanVien = "NV" + idTaiKhoan.ToString("D4");
+                        nvMoi.IdTaiKhoan = idTaiKhoan;
+                        nvMoi.HoTen = string.IsNullOrEmpty(tenHienThi) ? username : tenHienThi;
+                        nvMoi.Luong = 0;
+                        nvMoi.IsActive = true;
+                        db.NhanViens.InsertOnSubmit(nvMoi);
                     }
                 }
 

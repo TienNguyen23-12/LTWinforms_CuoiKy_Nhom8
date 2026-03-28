@@ -24,28 +24,29 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucDichVuHoiVien_Load(object sender, EventArgs e)
         {
+            dtpTuNgay.Enabled = false;
+            dtpDenNgay.Enabled = false;
+
             LoadDuLieuGoi();
             LoadDuLieuLop();
+            LoadComboHLV();
         }
 
         private void LoadDuLieuGoi()
         {
-            // Tiến nhớ check tên hàm trong HoiVienBUS nhé (ví dụ: LayDanhSachGoi)
             dgvGoiTap.DataSource = hvBUS.LayDanhSachGoiTap();
 
             FormatGrid(dgvGoiTap, "MaGoi");
 
-            // Đổi tiêu đề cột cho khách dễ nhìn
             if (dgvGoiTap.Columns.Contains("TenGoi")) dgvGoiTap.Columns["TenGoi"].HeaderText = "Tên Gói Tập";
             if (dgvGoiTap.Columns.Contains("GiaTien")) dgvGoiTap.Columns["GiaTien"].HeaderText = "Giá Tiền";
             if (dgvGoiTap.Columns.Contains("ThoiHan")) dgvGoiTap.Columns["ThoiHan"].HeaderText = "Thời Hạn";
             if (dgvGoiTap.Columns.Contains("PhongGym")) dgvGoiTap.Columns["PhongGym"].HeaderText = "Phòng Gym";
         }
 
-        private void LoadDuLieuLop()
+        private void LoadDuLieuLop(string maHLV = "", DateTime? tuNgay = null, DateTime? denNgay = null)
         {
-            // Lấy các lớp đang ở trạng thái "Chuẩn bị" để khách đăng ký
-            dgvLopHoc.DataSource = lopBUS.LayDanhSachLopHoc("", "", null, null);
+            dgvLopHoc.DataSource = lopBUS.LayDanhSachLopHoc("", maHLV, tuNgay, denNgay);
             FormatGrid(dgvLopHoc, "MaLop");
         }
 
@@ -82,7 +83,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            // GỌI HÀM TRONG HOIVIENBUS CỦA TIẾN
             string kq = hvBUS.GuiPhanHoi(Session.IdTaiKhoan, noiDung);
             if (kq == "")
             {
@@ -100,7 +100,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                 if (MessageBox.Show("Xác nhận đăng ký Online gói này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    // GỌI HÀM TRONG HOIVIENBUS CỦA TIẾN
                     string kq = hvBUS.DangKyGoiOnline(Session.IdTaiKhoan, maGoi, giaTien);
                     if (kq == "")
                         MessageBox.Show("Đã đặt chỗ thành công! Hãy ghé quầy thu ngân để thanh toán.", "Thông báo");
@@ -119,7 +118,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                 if (MessageBox.Show($"Bạn muốn đăng ký học lớp [{tenLop}]?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    // GỌI HÀM TRONG HOIVIENBUS CỦA TIẾN
                     string kq = hvBUS.DangKyLopOnline(Session.IdTaiKhoan, maLop);
                     if (kq == "")
                         MessageBox.Show("Đăng ký lớp thành công! Vui lòng đóng học phí tại quầy.", "Thông báo");
@@ -131,9 +129,24 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedTab.Text == "Lịch sử của tôi")
+            string tabName = tabControl1.SelectedTab.Name;
+
+            switch (tabName)
             {
-                LoadLichSu();
+                case "tpGoiTap":
+                    LoadDuLieuGoi();
+                    break;
+
+                case "tpLopHoc":
+                    LoadDuLieuLop();
+                    break;
+
+                case "tpLichSu":
+                    LoadLichSu();
+                    break;
+
+                default:
+                    break;
             }
         }
 
@@ -150,6 +163,45 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     e.CellStyle.ForeColor = Color.Green; // Đã xong: Màu Xanh
                 }
             }
+        }
+
+        private void LoadComboHLV()
+        {
+            cboLocHLV.DataSource = lopBUS.LayDanhSachHLV();
+            cboLocHLV.DisplayMember = "TenHLV";
+            cboLocHLV.ValueMember = "MaHLV";
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            string maHLV = "";
+            if (cboLocHLV.SelectedValue != null)
+            {
+                maHLV = cboLocHLV.SelectedValue.ToString();
+            }
+
+            DateTime? tuNgay = null;
+            DateTime? denNgay = null;
+
+            if (chkLocNgay.Checked)
+            {
+                tuNgay = dtpTuNgay.Value;
+                denNgay = dtpDenNgay.Value;
+
+                if (tuNgay > denNgay)
+                {
+                    MessageBox.Show("Từ ngày không thể lớn hơn Đến ngày!", "Cảnh báo");
+                    return;
+                }
+            }
+
+            LoadDuLieuLop(maHLV, tuNgay, denNgay);
+        }
+
+        private void chkLocNgay_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpTuNgay.Enabled = chkLocNgay.Checked;
+            dtpDenNgay.Enabled = chkLocNgay.Checked;
         }
     }
 }

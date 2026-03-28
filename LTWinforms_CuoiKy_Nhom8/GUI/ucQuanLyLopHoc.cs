@@ -33,11 +33,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     dgvLopHoc.Columns["MaPhongTap"].Visible = false;
                 }
 
-                dgvLopHoc.Columns["MaLop"].HeaderText = "Mã Lớp";
-                dgvLopHoc.Columns["TenLop"].HeaderText = "Tên Lớp Học";
-                dgvLopHoc.Columns["TenHLV"].HeaderText = "Huấn Luyện Viên";
-                dgvLopHoc.Columns["ThoiGian"].HeaderText = "Thời Gian";
-                dgvLopHoc.Columns["PhongTap"].HeaderText = "Phòng Tập";
+                if (dgvLopHoc.Columns.Contains("MaLop")) dgvLopHoc.Columns["MaLop"].HeaderText = " Mã Lớp";
+                if (dgvLopHoc.Columns.Contains("TenLop")) dgvLopHoc.Columns["TenLop"].HeaderText = "Tên Lớp Học";
+                if (dgvLopHoc.Columns.Contains("TenHLV")) dgvLopHoc.Columns["TenHLV"].HeaderText = "Huấn Luyện Viên";
+                if (dgvLopHoc.Columns.Contains("ThoiGian")) dgvLopHoc.Columns["ThoiGian"].HeaderText = "Thời Gian";
+                if (dgvLopHoc.Columns.Contains("PhongTap")) dgvLopHoc.Columns["PhongTap"].HeaderText = "Phòng Tập";
 
                 if (dgvLopHoc.Columns.Contains("GiaTien"))
                 {
@@ -62,14 +62,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             cboHLV.DisplayMember = "TenHLV";
             cboHLV.ValueMember = "MaHLV";
 
-            // 2. Load Combobox Phòng tập
             var listPhong = db.PhongTaps.Where(p => p.IsActive == true).ToList();
             listPhong.Insert(0, new PhongTap { MaPhong = "", TenPhong = "-- Chọn phòng tập --" });
             cboPhongTap.DataSource = listPhong;
             cboPhongTap.DisplayMember = "TenPhong";
             cboPhongTap.ValueMember = "MaPhong";
 
-            // 3. Load Combobox BỘ LỌC HLV (Để tìm kiếm)
             var listLocHLV = db.HuanLuyenViens.Where(x => x.IsActive == true).ToList();
 
             listLocHLV.Insert(0, new HuanLuyenVien { MaHLV = "NULL", TenHLV = "-- Lớp chưa phân công HLV --" });

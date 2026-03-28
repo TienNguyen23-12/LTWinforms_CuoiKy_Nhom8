@@ -57,6 +57,7 @@
     <Compile Include="BUS\NhanSuBUS.cs" />
     <Compile Include="BUS\PhongTapBUS.cs" />
     <Compile Include="BUS\QuanTriBUS.cs" />
+    <Compile Include="BUS\SanPhamBUS.cs" />
     <Compile Include="BUS\TaiKhoanBUS.cs" />
     <Compile Include="BUS\ThongKeBUS.cs" />
     <Compile Include="BUS\TinNhanBUS.cs" />
@@ -168,6 +169,12 @@
     <Compile Include="GUI\ucQuanLyPhongTap.Designer.cs">
       <DependentUpon>ucQuanLyPhongTap.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ucQuanLySanPham.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ucQuanLySanPham.Designer.cs">
+      <DependentUpon>ucQuanLySanPham.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ucQuanTriHeThong.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -247,6 +254,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ucQuanLyPhongTap.resx">
       <DependentUpon>ucQuanLyPhongTap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ucQuanLySanPham.resx">
+      <DependentUpon>ucQuanLySanPham.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ucQuanTriHeThong.resx">
       <DependentUpon>ucQuanTriHeThong.cs</DependentUpon>

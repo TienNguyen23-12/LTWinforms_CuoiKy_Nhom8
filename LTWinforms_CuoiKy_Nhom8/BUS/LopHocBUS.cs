@@ -13,17 +13,16 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object LayDanhSachLopHoc(string tuKhoa = "", string maHLV = "", DateTime? tuNgay = null, DateTime? denNgay = null)
         {
-            var query = db.LopHocs.AsQueryable();
+            var query = db.LopHocs.Where(x => x.IsActive == true && x.TrangThai == "Chuẩn bị");
 
             if (!string.IsNullOrEmpty(tuKhoa))
             {
-                tuKhoa = tuKhoa.ToLower();
-                query = query.Where(x => x.TenLop.ToLower().Contains(tuKhoa));
+                query = query.Where(x => x.TenLop.Contains(tuKhoa));
             }
 
-            if (!string.IsNullOrEmpty(maHLV))
+            if (!string.IsNullOrEmpty(maHLV) && maHLV != "ALL")
             {
-                if (maHLV == "NULL")
+                if (maHLV == "NONE")
                 {
                     query = query.Where(x => x.MaHLV == null || x.MaHLV == "");
                 }
@@ -33,26 +32,26 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 }
             }
 
-            if (tuNgay.HasValue && denNgay.HasValue)
+            if (tuNgay.HasValue) query = query.Where(x => x.NgayBatDau >= tuNgay.Value.Date);
+            if (denNgay.HasValue)
             {
-                query = query.Where(x => x.NgayBatDau >= tuNgay.Value.Date && x.NgayBatDau <= denNgay.Value.Date);
+                DateTime denNgayEnd = denNgay.Value.Date.AddDays(1).AddSeconds(-1);
+                query = query.Where(x => x.NgayBatDau <= denNgayEnd);
             }
 
-            var result = query.Select(x => new
+            return query.Select(x => new
             {
                 x.MaLop,
                 x.TenLop,
-                TenHLV = x.HuanLuyenVien != null ? x.HuanLuyenVien.TenHLV : "Chưa có",
                 x.ThoiGian,
-                PhongTap = x.PhongTap1 != null ? x.PhongTap1.TenPhong : "Chưa xếp",
-                x.GiaTien,
-                x.SoLuongToiDa,
-                x.SoBuoi,
                 NgayBatDau = x.NgayBatDau,
-                TrangThai = x.TrangThai 
+                SoLuongToiDa = x.SoLuongToiDa,
+                TrangThai = x.TrangThai,
+                GiaTien = x.GiaTien,
+                SoBuoi = x.SoBuoi,
+                TenHLV = x.HuanLuyenVien != null ? x.HuanLuyenVien.TenHLV : "Chưa phân công",
+                PhongTap = x.PhongTap1 != null ? x.PhongTap1.TenPhong : "N/A"
             }).ToList();
-
-            return result;
         }
 
         public string ThemLop(LopHoc lopMoi)
@@ -122,6 +121,23 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             {
                 return "Lỗi khóa lớp: " + ex.Message;
             }
+        }
+
+        public object LayDanhSachHLV()
+        {
+            var list = db.HuanLuyenViens.Where(x => x.IsActive == true).ToList();
+
+            HuanLuyenVien hlvChuaPhanCong = new HuanLuyenVien();
+            hlvChuaPhanCong.MaHLV = "NONE";
+            hlvChuaPhanCong.TenHLV = "--- Chưa phân công ---";
+            list.Insert(0, hlvChuaPhanCong);
+
+            HuanLuyenVien hlvTatCa = new HuanLuyenVien();
+            hlvTatCa.MaHLV = "ALL";
+            hlvTatCa.TenHLV = "--- Tất cả HLV ---";
+            list.Insert(0, hlvTatCa);
+
+            return list;
         }
 
         public object LayDanhSachLopChuaCoHLV()

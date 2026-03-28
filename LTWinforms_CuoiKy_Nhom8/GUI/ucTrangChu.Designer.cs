@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.pnlThanhMenu = new System.Windows.Forms.Panel();
+            this.btnChamCong = new System.Windows.Forms.Button();
             this.btnQuanLyPhongTap = new System.Windows.Forms.Button();
             this.btnQuanLyLopHoc = new System.Windows.Forms.Button();
             this.btnHoSoCaNhan = new System.Windows.Forms.Button();
@@ -45,12 +46,13 @@
             this.btnQuanTriHeThong = new System.Windows.Forms.Button();
             this.lblXinChao = new System.Windows.Forms.Label();
             this.pnlNoiDungChinh = new System.Windows.Forms.Panel();
-            this.btnChamCong = new System.Windows.Forms.Button();
+            this.btnQuanLySanPham = new System.Windows.Forms.Button();
             this.pnlThanhMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlThanhMenu
             // 
+            this.pnlThanhMenu.Controls.Add(this.btnQuanLySanPham);
             this.pnlThanhMenu.Controls.Add(this.btnChamCong);
             this.pnlThanhMenu.Controls.Add(this.btnQuanLyPhongTap);
             this.pnlThanhMenu.Controls.Add(this.btnQuanLyLopHoc);
@@ -73,9 +75,19 @@
             this.pnlThanhMenu.Size = new System.Drawing.Size(200, 921);
             this.pnlThanhMenu.TabIndex = 0;
             // 
+            // btnChamCong
+            // 
+            this.btnChamCong.Location = new System.Drawing.Point(40, 110);
+            this.btnChamCong.Name = "btnChamCong";
+            this.btnChamCong.Size = new System.Drawing.Size(100, 33);
+            this.btnChamCong.TabIndex = 16;
+            this.btnChamCong.Text = "Chấm công";
+            this.btnChamCong.UseVisualStyleBackColor = true;
+            this.btnChamCong.Click += new System.EventHandler(this.btnChamCong_Click);
+            // 
             // btnQuanLyPhongTap
             // 
-            this.btnQuanLyPhongTap.Location = new System.Drawing.Point(40, 702);
+            this.btnQuanLyPhongTap.Location = new System.Drawing.Point(40, 735);
             this.btnQuanLyPhongTap.Name = "btnQuanLyPhongTap";
             this.btnQuanLyPhongTap.Size = new System.Drawing.Size(100, 33);
             this.btnQuanLyPhongTap.TabIndex = 15;
@@ -85,7 +97,7 @@
             // 
             // btnQuanLyLopHoc
             // 
-            this.btnQuanLyLopHoc.Location = new System.Drawing.Point(40, 319);
+            this.btnQuanLyLopHoc.Location = new System.Drawing.Point(40, 352);
             this.btnQuanLyLopHoc.Name = "btnQuanLyLopHoc";
             this.btnQuanLyLopHoc.Size = new System.Drawing.Size(100, 33);
             this.btnQuanLyLopHoc.TabIndex = 14;
@@ -95,7 +107,7 @@
             // 
             // btnHoSoCaNhan
             // 
-            this.btnHoSoCaNhan.Location = new System.Drawing.Point(40, 752);
+            this.btnHoSoCaNhan.Location = new System.Drawing.Point(40, 785);
             this.btnHoSoCaNhan.Name = "btnHoSoCaNhan";
             this.btnHoSoCaNhan.Size = new System.Drawing.Size(100, 33);
             this.btnHoSoCaNhan.TabIndex = 13;
@@ -105,7 +117,7 @@
             // 
             // btnDangXuat
             // 
-            this.btnDangXuat.Location = new System.Drawing.Point(40, 803);
+            this.btnDangXuat.Location = new System.Drawing.Point(40, 836);
             this.btnDangXuat.Name = "btnDangXuat";
             this.btnDangXuat.Size = new System.Drawing.Size(100, 33);
             this.btnDangXuat.TabIndex = 12;
@@ -115,7 +127,7 @@
             // 
             // btnLichHoc
             // 
-            this.btnLichHoc.Location = new System.Drawing.Point(40, 649);
+            this.btnLichHoc.Location = new System.Drawing.Point(40, 682);
             this.btnLichHoc.Name = "btnLichHoc";
             this.btnLichHoc.Size = new System.Drawing.Size(100, 33);
             this.btnLichHoc.TabIndex = 11;
@@ -124,7 +136,7 @@
             // 
             // btnLuongThuong
             // 
-            this.btnLuongThuong.Location = new System.Drawing.Point(40, 592);
+            this.btnLuongThuong.Location = new System.Drawing.Point(40, 625);
             this.btnLuongThuong.Name = "btnLuongThuong";
             this.btnLuongThuong.Size = new System.Drawing.Size(100, 33);
             this.btnLuongThuong.TabIndex = 10;
@@ -134,7 +146,7 @@
             // 
             // btnLichSuGiaoDich
             // 
-            this.btnLichSuGiaoDich.Location = new System.Drawing.Point(40, 533);
+            this.btnLichSuGiaoDich.Location = new System.Drawing.Point(40, 566);
             this.btnLichSuGiaoDich.Name = "btnLichSuGiaoDich";
             this.btnLichSuGiaoDich.Size = new System.Drawing.Size(114, 33);
             this.btnLichSuGiaoDich.TabIndex = 8;
@@ -144,7 +156,7 @@
             // 
             // btnDangKyDichVu
             // 
-            this.btnDangKyDichVu.Location = new System.Drawing.Point(40, 479);
+            this.btnDangKyDichVu.Location = new System.Drawing.Point(40, 512);
             this.btnDangKyDichVu.Name = "btnDangKyDichVu";
             this.btnDangKyDichVu.Size = new System.Drawing.Size(114, 33);
             this.btnDangKyDichVu.TabIndex = 7;
@@ -154,7 +166,7 @@
             // 
             // btnTinNhan
             // 
-            this.btnTinNhan.Location = new System.Drawing.Point(40, 425);
+            this.btnTinNhan.Location = new System.Drawing.Point(40, 458);
             this.btnTinNhan.Name = "btnTinNhan";
             this.btnTinNhan.Size = new System.Drawing.Size(100, 33);
             this.btnTinNhan.TabIndex = 6;
@@ -164,7 +176,7 @@
             // 
             // btnBanVeThuNgan
             // 
-            this.btnBanVeThuNgan.Location = new System.Drawing.Point(40, 371);
+            this.btnBanVeThuNgan.Location = new System.Drawing.Point(40, 404);
             this.btnBanVeThuNgan.Name = "btnBanVeThuNgan";
             this.btnBanVeThuNgan.Size = new System.Drawing.Size(100, 33);
             this.btnBanVeThuNgan.TabIndex = 5;
@@ -174,7 +186,7 @@
             // 
             // btnQuanLyGoiTap
             // 
-            this.btnQuanLyGoiTap.Location = new System.Drawing.Point(40, 280);
+            this.btnQuanLyGoiTap.Location = new System.Drawing.Point(40, 313);
             this.btnQuanLyGoiTap.Name = "btnQuanLyGoiTap";
             this.btnQuanLyGoiTap.Size = new System.Drawing.Size(100, 33);
             this.btnQuanLyGoiTap.TabIndex = 4;
@@ -184,7 +196,7 @@
             // 
             // btnQuanLyHoiVien
             // 
-            this.btnQuanLyHoiVien.Location = new System.Drawing.Point(40, 224);
+            this.btnQuanLyHoiVien.Location = new System.Drawing.Point(40, 257);
             this.btnQuanLyHoiVien.Name = "btnQuanLyHoiVien";
             this.btnQuanLyHoiVien.Size = new System.Drawing.Size(100, 33);
             this.btnQuanLyHoiVien.TabIndex = 3;
@@ -229,15 +241,15 @@
             this.pnlNoiDungChinh.Size = new System.Drawing.Size(797, 921);
             this.pnlNoiDungChinh.TabIndex = 1;
             // 
-            // btnChamCong
+            // btnQuanLySanPham
             // 
-            this.btnChamCong.Location = new System.Drawing.Point(40, 110);
-            this.btnChamCong.Name = "btnChamCong";
-            this.btnChamCong.Size = new System.Drawing.Size(100, 33);
-            this.btnChamCong.TabIndex = 16;
-            this.btnChamCong.Text = "Chấm công";
-            this.btnChamCong.UseVisualStyleBackColor = true;
-            this.btnChamCong.Click += new System.EventHandler(this.btnChamCong_Click);
+            this.btnQuanLySanPham.Location = new System.Drawing.Point(40, 203);
+            this.btnQuanLySanPham.Name = "btnQuanLySanPham";
+            this.btnQuanLySanPham.Size = new System.Drawing.Size(100, 33);
+            this.btnQuanLySanPham.TabIndex = 17;
+            this.btnQuanLySanPham.Text = "Sản phẩm";
+            this.btnQuanLySanPham.UseVisualStyleBackColor = true;
+            this.btnQuanLySanPham.Click += new System.EventHandler(this.btnQuanLySanPham_Click);
             // 
             // ucTrangChu
             // 
@@ -274,5 +286,6 @@
         private System.Windows.Forms.Button btnQuanLyLopHoc;
         private System.Windows.Forms.Button btnQuanLyPhongTap;
         private System.Windows.Forms.Button btnChamCong;
+        private System.Windows.Forms.Button btnQuanLySanPham;
     }
 }

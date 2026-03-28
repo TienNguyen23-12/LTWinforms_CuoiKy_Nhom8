@@ -66,7 +66,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     btnKhoaTaiKhoan.Text = "Khóa Tài Khoản";
                 }
 
-                if (cboVaiTro.Text == "Huấn Luyện Viên")
+                if (cboVaiTro.Text == "Huấn Luyện Viên" || cboVaiTro.Text == "Nhân Viên")
                 {
                     txtLuongCoBan.Text = Convert.ToDecimal(row.Cells["LuongCoBan"].Value).ToString("0");
                     txtLuongCoBan.Enabled = true; 
@@ -107,9 +107,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            if (cboVaiTro.Text != "Huấn Luyện Viên")
+            if (cboVaiTro.Text != "Huấn Luyện Viên" && cboVaiTro.Text != "Nhân Viên")
             {
-                MessageBox.Show("Chức năng này chỉ áp dụng cho Huấn Luyện Viên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chức năng cập nhật lương chỉ áp dụng cho Nhân Viên và Huấn Luyện Viên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -180,7 +180,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void cboVaiTro_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboVaiTro.Text == "Huấn Luyện Viên")
+            if (cboVaiTro.Text == "Huấn Luyện Viên" || cboVaiTro.Text == "Nhân Viên")
             {
                 txtLuongCoBan.Enabled = true;
             }

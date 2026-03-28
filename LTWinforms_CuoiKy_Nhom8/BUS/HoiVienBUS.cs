@@ -80,7 +80,10 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             try
             {
                 var hv = db.HoiViens.SingleOrDefault(x => x.MaHoiVien == maHoiVien);
-                if (hv == null) return "Không tìm thấy hội viên cần xóa!";
+                if (hv == null)
+                {
+                    return "Không tìm thấy hội viên cần xóa!";
+                }
 
                 hv.IsActive = false; 
                 db.SubmitChanges();
@@ -201,7 +204,6 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             var hv = db.HoiViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
             if (hv == null) return null;
 
-            // 1. Lấy lịch sử Gói tập từ bảng HoaDon
             var dsGoi = db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
                 .Select(x => new {
                     Loai = "Gói Tập",
@@ -211,7 +213,6 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     TrangThai = x.TrangThai ?? "Đã thanh toán"
                 }).ToList();
 
-            // 2. Lấy lịch sử Lớp học từ bảng DangKyLop
             var dsLop = (from dk in db.DangKyLops
                          join lop in db.LopHocs on dk.MaLop equals lop.MaLop
                          where dk.MaHoiVien == hv.MaHoiVien
@@ -224,8 +225,34 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                              TrangThai = dk.TrangThaiThanhToan
                          }).ToList();
 
-            // Gộp 2 danh sách lại và sắp xếp theo ngày mới nhất
             return dsGoi.Concat(dsLop).OrderByDescending(x => x.NgayDky).ToList();
+        }
+
+        public object LayTatCaPhanHoi()
+        {
+            return (from ph in db.PhanHois
+                    join tk in db.TaiKhoans on ph.IdTaiKhoan equals tk.Id
+                    orderby ph.NgayGui descending
+                    select new
+                    {
+                        Mã_PH = ph.Id,
+                        Người_Gửi = tk.Username, 
+                        Nội_Dung = ph.NoiDung,
+                        Ngày_Gửi = ph.NgayGui,
+                        Trạng_Thái = ph.TrangThai
+                    }).ToList();
+        }
+
+        public bool DaXuLyPhanHoi(int idPH)
+        {
+            var ph = db.PhanHois.SingleOrDefault(x => x.Id == idPH);
+            if (ph != null)
+            {
+                ph.TrangThai = "Đã xử lý";
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             DateTime tuNgay = dtpTuNgay.Value.Date;
             DateTime denNgay = dtpDenNgay.Value.Date;
 
-            // 1. ĐỔ DỮ LIỆU CHI TIẾT VÀO BẢNG
             dgvThongKe.DataSource = tkBUS.ThongKeTheoGoiTap(tuNgay, denNgay);
             if (dgvThongKe.Columns.Count > 0)
             {
@@ -44,14 +43,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvThongKe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
 
-            // 2. TÍNH TOÁN 3 CON SỐ TỔNG QUAN ĐỂ HIỂN THỊ LÊN 3 CÁI LABEL
             var dataTaiChinh = (List<dynamic>)tkBUS.ThongKeTaiChinh(tuNgay, denNgay);
 
             if (dataTaiChinh.Count > 0)
             {
-                var row = dataTaiChinh.First(); // Lấy dòng dữ liệu duy nhất
+                var row = dataTaiChinh.First(); 
 
-                // Gắn vào Label kèm format VNĐ
                 txtDoanhThu.Text = row.Doanh_Thu.ToString("N0") + " VNĐ";
                 txtChiLuong.Text = row.Tong_Chi_Luong.ToString("N0") + " VNĐ";
                 txtLoiNhuan.Text = row.Loi_Nhuan_Thuc.ToString("N0") + " VNĐ";

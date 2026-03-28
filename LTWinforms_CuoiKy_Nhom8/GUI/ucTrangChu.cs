@@ -73,7 +73,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 btnQuanLyLopHoc.Visible = false;
                 btnQuanLyPhongTap.Visible = false;
             }
-            else if (Session.Role == 2) // NHÂN VIÊN LỄ TÂN
+            else if (Session.Role == 2) // NHÂN VIÊN
             {
                 btnLichHoc.Text = "Lịch toàn Trung tâm"; 
 
@@ -182,6 +182,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void btnChamCong_Click(object sender, EventArgs e)
         {
             TaiChucNang(new ucQuanLyNhanSu());
+        }
+
+        private void btnQuanLySanPham_Click(object sender, EventArgs e)
+        {
+            TaiChucNang(new ucQuanLySanPham());
         }
     }
 }

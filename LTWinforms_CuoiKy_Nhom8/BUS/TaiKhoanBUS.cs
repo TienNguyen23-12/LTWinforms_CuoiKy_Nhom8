@@ -153,6 +153,14 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         xacThucThanhCong = true;
                     }
                 }
+                else if (tk.Role == 2)
+                {
+                    var nv = db.NhanViens.SingleOrDefault(x => x.IdTaiKhoan == tk.Id);
+                    if (nv != null && nv.SDT == sdtXacThuc)
+                    {
+                        xacThucThanhCong = true;
+                    }
+                }
                 else
                 {
                     return "Tài khoản Quản trị/Nhân viên vui lòng liên hệ trực tiếp Admin để cấp lại mật khẩu!";
@@ -201,6 +209,17 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         hlv.SDT = sdtMoi;
                         hlv.NgaySinh = ngaySinh; 
                         hlv.GioiTinh = gioiTinh;
+                    }
+                }
+                else if (role == 2) // NV
+                {
+                    var nv = db.NhanViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                    if (nv != null)
+                    {
+                        nv.HoTen = hoTenMoi;
+                        nv.SDT = sdtMoi;
+                        nv.NgaySinh = ngaySinh;
+                        nv.GioiTinh = gioiTinh;
                     }
                 }
                 else return "Tài khoản của bạn không hỗ trợ tính năng này!";

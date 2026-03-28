@@ -13,8 +13,13 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object ThongKeTheoGoiTap(DateTime tuNgay, DateTime denNgay)
         {
+            DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
+
             var hoaDonTrongKy = db.HoaDons
-                                  .Where(x => x.NgayThanhToan.Value.Date >= tuNgay.Date && x.NgayThanhToan.Value.Date <= denNgay.Date)
+                                  .Where(x => x.TrangThai == "Đã thanh toán"
+                                           && x.NgayThanhToan.HasValue
+                                           && x.NgayThanhToan.Value >= tuNgay.Date
+                                           && x.NgayThanhToan.Value <= denNgayEnd)
                                   .ToList();
 
             var query = hoaDonTrongKy
@@ -33,21 +38,30 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public decimal TinhTongDoanhThu(DateTime tuNgay, DateTime denNgay)
         {
-            var query = db.HoaDons.Where(x => x.NgayThanhToan.Value.Date >= tuNgay.Date && x.NgayThanhToan.Value.Date <= denNgay.Date);
+            DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
 
-            if (query.Any())
-            {
-                return query.Sum(x => x.SoTien);
-            }
-            return 0;
+            return db.HoaDons
+                     .Where(x => x.TrangThai == "Đã thanh toán"
+                              && x.NgayThanhToan.HasValue
+                              && x.NgayThanhToan.Value >= tuNgay.Date
+                              && x.NgayThanhToan.Value <= denNgayEnd)
+                     .Sum(x => (decimal?)x.SoTien) ?? 0;
         }
 
         public object ThongKeTaiChinh(DateTime tuNgay, DateTime denNgay)
         {
+            DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
+
             decimal tongDoanhThu = TinhTongDoanhThu(tuNgay, denNgay);
 
-            var listChamCong = db.ChamCongs.Where(x => x.NgayCham.Value.Date >= tuNgay.Date && x.NgayCham.Value.Date <= denNgay.Date && x.TrangThai == "Có mặt").ToList();
-            var listPhat = db.KyLuats.Where(x => x.NgayPhat.Value.Date >= tuNgay.Date && x.NgayPhat.Value.Date <= denNgay.Date).ToList();
+            var listChamCong = db.ChamCongs.Where(x => x.NgayCham.HasValue
+                                                    && x.NgayCham.Value >= tuNgay.Date
+                                                    && x.NgayCham.Value <= denNgayEnd
+                                                    && x.TrangThai == "Có mặt").ToList();
+
+            var listPhat = db.KyLuats.Where(x => x.NgayPhat.HasValue
+                                              && x.NgayPhat.Value >= tuNgay.Date
+                                              && x.NgayPhat.Value <= denNgayEnd).ToList();
 
             decimal tongChiLuong = 0;
 

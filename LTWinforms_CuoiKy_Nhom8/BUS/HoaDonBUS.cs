@@ -146,5 +146,29 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return "Lỗi khi duyệt hóa đơn: " + ex.Message;
             }
         }
+
+        public string BanSanPhamTaiQuay(string maHoiVien, string tenSP, decimal giaTien, int idNhanVien)
+        {
+            try
+            {
+                HoaDon hd = new HoaDon();
+                hd.MaHoiVien = maHoiVien;
+                hd.MaGoi = null;               
+                hd.SoTien = giaTien;           
+                hd.NgayThanhToan = DateTime.Now;
+                hd.IdNhanVien = idNhanVien;   
+                hd.TrangThai = "Đã thanh toán";
+                hd.GhiChu = "Mua SP: " + tenSP;  
+
+                db.HoaDons.InsertOnSubmit(hd);
+                db.SubmitChanges();
+
+                return ""; 
+            }
+            catch (Exception ex)
+            {
+                return "Lỗi khi lưu Database: " + ex.Message;
+            }
+        }
     }
 }
