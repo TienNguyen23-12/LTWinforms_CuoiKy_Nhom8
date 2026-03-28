@@ -15,18 +15,19 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             var query = from hd in db.HoaDons
                         join hv in db.HoiViens on hd.MaHoiVien equals hv.MaHoiVien
-                        join nv in db.TaiKhoans on hd.IdNhanVien equals nv.Id
-                        orderby hd.NgayThanhToan descending
+                        join nv in db.TaiKhoans on hd.IdNhanVien equals nv.Id into nvGroup
+                        from nv in nvGroup.DefaultIfEmpty()
+                        orderby hd.MaHoaDon descending
                         select new
                         {
                             Mã_HĐ = hd.MaHoaDon,
                             Tên_Khách = hv.HoTen,
                             Dịch_Vụ = hd.GoiTap != null ? hd.GoiTap.TenGoi : hd.GhiChu,
-                            Thu_Ngân = nv.Username,
+                            Thu_Ngân = nv != null ? nv.Username : "--- Chờ duyệt ---",
                             SoTien = hd.SoTien,
-                            NgayThanhToan = hd.NgayThanhToan
+                            NgayThanhToan = hd.NgayThanhToan,
+                            Trạng_Thái = hd.TrangThai ?? "Đã thanh toán"
                         };
-
             return query.ToList();
         }
 
@@ -103,6 +104,47 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                                                .ToList();
 
             return lichSuTongHop;
+        }
+        public string DuyetHoaDonOnline(int maHD, int idNhanVienThuTien)
+        {
+            try
+            {
+                var hd = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == maHD);
+                if (hd == null)
+                {
+                    return "Không tìm thấy hóa đơn!";
+                }
+
+                if (hd.TrangThai == "Đã thanh toán")
+                {
+                    return "Hóa đơn này đã được thanh toán trước đó!";
+                }
+
+                hd.TrangThai = "Đã thanh toán";
+                hd.NgayThanhToan = DateTime.Now;
+                hd.IdNhanVien = idNhanVienThuTien;
+
+                if (!string.IsNullOrEmpty(hd.MaGoi))
+                {
+                    var hv = db.HoiViens.SingleOrDefault(x => x.MaHoiVien == hd.MaHoiVien);
+                    var goi = db.GoiTaps.SingleOrDefault(x => x.MaGoi == hd.MaGoi);
+
+                    if (hv != null && goi != null)
+                    {
+                        DateTime ngayBatDau = (hv.NgayHetHan.HasValue && hv.NgayHetHan.Value > DateTime.Now)
+                                              ? hv.NgayHetHan.Value
+                                              : DateTime.Now;
+                        hv.NgayHetHan = ngayBatDau.AddMonths(goi.ThoiHanThang ?? 0);
+                    }
+                }
+
+                db.SubmitChanges();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "Lỗi khi duyệt hóa đơn: " + ex.Message;
+            }
         }
     }
 }

@@ -28,31 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.dgvLuong = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTongLuong = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLuong)).BeginInit();
+            this.btnXemLuong = new System.Windows.Forms.Button();
+            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
+            this.label3 = new System.Windows.Forms.Label();
+            this.dgvBangLuong = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBangLuong)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(397, 35);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "BẢNG LƯƠNG";
-            // 
-            // dgvLuong
-            // 
-            this.dgvLuong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLuong.Location = new System.Drawing.Point(68, 74);
-            this.dgvLuong.Name = "dgvLuong";
-            this.dgvLuong.RowHeadersWidth = 51;
-            this.dgvLuong.RowTemplate.Height = 24;
-            this.dgvLuong.Size = new System.Drawing.Size(861, 316);
-            this.dgvLuong.TabIndex = 1;
             // 
             // label2
             // 
@@ -71,28 +56,91 @@
             this.txtTongLuong.Size = new System.Drawing.Size(196, 22);
             this.txtTongLuong.TabIndex = 3;
             // 
+            // btnXemLuong
+            // 
+            this.btnXemLuong.Location = new System.Drawing.Point(130, 93);
+            this.btnXemLuong.Name = "btnXemLuong";
+            this.btnXemLuong.Size = new System.Drawing.Size(146, 23);
+            this.btnXemLuong.TabIndex = 9;
+            this.btnXemLuong.Text = "Xem lương";
+            this.btnXemLuong.UseVisualStyleBackColor = true;
+            this.btnXemLuong.Click += new System.EventHandler(this.btnXemLuong_Click);
+            // 
+            // dtpDenNgay
+            // 
+            this.dtpDenNgay.CustomFormat = "dd/MM/yyyy";
+            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpDenNgay.Location = new System.Drawing.Point(526, 49);
+            this.dtpDenNgay.Name = "dtpDenNgay";
+            this.dtpDenNgay.Size = new System.Drawing.Size(200, 22);
+            this.dtpDenNgay.TabIndex = 8;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(456, 49);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 16);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Đến ngày";
+            // 
+            // dtpTuNgay
+            // 
+            this.dtpTuNgay.CustomFormat = "dd/MM/yyyy";
+            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpTuNgay.Location = new System.Drawing.Point(197, 49);
+            this.dtpTuNgay.Name = "dtpTuNgay";
+            this.dtpTuNgay.Size = new System.Drawing.Size(200, 22);
+            this.dtpTuNgay.TabIndex = 6;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(127, 49);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 16);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Từ ngày";
+            // 
+            // dgvBangLuong
+            // 
+            this.dgvBangLuong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBangLuong.Location = new System.Drawing.Point(90, 140);
+            this.dgvBangLuong.Name = "dgvBangLuong";
+            this.dgvBangLuong.RowHeadersWidth = 51;
+            this.dgvBangLuong.RowTemplate.Height = 24;
+            this.dgvBangLuong.Size = new System.Drawing.Size(810, 269);
+            this.dgvBangLuong.TabIndex = 10;
+            // 
             // ucLuongThuong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.dgvBangLuong);
+            this.Controls.Add(this.btnXemLuong);
+            this.Controls.Add(this.dtpDenNgay);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dtpTuNgay);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.txtTongLuong);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.dgvLuong);
-            this.Controls.Add(this.label1);
             this.Name = "ucLuongThuong";
             this.Size = new System.Drawing.Size(991, 548);
             this.Load += new System.EventHandler(this.ucLuongThuong_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLuong)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBangLuong)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dgvLuong;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtTongLuong;
+        private System.Windows.Forms.Button btnXemLuong;
+        private System.Windows.Forms.DateTimePicker dtpDenNgay;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DateTimePicker dtpTuNgay;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView dgvBangLuong;
     }
 }

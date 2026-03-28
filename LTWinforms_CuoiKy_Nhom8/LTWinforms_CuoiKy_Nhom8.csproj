@@ -54,6 +54,7 @@
     <Compile Include="BUS\HuanLuyenVienBUS.cs" />
     <Compile Include="BUS\LichHocBUS.cs" />
     <Compile Include="BUS\LopHocBUS.cs" />
+    <Compile Include="BUS\NhanSuBUS.cs" />
     <Compile Include="BUS\PhongTapBUS.cs" />
     <Compile Include="BUS\QuanTriBUS.cs" />
     <Compile Include="BUS\TaiKhoanBUS.cs" />
@@ -65,6 +66,18 @@
       <DependentUpon>QLTT.dbml</DependentUpon>
     </Compile>
     <Compile Include="DTO\Session.cs" />
+    <Compile Include="GUI\ucDichVuHoiVien.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ucDichVuHoiVien.Designer.cs">
+      <DependentUpon>ucDichVuHoiVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ucQuanLyNhanSu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ucQuanLyNhanSu.Designer.cs">
+      <DependentUpon>ucQuanLyNhanSu.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\frmMainContainer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +197,12 @@
     <None Include="DAL\QLTT.dbml.layout">
       <DependentUpon>QLTT.dbml</DependentUpon>
     </None>
+    <EmbeddedResource Include="GUI\ucDichVuHoiVien.resx">
+      <DependentUpon>ucDichVuHoiVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ucQuanLyNhanSu.resx">
+      <DependentUpon>ucQuanLyNhanSu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmMainContainer.resx">
       <DependentUpon>frmMainContainer.cs</DependentUpon>
     </EmbeddedResource>

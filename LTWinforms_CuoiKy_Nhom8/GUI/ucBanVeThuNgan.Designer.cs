@@ -38,13 +38,14 @@
             this.dgvLichSu = new System.Windows.Forms.DataGridView();
             this.radGoiTap = new System.Windows.Forms.RadioButton();
             this.radLopHoc = new System.Windows.Forms.RadioButton();
+            this.btnDuyetOnline = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLichSu)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(55, 54);
+            this.label1.Location = new System.Drawing.Point(121, 59);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 16);
             this.label1.TabIndex = 0;
@@ -53,7 +54,7 @@
             // cboHoiVien
             // 
             this.cboHoiVien.FormattingEnabled = true;
-            this.cboHoiVien.Location = new System.Drawing.Point(139, 51);
+            this.cboHoiVien.Location = new System.Drawing.Point(205, 56);
             this.cboHoiVien.Name = "cboHoiVien";
             this.cboHoiVien.Size = new System.Drawing.Size(172, 24);
             this.cboHoiVien.TabIndex = 1;
@@ -62,7 +63,7 @@
             // cboDichVu
             // 
             this.cboDichVu.FormattingEnabled = true;
-            this.cboDichVu.Location = new System.Drawing.Point(570, 69);
+            this.cboDichVu.Location = new System.Drawing.Point(205, 105);
             this.cboDichVu.Name = "cboDichVu";
             this.cboDichVu.Size = new System.Drawing.Size(172, 24);
             this.cboDichVu.TabIndex = 3;
@@ -71,7 +72,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(420, 72);
+            this.label2.Location = new System.Drawing.Point(55, 108);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(137, 16);
             this.label2.TabIndex = 2;
@@ -80,7 +81,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(55, 123);
+            this.label3.Location = new System.Drawing.Point(420, 62);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(98, 16);
             this.label3.TabIndex = 4;
@@ -88,7 +89,7 @@
             // 
             // txtSoTien
             // 
-            this.txtSoTien.Location = new System.Drawing.Point(183, 123);
+            this.txtSoTien.Location = new System.Drawing.Point(548, 59);
             this.txtSoTien.Name = "txtSoTien";
             this.txtSoTien.ReadOnly = true;
             this.txtSoTien.Size = new System.Drawing.Size(161, 22);
@@ -114,6 +115,7 @@
             this.dgvLichSu.Size = new System.Drawing.Size(861, 305);
             this.dgvLichSu.TabIndex = 7;
             this.dgvLichSu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLichSu_CellClick);
+            this.dgvLichSu.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvLichSu_CellFormatting);
             // 
             // radGoiTap
             // 
@@ -139,10 +141,21 @@
             this.radLopHoc.UseVisualStyleBackColor = true;
             this.radLopHoc.CheckedChanged += new System.EventHandler(this.radLopHoc_CheckedChanged);
             // 
+            // btnDuyetOnline
+            // 
+            this.btnDuyetOnline.Location = new System.Drawing.Point(548, 123);
+            this.btnDuyetOnline.Name = "btnDuyetOnline";
+            this.btnDuyetOnline.Size = new System.Drawing.Size(96, 23);
+            this.btnDuyetOnline.TabIndex = 10;
+            this.btnDuyetOnline.Text = "Duyệt Online";
+            this.btnDuyetOnline.UseVisualStyleBackColor = true;
+            this.btnDuyetOnline.Click += new System.EventHandler(this.btnDuyetOnline_Click);
+            // 
             // ucBanVeThuNgan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnDuyetOnline);
             this.Controls.Add(this.radLopHoc);
             this.Controls.Add(this.radGoiTap);
             this.Controls.Add(this.dgvLichSu);
@@ -174,5 +187,6 @@
         private System.Windows.Forms.DataGridView dgvLichSu;
         private System.Windows.Forms.RadioButton radGoiTap;
         private System.Windows.Forms.RadioButton radLopHoc;
+        private System.Windows.Forms.Button btnDuyetOnline;
     }
 }

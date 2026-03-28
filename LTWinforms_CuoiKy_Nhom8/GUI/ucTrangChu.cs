@@ -137,7 +137,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (Session.Role == 3) 
             {
-                TaiChucNang(new ucDangKyLop());
+                TaiChucNang(new ucDichVuHoiVien());
             }
             else if (Session.Role == 4) 
             {
@@ -177,6 +177,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void btnQuanLyPhongTap_Click(object sender, EventArgs e)
         {
             TaiChucNang(new ucQuanLyPhongTap());
+        }
+
+        private void btnChamCong_Click(object sender, EventArgs e)
+        {
+            TaiChucNang(new ucQuanLyNhanSu());
         }
     }
 }

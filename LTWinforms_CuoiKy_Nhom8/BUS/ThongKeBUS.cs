@@ -15,7 +15,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             var hoaDonTrongKy = db.HoaDons
                                   .Where(x => x.NgayThanhToan.Value.Date >= tuNgay.Date && x.NgayThanhToan.Value.Date <= denNgay.Date)
-                                  .ToList(); 
+                                  .ToList();
 
             var query = hoaDonTrongKy
                         .GroupBy(x => x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu)
@@ -35,11 +35,63 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             var query = db.HoaDons.Where(x => x.NgayThanhToan.Value.Date >= tuNgay.Date && x.NgayThanhToan.Value.Date <= denNgay.Date);
 
-            if (query.Any()) 
+            if (query.Any())
             {
                 return query.Sum(x => x.SoTien);
             }
             return 0;
+        }
+
+        public object ThongKeTaiChinh(DateTime tuNgay, DateTime denNgay)
+        {
+            decimal tongDoanhThu = TinhTongDoanhThu(tuNgay, denNgay);
+
+            var listChamCong = db.ChamCongs.Where(x => x.NgayCham.Value.Date >= tuNgay.Date && x.NgayCham.Value.Date <= denNgay.Date && x.TrangThai == "Có mặt").ToList();
+            var listPhat = db.KyLuats.Where(x => x.NgayPhat.Value.Date >= tuNgay.Date && x.NgayPhat.Value.Date <= denNgay.Date).ToList();
+
+            decimal tongChiLuong = 0;
+
+            var listNV = db.NhanViens.ToList();
+            foreach (var nv in listNV)
+            {
+                int soNgayLam = listChamCong.Count(c => c.IdTaiKhoan == nv.IdTaiKhoan);
+                decimal luong1Ngay = (nv.Luong ?? 0) / 30; 
+                decimal tienPhat = listPhat.Where(p => p.IdTaiKhoan == nv.IdTaiKhoan).Sum(p => (decimal?)p.SoTien) ?? 0;
+
+                decimal luongThucLanh = (luong1Ngay * soNgayLam) - tienPhat;
+
+                if (luongThucLanh > 0)
+                {
+                    tongChiLuong += luongThucLanh;
+                }
+            }
+
+            var listHLV = db.HuanLuyenViens.ToList();
+            foreach (var hlv in listHLV)
+            {
+                int soBuoiDay = listChamCong.Count(c => c.IdTaiKhoan == hlv.IdTaiKhoan);
+                decimal tienPhat = listPhat.Where(p => p.IdTaiKhoan == hlv.IdTaiKhoan).Sum(p => (decimal?)p.SoTien) ?? 0;
+
+                decimal luongThucLanh = ((hlv.LuongCoBan ?? 0) * soBuoiDay) - tienPhat;
+
+                if (luongThucLanh > 0)
+                {
+                    tongChiLuong += luongThucLanh;
+                }
+            }
+
+            decimal loiNhuan = tongDoanhThu - tongChiLuong;
+
+            var result = new List<dynamic>
+            {
+                new {
+                    Doanh_Thu = tongDoanhThu,
+                    Tong_Chi_Luong = Math.Round(tongChiLuong, 0),
+                    Loi_Nhuan_Thuc = Math.Round(loiNhuan, 0)
+                }
+            };
+
+            return result;
         }
     }
 }

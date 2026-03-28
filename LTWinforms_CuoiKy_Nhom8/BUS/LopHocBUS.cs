@@ -11,25 +11,48 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
     {
         QLTTDataContext db = new QLTTDataContext();
 
-        public object LayDanhSachLopHoc(string tuKhoa = "")
+        public object LayDanhSachLopHoc(string tuKhoa = "", string maHLV = "", DateTime? tuNgay = null, DateTime? denNgay = null)
         {
-            var query = db.LopHocs.Where(x => x.IsActive == true);
+            var query = db.LopHocs.AsQueryable();
 
             if (!string.IsNullOrEmpty(tuKhoa))
             {
-                query = query.Where(x => x.TenLop.Contains(tuKhoa) || x.MaLop.Contains(tuKhoa));
+                tuKhoa = tuKhoa.ToLower();
+                query = query.Where(x => x.TenLop.ToLower().Contains(tuKhoa));
             }
 
-            return query.Select(x => new
+            if (!string.IsNullOrEmpty(maHLV))
+            {
+                if (maHLV == "NULL")
+                {
+                    query = query.Where(x => x.MaHLV == null || x.MaHLV == "");
+                }
+                else
+                {
+                    query = query.Where(x => x.MaHLV == maHLV);
+                }
+            }
+
+            if (tuNgay.HasValue && denNgay.HasValue)
+            {
+                query = query.Where(x => x.NgayBatDau >= tuNgay.Value.Date && x.NgayBatDau <= denNgay.Value.Date);
+            }
+
+            var result = query.Select(x => new
             {
                 x.MaLop,
                 x.TenLop,
-                TenHLV = x.HuanLuyenVien.TenHLV,
+                TenHLV = x.HuanLuyenVien != null ? x.HuanLuyenVien.TenHLV : "Chưa có",
                 x.ThoiGian,
-                x.PhongTap,
+                PhongTap = x.PhongTap1 != null ? x.PhongTap1.TenPhong : "Chưa xếp",
                 x.GiaTien,
-                x.SoLuongToiDa
+                x.SoLuongToiDa,
+                x.SoBuoi,
+                NgayBatDau = x.NgayBatDau,
+                TrangThai = x.TrangThai 
             }).ToList();
+
+            return result;
         }
 
         public string ThemLop(LopHoc lopMoi)
@@ -68,6 +91,9 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 lop.PhongTap = lopSua.PhongTap;
                 lop.GiaTien = lopSua.GiaTien;
                 lop.SoLuongToiDa = lopSua.SoLuongToiDa;
+                lop.SoBuoi = lopSua.SoBuoi;
+                lop.NgayBatDau = lopSua.NgayBatDau;
+                lop.TrangThai = lopSua.TrangThai;
 
                 db.SubmitChanges();
                 return "";

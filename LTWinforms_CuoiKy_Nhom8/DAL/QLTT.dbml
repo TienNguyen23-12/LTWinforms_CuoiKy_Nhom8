@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="QLTT_TheThao" Class="QLTTDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=QLTT_TheThao;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="LTWinforms_CuoiKy_Nhom8.Properties.Settings" SettingsPropertyName="QLTT_TheThaoConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.DangKyLop" Member="DangKyLops">
-    <Type Name="DangKyLop">
+  <Table Name="dbo.ChamCong" Member="ChamCongs">
+    <Type Name="ChamCong">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="MaHoiVien" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="MaLop" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="NgayDangKy" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TrangThaiThanhToan" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="HoiVien_DangKyLop" Member="HoiVien" ThisKey="MaHoiVien" OtherKey="MaHoiVien" Type="HoiVien" IsForeignKey="true" />
-      <Association Name="LopHoc_DangKyLop" Member="LopHoc" ThisKey="MaLop" OtherKey="MaLop" Type="LopHoc" IsForeignKey="true" />
+      <Column Name="IdTaiKhoan" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NgayCham" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="TaiKhoan_ChamCong" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.VeVangLai" Member="VeVangLais">
@@ -22,6 +20,17 @@
       <Association Name="TaiKhoan_VeVangLai" Member="TaiKhoan" ThisKey="IdNhanVien" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.DangKyLop" Member="DangKyLops">
+    <Type Name="DangKyLop">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaHoiVien" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MaLop" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="NgayDangKy" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrangThaiThanhToan" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="HoiVien_DangKyLop" Member="HoiVien" ThisKey="MaHoiVien" OtherKey="MaHoiVien" Type="HoiVien" IsForeignKey="true" />
+      <Association Name="LopHoc_DangKyLop" Member="LopHoc" ThisKey="MaLop" OtherKey="MaLop" Type="LopHoc" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.GoiTap" Member="GoiTaps">
     <Type Name="GoiTap">
       <Column Name="MaGoi" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -29,7 +38,23 @@
       <Column Name="ThoiHanThang" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="GiaTien" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
       <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="KemPhongTap" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="GoiTap_HoaDon" Member="HoaDons" ThisKey="MaGoi" OtherKey="MaGoi" Type="HoaDon" />
+    </Type>
+  </Table>
+  <Table Name="dbo.HoaDon" Member="HoaDons">
+    <Type Name="HoaDon">
+      <Column Name="MaHoaDon" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MaHoiVien" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="MaGoi" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="IdNhanVien" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTien" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="NgayThanhToan" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="GoiTap_HoaDon" Member="GoiTap" ThisKey="MaGoi" OtherKey="MaGoi" Type="GoiTap" IsForeignKey="true" />
+      <Association Name="HoiVien_HoaDon" Member="HoiVien" ThisKey="MaHoiVien" OtherKey="MaHoiVien" Type="HoiVien" IsForeignKey="true" />
+      <Association Name="TaiKhoan_HoaDon" Member="TaiKhoan" ThisKey="IdNhanVien" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.HoiVien" Member="HoiViens">
@@ -63,6 +88,34 @@
       <Association Name="TaiKhoan_HuanLuyenVien" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.KyLuat" Member="KyLuats">
+    <Type Name="KyLuat">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdTaiKhoan" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTien" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="LyDo" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="NgayPhat" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="TaiKhoan_KyLuat" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LopHoc" Member="LopHocs">
+    <Type Name="LopHoc">
+      <Column Name="MaLop" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TenLop" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MaHLV" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ThoiGian" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="PhongTap" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="GiaTien" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="SoLuongToiDa" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoBuoi" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NgayBatDau" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="LopHoc_DangKyLop" Member="DangKyLops" ThisKey="MaLop" OtherKey="MaLop" Type="DangKyLop" />
+      <Association Name="HuanLuyenVien_LopHoc" Member="HuanLuyenVien" ThisKey="MaHLV" OtherKey="MaHLV" Type="HuanLuyenVien" IsForeignKey="true" />
+      <Association Name="PhongTap_LopHoc" Member="PhongTap1" ThisKey="PhongTap" OtherKey="MaPhong" Type="PhongTap" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.NhanVien" Member="NhanViens">
     <Type Name="NhanVien">
       <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -74,6 +127,16 @@
       <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Luong" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
       <Association Name="TaiKhoan_NhanVien" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PhanHoi" Member="PhanHois">
+    <Type Name="PhanHoi">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdTaiKhoan" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="NgayGui" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="TaiKhoan_PhanHoi" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PhongTap" Member="PhongTaps">
@@ -96,14 +159,17 @@
       <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="FailedLogin" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="LastLogin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="TaiKhoan_ChamCong" Member="ChamCongs" ThisKey="Id" OtherKey="IdTaiKhoan" Type="ChamCong" />
       <Association Name="TaiKhoan_VeVangLai" Member="VeVangLais" ThisKey="Id" OtherKey="IdNhanVien" Type="VeVangLai" />
+      <Association Name="TaiKhoan_HoaDon" Member="HoaDons" ThisKey="Id" OtherKey="IdNhanVien" Type="HoaDon" />
       <Association Name="TaiKhoan_HoiVien" Member="HoiViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="HoiVien" />
       <Association Name="TaiKhoan_HuanLuyenVien" Member="HuanLuyenViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="HuanLuyenVien" />
+      <Association Name="TaiKhoan_KyLuat" Member="KyLuats" ThisKey="Id" OtherKey="IdTaiKhoan" Type="KyLuat" />
       <Association Name="TaiKhoan_NhanVien" Member="NhanViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="NhanVien" />
+      <Association Name="TaiKhoan_PhanHoi" Member="PhanHois" ThisKey="Id" OtherKey="IdTaiKhoan" Type="PhanHoi" />
       <Association Name="TaiKhoan_PhongTap" Member="PhongTaps" ThisKey="Id" OtherKey="IdNguoiPhuTrach" Type="PhongTap" />
       <Association Name="TaiKhoan_TinNhan" Member="TinNhans" ThisKey="Id" OtherKey="IdReceiver" Type="TinNhan" />
       <Association Name="TaiKhoan_TinNhan1" Member="TinNhans1" ThisKey="Id" OtherKey="IdSender" Type="TinNhan" />
-      <Association Name="TaiKhoan_HoaDon" Member="HoaDons" ThisKey="Id" OtherKey="IdNhanVien" Type="HoaDon" />
     </Type>
   </Table>
   <Table Name="dbo.TinNhan" Member="TinNhans">
@@ -116,36 +182,6 @@
       <Column Name="DaDoc" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="TaiKhoan_TinNhan" Member="TaiKhoan" ThisKey="IdReceiver" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
       <Association Name="TaiKhoan_TinNhan1" Member="TaiKhoan1" ThisKey="IdSender" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.HoaDon" Member="HoaDons">
-    <Type Name="HoaDon">
-      <Column Name="MaHoaDon" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="MaHoiVien" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="MaGoi" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="IdNhanVien" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SoTien" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
-      <Column Name="NgayThanhToan" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="GhiChu" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Association Name="TaiKhoan_HoaDon" Member="TaiKhoan" ThisKey="IdNhanVien" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
-      <Association Name="GoiTap_HoaDon" Member="GoiTap" ThisKey="MaGoi" OtherKey="MaGoi" Type="GoiTap" IsForeignKey="true" />
-      <Association Name="HoiVien_HoaDon" Member="HoiVien" ThisKey="MaHoiVien" OtherKey="MaHoiVien" Type="HoiVien" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.LopHoc" Member="LopHocs">
-    <Type Name="LopHoc">
-      <Column Name="MaLop" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TenLop" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="MaHLV" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="ThoiGian" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="PhongTap" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="GiaTien" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
-      <Column Name="SoLuongToiDa" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="LopHoc_DangKyLop" Member="DangKyLops" ThisKey="MaLop" OtherKey="MaLop" Type="DangKyLop" />
-      <Association Name="HuanLuyenVien_LopHoc" Member="HuanLuyenVien" ThisKey="MaHLV" OtherKey="MaHLV" Type="HuanLuyenVien" IsForeignKey="true" />
-      <Association Name="PhongTap_LopHoc" Member="PhongTap1" ThisKey="PhongTap" OtherKey="MaPhong" Type="PhongTap" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

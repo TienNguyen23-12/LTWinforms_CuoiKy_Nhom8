@@ -22,6 +22,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         public ucBanVeThuNgan()
         {
             InitializeComponent();
+            dgvLichSu.CellFormatting += dgvLichSu_CellFormatting;
         }
 
         private void LoadLichSu()
@@ -45,7 +46,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
             else if (radLopHoc.Checked)
             {
-                if (cboHoiVien.SelectedValue == null) return;
+                if (cboHoiVien.SelectedValue == null)
+                {
+                    return;
+                }
                 string maHV = cboHoiVien.SelectedValue.ToString();
 
                 var listNoLop = (from dk in db.DangKyLops
@@ -53,7 +57,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                                  where dk.MaHoiVien == maHV && dk.TrangThaiThanhToan == "Chờ thanh toán"
                                  select new
                                  {
-                                     IdDangKy = dk.Id, 
+                                     IdDangKy = dk.Id,
                                      TenHienThi = lop.TenLop,
                                      GiaTien = lop.GiaTien
                                  }).ToList();
@@ -94,7 +98,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 if (radGoiTap.Checked)
                 {
                     var goiDangChon = (GoiTap)cboDichVu.SelectedItem;
-
                     decimal giaTien = Convert.ToDecimal(goiDangChon.GiaTien);
                     txtSoTien.Text = giaTien.ToString("N0") + " VNĐ";
                 }
@@ -136,7 +139,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     string kq = hdBUS.ThanhToanGiaHan(maHV, maGoi, idNhanVien);
                     if (kq == "")
                     {
-                        MessageBox.Show("Thanh toán thành công! Thẻ của khách đã được gia hạn.", "Thành công");
+                        MessageBox.Show("Thanh toán thành công!", "Thành công");
                         LoadLichSu();
                     }
                     else MessageBox.Show(kq, "Lỗi hệ thống");
@@ -145,14 +148,15 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             else if (radLopHoc.Checked)
             {
                 int idDangKy = Convert.ToInt32(cboDichVu.SelectedValue);
-                if (MessageBox.Show($"Xác nhận thu tiền lớp học này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show($"Xác nhận thu tiền lớp học này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     string kq = dkBUS.XacNhanThuTien(idDangKy, Session.IdTaiKhoan);
                     if (kq == "")
                     {
                         MessageBox.Show("Thanh toán lớp học thành công!", "Thành công");
-                        LoadLichSu();
-                        LoadDichVu(); 
+
+                        LoadLichSu();  
+                        LoadDichVu();  
                     }
                     else MessageBox.Show(kq, "Lỗi hệ thống");
                 }
@@ -187,6 +191,53 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (radLopHoc.Checked)
             {
                 LoadDichVu();
+            }
+        }
+
+        private void btnDuyetOnline_Click(object sender, EventArgs e)
+        {
+            if (dgvLichSu.CurrentRow != null)
+            {
+                int maHD = Convert.ToInt32(dgvLichSu.CurrentRow.Cells["Mã_HĐ"].Value);
+                string trangThai = dgvLichSu.CurrentRow.Cells["Trạng_Thái"].Value.ToString();
+
+                if (trangThai == "Đã thanh toán")
+                {
+                    MessageBox.Show("Đơn này đã được thanh toán rồi!", "Thông báo");
+                    return;
+                }
+
+                if (MessageBox.Show($"Xác nhận đã thu tiền cho hóa đơn #{maHD}?", "Xác nhận duyệt Online", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    string kq = hdBUS.DuyetHoaDonOnline(maHD, Session.IdTaiKhoan);
+                    if (kq == "")
+                    {
+                        MessageBox.Show("Duyệt thành công! Gói tập đã được kích hoạt cho khách.", "Thành công");
+                        LoadLichSu();
+                    }
+                    else MessageBox.Show(kq, "Lỗi");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một dòng 'Chờ thanh toán' trên bảng để duyệt!", "Nhắc nhở");
+            }
+        }
+
+        private void dgvLichSu_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvLichSu.Columns[e.ColumnIndex].Name == "Trạng_Thái" && e.Value != null)
+            {
+                string tt = e.Value.ToString();
+                if (tt == "Chờ thanh toán")
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(dgvLichSu.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.Green;
+                }
             }
         }
     }
