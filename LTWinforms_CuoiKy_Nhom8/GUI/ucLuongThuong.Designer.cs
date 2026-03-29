@@ -36,6 +36,7 @@
             this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.dgvBangLuong = new System.Windows.Forms.DataGridView();
+            this.btnXuat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBangLuong)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,10 +113,21 @@
             this.dgvBangLuong.Size = new System.Drawing.Size(810, 269);
             this.dgvBangLuong.TabIndex = 10;
             // 
+            // btnXuat
+            // 
+            this.btnXuat.Location = new System.Drawing.Point(300, 93);
+            this.btnXuat.Name = "btnXuat";
+            this.btnXuat.Size = new System.Drawing.Size(146, 23);
+            this.btnXuat.TabIndex = 11;
+            this.btnXuat.Text = "Xuất bảng lương";
+            this.btnXuat.UseVisualStyleBackColor = true;
+            this.btnXuat.Click += new System.EventHandler(this.btnXuat_Click);
+            // 
             // ucLuongThuong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnXuat);
             this.Controls.Add(this.dgvBangLuong);
             this.Controls.Add(this.btnXemLuong);
             this.Controls.Add(this.dtpDenNgay);
@@ -142,5 +154,6 @@
         private System.Windows.Forms.DateTimePicker dtpTuNgay;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dgvBangLuong;
+        private System.Windows.Forms.Button btnXuat;
     }
 }

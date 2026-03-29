@@ -82,5 +82,47 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtTongLuong.ForeColor = Color.DarkGreen;
             txtTongLuong.Font = new Font(txtTongLuong.Font, FontStyle.Bold);
         }
+
+        private void btnXuat_Click(object sender, EventArgs e)
+        {
+            if (dgvBangLuong.Rows.Count == 0 || dgvBangLuong.Rows[0].Cells[0].Value == null)
+            {
+                MessageBox.Show("Chưa có dữ liệu lương để xuất phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                DataGridViewRow row = dgvBangLuong.Rows[0];
+
+                var lstPhieuLuong = new[]
+                {
+            new
+            {
+                MaNS = row.Cells[0].Value.ToString(),
+                HoTen = row.Cells[1].Value.ToString(),
+                VaiTro = row.Cells[2].Value.ToString(),
+                
+                SoCong = Convert.ToDouble(row.Cells[3].Value?.ToString() ?? "0"),
+                BiPhat = Convert.ToDecimal(row.Cells[4].Value?.ToString().Replace(",", "").Replace(".", "") ?? "0"),
+                ThucLanh = Convert.ToDecimal(row.Cells[5].Value?.ToString().Replace(",", "").Replace(".", "") ?? "0")
+            }
+        }.ToList();
+
+                rptPhieuLuongCaNhan rpt = new rptPhieuLuongCaNhan();
+                rpt.SetDataSource(lstPhieuLuong);
+
+                rpt.SetParameterValue("pTuNgay", dtpTuNgay.Value.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.ToString("dd/MM/yyyy"));
+
+                frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
+                frmBaoCao.HienThiBaoCao(rpt);
+                frmBaoCao.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xuất phiếu lương: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
