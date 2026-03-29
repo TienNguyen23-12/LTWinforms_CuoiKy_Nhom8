@@ -78,7 +78,7 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
     #endregion
 		
 		public QLTTDataContext() : 
-				base(global::LTWinforms_CuoiKy_Nhom8.Properties.Settings.Default.QLTT_TheThaoConnectionString, mappingSource)
+				base(global::LTWinforms_CuoiKy_Nhom8.Properties.Settings.Default.QLTT_TheThaoConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -2680,10 +2680,8 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
 				}
 			}
 		}
-
-        public object SoLuongToida { get; internal set; }
-
-        public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		

@@ -185,5 +185,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             TaiChucNang(new ucQuanLySanPham());
         }
+
+        private void lblXinChao_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

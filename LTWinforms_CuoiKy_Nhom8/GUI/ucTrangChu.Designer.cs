@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.pnlThanhMenu = new System.Windows.Forms.Panel();
+            this.btnQuanLySanPham = new System.Windows.Forms.Button();
             this.btnChamCong = new System.Windows.Forms.Button();
             this.btnQuanLyPhongTap = new System.Windows.Forms.Button();
             this.btnQuanLyLopHoc = new System.Windows.Forms.Button();
@@ -46,7 +47,6 @@
             this.btnQuanTriHeThong = new System.Windows.Forms.Button();
             this.lblXinChao = new System.Windows.Forms.Label();
             this.pnlNoiDungChinh = new System.Windows.Forms.Panel();
-            this.btnQuanLySanPham = new System.Windows.Forms.Button();
             this.pnlThanhMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,6 +74,16 @@
             this.pnlThanhMenu.Name = "pnlThanhMenu";
             this.pnlThanhMenu.Size = new System.Drawing.Size(200, 921);
             this.pnlThanhMenu.TabIndex = 0;
+            // 
+            // btnQuanLySanPham
+            // 
+            this.btnQuanLySanPham.Location = new System.Drawing.Point(40, 203);
+            this.btnQuanLySanPham.Name = "btnQuanLySanPham";
+            this.btnQuanLySanPham.Size = new System.Drawing.Size(100, 33);
+            this.btnQuanLySanPham.TabIndex = 17;
+            this.btnQuanLySanPham.Text = "Sản phẩm";
+            this.btnQuanLySanPham.UseVisualStyleBackColor = true;
+            this.btnQuanLySanPham.Click += new System.EventHandler(this.btnQuanLySanPham_Click);
             // 
             // btnChamCong
             // 
@@ -232,6 +242,7 @@
             this.lblXinChao.Size = new System.Drawing.Size(44, 16);
             this.lblXinChao.TabIndex = 0;
             this.lblXinChao.Text = "label1";
+            this.lblXinChao.Click += new System.EventHandler(this.lblXinChao_Click);
             // 
             // pnlNoiDungChinh
             // 
@@ -240,16 +251,6 @@
             this.pnlNoiDungChinh.Name = "pnlNoiDungChinh";
             this.pnlNoiDungChinh.Size = new System.Drawing.Size(797, 921);
             this.pnlNoiDungChinh.TabIndex = 1;
-            // 
-            // btnQuanLySanPham
-            // 
-            this.btnQuanLySanPham.Location = new System.Drawing.Point(40, 203);
-            this.btnQuanLySanPham.Name = "btnQuanLySanPham";
-            this.btnQuanLySanPham.Size = new System.Drawing.Size(100, 33);
-            this.btnQuanLySanPham.TabIndex = 17;
-            this.btnQuanLySanPham.Text = "Sản phẩm";
-            this.btnQuanLySanPham.UseVisualStyleBackColor = true;
-            this.btnQuanLySanPham.Click += new System.EventHandler(this.btnQuanLySanPham_Click);
             // 
             // ucTrangChu
             // 
