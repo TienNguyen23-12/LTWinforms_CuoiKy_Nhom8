@@ -76,10 +76,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(TextBox textBox)
         {
-            textBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            textBox.ForeColor = Color.FromArgb(44, 62, 80);
-            textBox.BackColor = Color.White;
-            textBox.BorderStyle = BorderStyle.FixedSingle;
+            ModernTheme.StyleInput(textBox);
         }
 
         private void StylePrimaryButton(Button button)
@@ -94,14 +91,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleButton(Button button, Color backColor, Color foreColor)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
-            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
-            button.BackColor = backColor;
-            button.ForeColor = foreColor;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, backColor, foreColor);
             button.Height = 34;
         }
 

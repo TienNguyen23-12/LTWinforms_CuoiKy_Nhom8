@@ -90,6 +90,7 @@
     <Compile Include="GUI\frmCR_BaoCao.Designer.cs">
       <DependentUpon>frmCR_BaoCao.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ModernMessageBox.cs" />
     <Compile Include="GUI\ModernTheme.cs" />
     <Compile Include="GUI\rptDoanhThu.cs">
       <AutoGen>True</AutoGen>

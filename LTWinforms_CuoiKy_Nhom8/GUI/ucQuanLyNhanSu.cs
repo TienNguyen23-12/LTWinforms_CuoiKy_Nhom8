@@ -54,15 +54,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(Control control)
         {
-            control.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            control.ForeColor = Color.FromArgb(44, 62, 80);
-            control.BackColor = Color.White;
-
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
-            {
-                textBox.BorderStyle = BorderStyle.FixedSingle;
-            }
+            ModernTheme.StyleInput(control);
 
             RichTextBox richTextBox = control as RichTextBox;
             if (richTextBox != null)

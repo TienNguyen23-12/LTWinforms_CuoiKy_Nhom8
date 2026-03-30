@@ -9,9 +9,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
     {
         public static frmMainContainer Instance;
 
-        private readonly Size authWindowSize = new Size(760, 520);
+        private readonly Size authWindowSize = new Size(430, 540);
         private readonly Font appUiFont = new Font("Segoe UI", 10F, FontStyle.Bold);
-
 
         public frmMainContainer()
         {
@@ -25,6 +24,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             ApplyGlobalFont(this);
+            ModernTheme.ApplyRoundedButtons(this, 10);
         }
 
         public void LoadUserControl(UserControl uc)
@@ -38,6 +38,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             uc.Dock = DockStyle.Fill;
             pnlContent.Controls.Add(uc);
             pnlContent.ResumeLayout();
+
+            ModernTheme.ApplyRoundedButtons(uc, 10);
         }
 
         private void ConfigureWindow(UserControl uc)

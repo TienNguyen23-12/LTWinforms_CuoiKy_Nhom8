@@ -450,21 +450,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(Control control)
         {
-            control.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            control.ForeColor = Color.FromArgb(44, 62, 80);
-            control.BackColor = Color.White;
-
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null)
-            {
-                ModernTheme.StyleDataComboBox(comboBox);
-            }
-
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
-            {
-                textBox.BorderStyle = BorderStyle.FixedSingle;
-            }
+            ModernTheme.StyleInput(control);
         }
 
         private void StyleRadio(RadioButton radio)
@@ -485,14 +471,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleButton(Button button, Color backColor, Color foreColor)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
-            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
-            button.BackColor = backColor;
-            button.ForeColor = foreColor;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, backColor, foreColor);
             button.Height = 34;
         }
 

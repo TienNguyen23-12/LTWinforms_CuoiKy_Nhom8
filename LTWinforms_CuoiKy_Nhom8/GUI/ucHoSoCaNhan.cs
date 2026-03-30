@@ -83,20 +83,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(TextBox textBox)
         {
-            textBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            textBox.ForeColor = Color.FromArgb(44, 62, 80);
-            textBox.BackColor = Color.White;
-            textBox.BorderStyle = BorderStyle.FixedSingle;
+            ModernTheme.StyleInput(textBox);
         }
 
         private void StylePrimaryButton(Button button)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.BackColor = Color.FromArgb(46, 134, 222);
-            button.ForeColor = Color.White;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, Color.FromArgb(46, 134, 222), Color.White);
             button.Height = 34;
         }
 
@@ -116,17 +108,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             lblThongTinThem.Top = lblQuyen.Bottom + 6;
 
             int rightLeft = left + 460;
-            int rightWidth = Math.Min(500, contentWidth - 460);
+            int rightWidth = Math.Max(360, Math.Min(500, contentWidth - 460));
 
             groupBox2.SetBounds(rightLeft, top, rightWidth, 240);
 
-            int passTop = Math.Max(lblThongTinThem.Bottom + 18, groupBox2.Bottom + 18);
+            int passTop = Math.Max(lblThongTinThem.Bottom + 18, groupBox2.Visible ? groupBox2.Bottom + 18 : lblThongTinThem.Bottom + 18);
             groupBox1.SetBounds(left, passTop, Math.Min(560, contentWidth), 185);
-
-            if (!groupBox2.Visible)
-            {
-                groupBox1.SetBounds(left, lblThongTinThem.Bottom + 18, Math.Min(560, contentWidth), 185);
-            }
         }
 
         private void ucHoSoCaNhan_Load(object sender, EventArgs e)
@@ -138,18 +125,19 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             lblXinChao.Text = "Tài khoản: " + Session.Username;
             lblThongTinThem.Text = "";
 
-            if (Session.Role == 1) // ADMIN
+            bool hoTroCapNhatHoSo = Session.Role == 2 || Session.Role == 3 || Session.Role == 4;
+            groupBox2.Visible = hoTroCapNhatHoSo;
+
+            if (Session.Role == 1)
             {
                 lblQuyen.Text = "Vai trò: Quản trị viên (Admin)";
                 lblThongTinThem.Text = "ID Hệ thống: " + Session.IdTaiKhoan +
-                                       "\nQuyền hạn: Toàn quyền kiểm soát hệ thống";
-
-                groupBox2.Visible = false;
+                                       "\nQuyền hạn: Toàn quyền kiểm soát hệ thống" +
+                                       "\nTài khoản Admin không có hồ sơ cá nhân để cập nhật tại màn này.";
             }
-            else if (Session.Role == 2) // NHÂN VIÊN
+            else if (Session.Role == 2)
             {
                 lblQuyen.Text = "Vai trò: Nhân viên";
-                groupBox2.Visible = true;
 
                 var nv = db.NhanViens.FirstOrDefault(x => x.IdTaiKhoan == Session.IdTaiKhoan);
                 if (nv != null)
@@ -173,13 +161,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 else
                 {
                     lblThongTinThem.Text = "ID Hệ thống: " + Session.IdTaiKhoan +
-                                           "\nChưa có thông tin hồ sơ nhân viên. Vui lòng cập nhật ở ô bên cạnh.";
+                                           "\nChưa có thông tin hồ sơ nhân viên.";
                 }
             }
-            else if (Session.Role == 4) // HUẤN LUYỆN VIÊN
+            else if (Session.Role == 4)
             {
                 lblQuyen.Text = "Vai trò: Huấn luyện viên";
-                groupBox2.Visible = true;
 
                 var hlv = db.HuanLuyenViens.FirstOrDefault(x => x.IdTaiKhoan == Session.IdTaiKhoan);
                 if (hlv != null)
@@ -200,11 +187,14 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         dtpNgaySinh.Value = hlv.NgaySinh.Value;
                     }
                 }
+                else
+                {
+                    lblThongTinThem.Text = "Chưa có hồ sơ huấn luyện viên để hiển thị.";
+                }
             }
-            else if (Session.Role == 3) // HỘI VIÊN
+            else if (Session.Role == 3)
             {
                 lblQuyen.Text = "Vai trò: Hội viên (Khách hàng)";
-                groupBox2.Visible = true;
 
                 var hoiVien = db.HoiViens.FirstOrDefault(x => x.IdTaiKhoan == Session.IdTaiKhoan);
                 if (hoiVien != null)
@@ -277,6 +267,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnLuuHoSo_Click(object sender, EventArgs e)
         {
+            if (Session.Role != 2 && Session.Role != 3 && Session.Role != 4)
+            {
+                MessageBox.Show("Tài khoản này không hỗ trợ cập nhật hồ sơ tại màn này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             string kq = tkBUS.CapNhatHoSoCaNhan(
                 Session.IdTaiKhoan,
                 Session.Role,
