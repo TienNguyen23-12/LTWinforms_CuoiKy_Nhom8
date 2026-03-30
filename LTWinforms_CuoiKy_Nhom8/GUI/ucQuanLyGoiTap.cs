@@ -1,24 +1,215 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucQuanLyGoiTap : UserControl
     {
-        GoiTapBUS gtBUS = new GoiTapBUS();
+        private readonly GoiTapBUS gtBUS = new GoiTapBUS();
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucQuanLyGoiTap()
         {
             InitializeComponent();
+        }
+
+        private void ApplyTheme()
+        {
+            if (isThemeApplied)
+            {
+                return;
+            }
+
+            BackColor = Color.White;
+
+            StyleLabel(label1);
+            StyleLabel(label2);
+            StyleLabel(label3);
+            StyleLabel(label6);
+            StyleLabel(label7);
+
+            StyleInput(txtMaGoi);
+            StyleInput(txtTenGoi);
+            StyleInput(txtThoiHan);
+            StyleInput(txtGiaTien);
+            StyleInput(txtTimKiem);
+
+            StylePrimaryButton(btnThem);
+            StyleSecondaryButton(btnSua);
+            StyleDangerButton(btnKhoa);
+            StyleSecondaryButton(btnLamMoi);
+            StylePrimaryButton(btnTimKiem);
+
+            StyleGrid(dgvGoiTap);
+
+            isThemeApplied = true;
+        }
+
+        private void StyleLabel(Label label)
+        {
+            label.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+            label.ForeColor = Color.FromArgb(44, 62, 80);
+        }
+
+        private void StyleInput(Control control)
+        {
+            control.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            control.ForeColor = Color.FromArgb(44, 62, 80);
+            control.BackColor = Color.White;
+
+            TextBox textBox = control as TextBox;
+            if (textBox != null)
+            {
+                textBox.BorderStyle = BorderStyle.FixedSingle;
+            }
+        }
+
+        private void StylePrimaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(46, 134, 222), Color.White);
+        }
+
+        private void StyleSecondaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(52, 73, 94), Color.White);
+        }
+
+        private void StyleDangerButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(211, 84, 0), Color.White);
+        }
+
+        private void StyleButton(Button button, Color backColor, Color foreColor)
+        {
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
+            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
+            button.BackColor = backColor;
+            button.ForeColor = foreColor;
+            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            button.Cursor = Cursors.Hand;
+            button.Height = 34;
+        }
+
+        private void StyleGrid(DataGridView grid)
+        {
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(46, 134, 222);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            grid.ColumnHeadersHeight = 38;
+
+            grid.RowTemplate.Height = 28;
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 249, 255);
+
+            grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(186, 222, 250);
+            grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(25, 42, 58);
+            grid.RowHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(186, 222, 250);
+            grid.RowHeadersDefaultCellStyle.SelectionForeColor = Color.FromArgb(25, 42, 58);
+
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToResizeRows = false;
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Min(1080, ClientSize.Width - 80);
+            if (contentWidth < 860)
+            {
+                contentWidth = 860;
+            }
+
+            int left = Math.Max(20, (ClientSize.Width - contentWidth) / 2);
+            int top = 30;
+
+            int leftColLabel = left + 30;
+            int leftColInput = left + 150;
+
+            int rightColLabel = left + (contentWidth / 2) + 10;
+            int rightColInput = rightColLabel + 95;
+
+            int inputWidth = 230;
+            int rowHeight = 42;
+
+            label1.Left = leftColLabel;
+            label1.Top = top + 4;
+            txtMaGoi.Left = leftColInput;
+            txtMaGoi.Top = top;
+            txtMaGoi.Width = inputWidth;
+
+            label6.Left = rightColLabel;
+            label6.Top = top + 4;
+            txtGiaTien.Left = rightColInput;
+            txtGiaTien.Top = top;
+            txtGiaTien.Width = inputWidth;
+
+            top += rowHeight;
+            label2.Left = leftColLabel;
+            label2.Top = top + 4;
+            txtTenGoi.Left = leftColInput;
+            txtTenGoi.Top = top;
+            txtTenGoi.Width = inputWidth;
+
+            top += rowHeight;
+            label3.Left = leftColLabel;
+            label3.Top = top + 4;
+            txtThoiHan.Left = leftColInput;
+            txtThoiHan.Top = top;
+            txtThoiHan.Width = inputWidth;
+
+            // Buttons row
+            int btnY = top + 56;
+            int btnWidth = 130;
+            int btnSpacing = 14;
+            int totalBtnWidth = (btnWidth * 4) + (btnSpacing * 3);
+            int btnStart = left + (contentWidth - totalBtnWidth) / 2;
+
+            btnThem.SetBounds(btnStart, btnY, btnWidth, 34);
+            btnSua.SetBounds(btnThem.Right + btnSpacing, btnY, btnWidth, 34);
+            btnKhoa.SetBounds(btnSua.Right + btnSpacing, btnY, btnWidth, 34);
+            btnLamMoi.SetBounds(btnKhoa.Right + btnSpacing, btnY, btnWidth, 34);
+
+            // Search row
+            int searchY = btnThem.Bottom + 18;
+            int searchInputWidth = 280;
+            int searchBtnWidth = 120;
+
+            int searchTotal = 70 + 10 + searchInputWidth + 14 + searchBtnWidth;
+            int searchStart = left + (contentWidth - searchTotal) / 2;
+
+            label7.Left = searchStart;
+            label7.Top = searchY + 8;
+
+            txtTimKiem.Left = label7.Right + 10;
+            txtTimKiem.Top = searchY;
+            txtTimKiem.Width = searchInputWidth;
+
+            btnTimKiem.SetBounds(txtTimKiem.Right + 14, searchY, searchBtnWidth, 34);
+
+            // Grid
+            int gridTop = txtTimKiem.Bottom + 18;
+            int gridHeight = ClientSize.Height - gridTop - 24;
+            if (gridHeight < 220)
+            {
+                gridHeight = 220;
+            }
+
+            dgvGoiTap.SetBounds(left, gridTop, contentWidth, gridHeight);
         }
 
         private void LoadData(string tuKhoa = "")
@@ -33,29 +224,65 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvGoiTap.Columns["GiaTien"].HeaderText = "Giá tiền (VNĐ)";
 
                 dgvGoiTap.Columns["GiaTien"].DefaultCellStyle.Format = "N0";
+                dgvGoiTap.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+        }
+
+        private void ucQuanLyGoiTap_Load(object sender, EventArgs e)
+        {
+            ApplyTheme();
+            LoadData();
+
+            if (!isLayoutHooked)
+            {
+                Resize += ucQuanLyGoiTap_Resize;
+                isLayoutHooked = true;
+            }
+
+            ApplyResponsiveLayout();
+        }
+
+        private void ucQuanLyGoiTap_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaGoi.Text) || string.IsNullOrEmpty(txtTenGoi.Text))
             {
-                MessageBox.Show("Nhập đủ thông tin Mã và Tên gói!", "Cảnh báo"); return;
+                MessageBox.Show("Nhập đủ thông tin Mã và Tên gói!", "Cảnh báo");
+                return;
+            }
+
+            int thoiHan;
+            decimal giaTien;
+
+            if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
+            {
+                MessageBox.Show("Thời hạn phải là số nguyên!", "Lỗi");
+                return;
+            }
+
+            if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
+            {
+                MessageBox.Show("Giá tiền không hợp lệ!", "Lỗi");
+                return;
             }
 
             GoiTap gt = new GoiTap()
             {
                 MaGoi = txtMaGoi.Text.Trim(),
                 TenGoi = txtTenGoi.Text.Trim(),
-                ThoiHanThang = int.Parse(txtThoiHan.Text.Trim()),
-                GiaTien = decimal.Parse(txtGiaTien.Text.Trim()),
+                ThoiHanThang = thoiHan,
+                GiaTien = giaTien,
                 IsActive = true
             };
 
             string kq = gtBUS.ThemGoiTap(gt);
             if (kq == "")
             {
-                MessageBox.Show("Thêm thành công!"); 
+                MessageBox.Show("Thêm thành công!");
                 btnLamMoi_Click(sender, e);
             }
             else
@@ -66,18 +293,34 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            int thoiHan;
+            decimal giaTien;
+
+            if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
+            {
+                MessageBox.Show("Thời hạn phải là số nguyên!", "Lỗi");
+                return;
+            }
+
+            if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
+            {
+                MessageBox.Show("Giá tiền không hợp lệ!", "Lỗi");
+                return;
+            }
+
             GoiTap gt = new GoiTap()
             {
                 MaGoi = txtMaGoi.Text.Trim(),
                 TenGoi = txtTenGoi.Text.Trim(),
-                ThoiHanThang = int.Parse(txtThoiHan.Text.Trim()),
-                GiaTien = decimal.Parse(txtGiaTien.Text.Trim())
+                ThoiHanThang = thoiHan,
+                GiaTien = giaTien
             };
+
             string kq = gtBUS.SuaGoiTap(gt);
-            if (kq == "") 
-            { 
-                MessageBox.Show("Sửa thành công!"); 
-                btnLamMoi_Click(sender, e); 
+            if (kq == "")
+            {
+                MessageBox.Show("Sửa thành công!");
+                btnLamMoi_Click(sender, e);
             }
             else
             {
@@ -90,10 +333,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (MessageBox.Show("Khóa gói tập này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 string kq = gtBUS.KhoaGoiTap(txtMaGoi.Text.Trim());
-                if (kq == "") 
-                { 
-                    MessageBox.Show("Đã khóa!"); 
-                    btnLamMoi_Click(sender, e); 
+                if (kq == "")
+                {
+                    MessageBox.Show("Đã khóa!");
+                    btnLamMoi_Click(sender, e);
                 }
                 else
                 {
@@ -125,18 +368,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dgvGoiTap.Rows[e.RowIndex];
-                txtMaGoi.Text = row.Cells["MaGoi"].Value?.ToString();
-                txtTenGoi.Text = row.Cells["TenGoi"].Value?.ToString();
-                txtThoiHan.Text = row.Cells["ThoiHanThang"].Value?.ToString();
+                txtMaGoi.Text = row.Cells["MaGoi"].Value == null ? "" : row.Cells["MaGoi"].Value.ToString();
+                txtTenGoi.Text = row.Cells["TenGoi"].Value == null ? "" : row.Cells["TenGoi"].Value.ToString();
+                txtThoiHan.Text = row.Cells["ThoiHanThang"].Value == null ? "" : row.Cells["ThoiHanThang"].Value.ToString();
 
-                txtGiaTien.Text = Convert.ToDecimal(row.Cells["GiaTien"].Value).ToString("0");
+                if (row.Cells["GiaTien"].Value != null)
+                {
+                    txtGiaTien.Text = Convert.ToDecimal(row.Cells["GiaTien"].Value).ToString("0");
+                }
+                else
+                {
+                    txtGiaTien.Text = "";
+                }
+
                 txtMaGoi.Enabled = false;
             }
-        }
-
-        private void ucQuanLyGoiTap_Load(object sender, EventArgs e)
-        {
-            LoadData();
         }
     }
 }

@@ -17,17 +17,15 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMainContainer));
             this.pnlContent = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
@@ -35,19 +33,22 @@
             // 
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
+            this.pnlContent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(800, 450);
+            this.pnlContent.Size = new System.Drawing.Size(675, 455);
             this.pnlContent.TabIndex = 0;
             // 
             // frmMainContainer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(675, 455);
             this.Controls.Add(this.pnlContent);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmMainContainer";
-            this.Text = "frmMainContainer";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "SPORTIFY";
             this.Load += new System.EventHandler(this.frmMainContainer_Load);
             this.ResumeLayout(false);
 

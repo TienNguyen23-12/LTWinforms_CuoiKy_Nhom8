@@ -1,39 +1,179 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Collections;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucThongKeDoanhThu : UserControl
     {
-        ThongKeBUS tkBUS = new ThongKeBUS();
+        private readonly ThongKeBUS tkBUS = new ThongKeBUS();
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucThongKeDoanhThu()
         {
             InitializeComponent();
         }
 
-        private void ucThongKeDoanhThu_Load(object sender, EventArgs e)
+        private void ApplyTheme()
         {
-            dtpTuNgay.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            dtpDenNgay.Value = DateTime.Now;
+            if (isThemeApplied)
+            {
+                return;
+            }
 
-            btnXemBaoCao_Click(sender, e);
+            BackColor = ModernTheme.PageBackground;
+
+            ModernTheme.StyleLabel(label1);
+            ModernTheme.StyleLabel(label2);
+
+            ModernTheme.StyleLabel(label3);
+            ModernTheme.StyleLabel(label6);
+            ModernTheme.StyleLabel(label8);
+
+            label3.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            label6.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            label8.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+
+            dtpTuNgay.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dtpDenNgay.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            ModernTheme.StyleInput(txtDoanhThu);
+            ModernTheme.StyleInput(txtChiLuong);
+            ModernTheme.StyleInput(txtLoiNhuan);
+
+            txtDoanhThu.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            txtChiLuong.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            txtLoiNhuan.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+
+            ModernTheme.StyleCard(panel1);
+            ModernTheme.StyleCard(panel2);
+            ModernTheme.StyleCard(panel3);
+
+            ModernTheme.StyleButton(btnXemBaoCao, Color.FromArgb(58, 129, 214), Color.White);
+            ModernTheme.StyleButton(btnIn, Color.FromArgb(53, 73, 95), Color.White);
+
+            ModernTheme.StyleGrid(dgvThongKe);
+
+            isThemeApplied = true;
         }
 
-        private void btnXemBaoCao_Click(object sender, EventArgs e)
+        private void StyleLabel(Label label)
         {
-            DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date;
+            label.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+            label.ForeColor = Color.FromArgb(44, 62, 80);
+        }
 
+        private void StyleDateInput(DateTimePicker picker)
+        {
+            picker.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            picker.CalendarForeColor = Color.FromArgb(44, 62, 80);
+        }
+
+        private void StyleSummaryBox(TextBox textBox)
+        {
+            textBox.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            textBox.ForeColor = Color.FromArgb(35, 47, 62);
+            textBox.BackColor = Color.White;
+            textBox.BorderStyle = BorderStyle.FixedSingle;
+            textBox.ReadOnly = true;
+        }
+
+        private void StyleCard(Panel panel)
+        {
+            panel.BackColor = Color.FromArgb(245, 249, 255);
+            panel.BorderStyle = BorderStyle.FixedSingle;
+        }
+
+        private void StylePrimaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(46, 134, 222), Color.White);
+        }
+
+        private void StyleSecondaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(52, 73, 94), Color.White);
+        }
+
+        private void StyleButton(Button button, Color backColor, Color foreColor)
+        {
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
+            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
+            button.BackColor = backColor;
+            button.ForeColor = foreColor;
+            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            button.Cursor = Cursors.Hand;
+            button.Height = 34;
+        }
+
+        private void StyleGrid(DataGridView grid)
+        {
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(46, 134, 222);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            grid.ColumnHeadersHeight = 38;
+
+            grid.RowTemplate.Height = 28;
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 249, 255);
+            grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(186, 222, 250);
+            grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(25, 42, 58);
+
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.RowHeadersVisible = false;
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Min(1100, ClientSize.Width - 40);
+            int left = Math.Max(20, (ClientSize.Width - contentWidth) / 2);
+
+            int top = 24;
+
+            label1.SetBounds(left, top + 8, 70, 24);
+            dtpTuNgay.SetBounds(left + 72, top, 170, 30);
+
+            label2.SetBounds(left + 282, top + 8, 80, 24);
+            dtpDenNgay.SetBounds(left + 364, top, 170, 30);
+
+            btnXemBaoCao.SetBounds(left + 556, top - 2, 140, 38);
+            btnIn.SetBounds(btnXemBaoCao.Right + 12, top - 2, 140, 38);
+
+            int cardTop = top + 54;
+            int gap = 12;
+            int cardWidth = (contentWidth - (gap * 2)) / 3;
+            int cardHeight = 104;
+
+            panel1.SetBounds(left, cardTop, cardWidth, cardHeight);
+            panel2.SetBounds(panel1.Right + gap, cardTop, cardWidth, cardHeight);
+            panel3.SetBounds(panel2.Right + gap, cardTop, cardWidth, cardHeight);
+
+            AlignSummaryCard(panel1, label3, txtDoanhThu);
+            AlignSummaryCard(panel2, label6, txtChiLuong);
+            AlignSummaryCard(panel3, label8, txtLoiNhuan);
+
+            int gridTop = panel1.Bottom + 16;
+            int gridHeight = Math.Max(220, ClientSize.Height - gridTop - 20);
+            dgvThongKe.SetBounds(left, gridTop, contentWidth, gridHeight);
+        }
+
+        private void UpdateBaoCao(DateTime tuNgay, DateTime denNgay)
+        {
             dgvThongKe.DataSource = tkBUS.ThongKeTheoGoiTap(tuNgay, denNgay);
             if (dgvThongKe.Columns.Count > 0)
             {
@@ -44,25 +184,64 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvThongKe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
 
-            var dataTaiChinh = (List<dynamic>)tkBUS.ThongKeTaiChinh(tuNgay, denNgay);
+            decimal doanhThu = 0;
+            decimal chiLuong = 0;
+            decimal loiNhuan = 0;
 
-            if (dataTaiChinh.Count > 0)
+            IEnumerable dataTaiChinh = tkBUS.ThongKeTaiChinh(tuNgay, denNgay) as IEnumerable;
+            if (dataTaiChinh != null)
             {
-                var row = dataTaiChinh.First(); 
+                foreach (object obj in dataTaiChinh)
+                {
+                    dynamic row = obj;
+                    doanhThu = Convert.ToDecimal(row.Doanh_Thu);
+                    chiLuong = Convert.ToDecimal(row.Tong_Chi_Luong);
+                    loiNhuan = Convert.ToDecimal(row.Loi_Nhuan_Thuc);
+                    break;
+                }
+            }
 
-                txtDoanhThu.Text = row.Doanh_Thu.ToString("N0") + " VNĐ";
-                txtChiLuong.Text = row.Tong_Chi_Luong.ToString("N0") + " VNĐ";
-                txtLoiNhuan.Text = row.Loi_Nhuan_Thuc.ToString("N0") + " VNĐ";
-            }
-            else
-            {
-                txtDoanhThu.Text = "0 VNĐ";
-                txtChiLuong.Text = "0 VNĐ";
-                txtLoiNhuan.Text = "0 VNĐ";
-            }
+            txtDoanhThu.Text = doanhThu.ToString("N0") + " VNĐ";
+            txtChiLuong.Text = chiLuong.ToString("N0") + " VNĐ";
+            txtLoiNhuan.Text = loiNhuan.ToString("N0") + " VNĐ";
         }
 
-        
+        private void ucThongKeDoanhThu_Load(object sender, EventArgs e)
+        {
+            ApplyTheme();
+
+            dtpTuNgay.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            dtpDenNgay.Value = DateTime.Now;
+
+            if (!isLayoutHooked)
+            {
+                Resize += ucThongKeDoanhThu_Resize;
+                isLayoutHooked = true;
+            }
+
+            ApplyResponsiveLayout();
+            btnXemBaoCao_Click(sender, e);
+        }
+
+        private void ucThongKeDoanhThu_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void btnXemBaoCao_Click(object sender, EventArgs e)
+        {
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+
+            if (tuNgay > denNgay)
+            {
+                MessageBox.Show("Từ ngày không được lớn hơn Đến ngày!", "Cảnh báo");
+                return;
+            }
+
+            UpdateBaoCao(tuNgay, denNgay);
+        }
+
         private void btnIn_Click(object sender, EventArgs e)
         {
             frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
@@ -73,15 +252,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 using (QLTTDataContext db = new QLTTDataContext())
                 {
-                    // =========================================================
-                    // 1. LẤY DỮ LIỆU TỔNG THU 
-                    // =========================================================
-                    // Bước 1: Kéo dữ liệu thô về RAM
                     var rawThu = db.HoaDons
                         .Where(hd => hd.NgayThanhToan >= tuNgay && hd.NgayThanhToan <= denNgay)
                         .ToList();
 
-                    // Bước 2: Ép kiểu triệt để khử Nullable
                     var lstThu = rawThu.Select(hd => new
                     {
                         NgayThang = Convert.ToDateTime(hd.NgayThanhToan),
@@ -91,9 +265,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         SoTien = Convert.ToDecimal(hd.SoTien)
                     }).ToList();
 
-                    // =========================================================
-                    // 2. LẤY DỮ LIỆU TỔNG CHI - NHÂN VIÊN
-                    // =========================================================
                     var rawChiNV = (from cc in db.ChamCongs
                                     join nv in db.NhanViens on cc.IdTaiKhoan equals nv.IdTaiKhoan
                                     where cc.NgayCham >= tuNgay && cc.NgayCham <= denNgay
@@ -108,9 +279,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         SoTien = Convert.ToDecimal(x.Luong)
                     }).ToList();
 
-                    // =========================================================
-                    // 3. LẤY DỮ LIỆU TỔNG CHI - HUẤN LUYỆN VIÊN
-                    // =========================================================
                     var rawChiHLV = (from cc in db.ChamCongs
                                      join hlv in db.HuanLuyenViens on cc.IdTaiKhoan equals hlv.IdTaiKhoan
                                      where cc.NgayCham >= tuNgay && cc.NgayCham <= denNgay
@@ -125,9 +293,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         SoTien = Convert.ToDecimal(x.LuongCoBan)
                     }).ToList();
 
-                    // =========================================================
-                    // 4. GỘP CÁC DANH SÁCH & TÍNH TOÁN
-                    // =========================================================
                     var lstBaoCao = lstThu.Concat(lstChiNV)
                                           .Concat(lstChiHLV)
                                           .OrderBy(x => x.LoaiGiaoDich)
@@ -140,7 +305,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         return;
                     }
 
-                    // Khúc này không cần ?? 0 nữa vì SoTien đã được ép về decimal thuần túy
                     decimal tongThu = lstThu.Sum(x => x.SoTien);
                     decimal tongChi = lstChiNV.Sum(x => x.SoTien) + lstChiHLV.Sum(x => x.SoTien);
                     decimal loiNhuanRong = tongThu - tongChi;
@@ -149,9 +313,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     txtChiLuong.Text = tongChi.ToString("#,##0") + " VNĐ";
                     txtLoiNhuan.Text = loiNhuanRong.ToString("#,##0") + " VNĐ";
 
-                    // =========================================================
-                    // 5. HIỂN THỊ LÊN CRYSTAL REPORT QUA FORM MỚI
-                    // =========================================================
                     rptDoanhThu rpt = new rptDoanhThu();
                     rpt.SetDataSource(lstBaoCao);
 
@@ -167,6 +328,16 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 MessageBox.Show("Đã xảy ra lỗi hệ thống: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void AlignSummaryCard(Panel panel, Label titleLabel, TextBox valueTextBox)
+        {
+            titleLabel.AutoSize = false;
+            titleLabel.TextAlign = ContentAlignment.MiddleCenter;
+            titleLabel.SetBounds(10, 12, panel.Width - 20, 26);
+
+            valueTextBox.BorderStyle = BorderStyle.FixedSingle;
+            valueTextBox.SetBounds(18, 48, panel.Width - 36, 32);
         }
     }
 }

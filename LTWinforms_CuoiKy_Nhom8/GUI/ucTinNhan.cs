@@ -1,28 +1,159 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
-using LTWinforms_CuoiKy_Nhom8.DAL;
 using LTWinforms_CuoiKy_Nhom8.DTO;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucTinNhan : UserControl
     {
-        TinNhanBUS chatBUS = new TinNhanBUS();
-        int idKhachHangDangChat = 0;
-        int idTinNhanDangSua = 0;
+        private readonly TinNhanBUS chatBUS = new TinNhanBUS();
+        private int idKhachHangDangChat = 0;
+        private int idTinNhanDangSua = 0;
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucTinNhan()
         {
             InitializeComponent();
             lbxNoiDungChat.ContextMenuStrip = contextMenuStrip1;
+        }
+
+        private void ApplyTheme()
+        {
+            if (isThemeApplied)
+            {
+                return;
+            }
+
+            BackColor = Color.White;
+
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(34, 49, 63);
+
+            txtSoanTin.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            txtSoanTin.ForeColor = Color.FromArgb(44, 62, 80);
+            txtSoanTin.BorderStyle = BorderStyle.FixedSingle;
+
+            StylePrimaryButton(btnGui);
+            StyleSecondaryButton(btnLamMoi);
+
+            StyleContactGrid(dgvDanhSachLienHe);
+            StyleChatList(lbxNoiDungChat);
+
+            isThemeApplied = true;
+        }
+
+        private void StylePrimaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(46, 134, 222), Color.White);
+        }
+
+        private void StyleSecondaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(52, 73, 94), Color.White);
+        }
+
+        private void StyleButton(Button button, Color backColor, Color foreColor)
+        {
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
+            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
+            button.BackColor = backColor;
+            button.ForeColor = foreColor;
+            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            button.Cursor = Cursors.Hand;
+            button.Height = 34;
+        }
+
+        private void StyleContactGrid(DataGridView grid)
+        {
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(46, 134, 222);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            grid.ColumnHeadersHeight = 36;
+
+            grid.RowTemplate.Height = 28;
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 249, 255);
+            grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(186, 222, 250);
+            grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(25, 42, 58);
+
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.RowHeadersVisible = false;
+        }
+
+        private void StyleChatList(ListBox listBox)
+        {
+            listBox.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+            listBox.ForeColor = Color.FromArgb(44, 62, 80);
+            listBox.BackColor = Color.White;
+            listBox.BorderStyle = BorderStyle.FixedSingle;
+            listBox.HorizontalScrollbar = true;
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Max(760, ClientSize.Width - 24);
+            int left = Math.Max(12, (ClientSize.Width - contentWidth) / 2);
+
+            int top = 12;
+            int contactWidth = 260;
+            int gap = 14;
+            int rightLeft = left + contactWidth + gap;
+            int rightWidth = contentWidth - contactWidth - gap;
+
+            label1.SetBounds(left, top, contentWidth, 28);
+
+            int areaTop = label1.Bottom + 8;
+            int areaHeight = ClientSize.Height - areaTop - 12;
+
+            dgvDanhSachLienHe.SetBounds(left, areaTop, contactWidth, areaHeight);
+
+            int chatListHeight = Math.Max(180, areaHeight - 86);
+            lbxNoiDungChat.SetBounds(rightLeft, areaTop, rightWidth, chatListHeight);
+
+            txtSoanTin.SetBounds(rightLeft, lbxNoiDungChat.Bottom + 10, rightWidth - 96, 30);
+            btnGui.SetBounds(txtSoanTin.Right + 8, txtSoanTin.Top - 2, 88, 34);
+
+            btnLamMoi.SetBounds(rightLeft, txtSoanTin.Bottom + 8, 100, 34);
+        }
+
+        private void LoadDanhSachLienHe()
+        {
+            dgvDanhSachLienHe.Visible = true;
+            dgvDanhSachLienHe.DataSource = chatBUS.LayDanhSachLienHe(Session.Role);
+
+            if (dgvDanhSachLienHe.Columns.Count > 0)
+            {
+                dgvDanhSachLienHe.Columns["Id"].Visible = false;
+                dgvDanhSachLienHe.Columns["TenHienThi"].HeaderText = "Danh sách liên hệ";
+                dgvDanhSachLienHe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+
+            if (dgvDanhSachLienHe.Rows.Count > 0)
+            {
+                dgvDanhSachLienHe.Rows[0].Selected = true;
+                idKhachHangDangChat = Convert.ToInt32(dgvDanhSachLienHe.Rows[0].Cells["Id"].Value);
+                LoadTinNhan();
+            }
+            else
+            {
+                idKhachHangDangChat = 0;
+                lbxNoiDungChat.Items.Clear();
+            }
         }
 
         private void LoadTinNhan()
@@ -33,9 +164,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             lbxNoiDungChat.Items.Clear();
-            var listTinNhan = (List<dynamic>)chatBUS.LayLichSuChat(Session.IdTaiKhoan, idKhachHangDangChat);
+            List<dynamic> listTinNhan = (List<dynamic>)chatBUS.LayLichSuChat(Session.IdTaiKhoan, idKhachHangDangChat);
 
-            foreach (var tn in listTinNhan)
+            foreach (dynamic tn in listTinNhan)
             {
                 string icon = tn.LaToi ? "👤" : (tn.TenHienThi == "Trung tâm" ? "🏢" : "💬");
                 string thoiGian = Convert.ToDateTime(tn.ThoiGian).ToString("HH:mm dd/MM");
@@ -43,9 +174,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 TinNhanItem item = new TinNhanItem()
                 {
                     Id = tn.Id,
-                    LaToi = tn.LaToi, 
+                    LaToi = tn.LaToi,
                     NoiDungGoc = tn.NoiDung,
-                    TextHienThi = $"[{thoiGian}] {icon} {tn.TenHienThi}: {tn.NoiDung}"
+                    TextHienThi = "[" + thoiGian + "] " + icon + " " + tn.TenHienThi + ": " + tn.NoiDung
                 };
 
                 lbxNoiDungChat.Items.Add(item);
@@ -59,25 +190,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucTinNhan_Load(object sender, EventArgs e)
         {
-            dgvDanhSachLienHe.Visible = true;
+            ApplyTheme();
+            LoadDanhSachLienHe();
 
-            dgvDanhSachLienHe.DataSource = chatBUS.LayDanhSachLienHe(Session.Role);
-
-            if (dgvDanhSachLienHe.Columns.Count > 0)
+            if (!isLayoutHooked)
             {
-                dgvDanhSachLienHe.Columns["Id"].Visible = false;
-                dgvDanhSachLienHe.Columns["TenHienThi"].HeaderText = "Danh sách liên hệ";
-                dgvDanhSachLienHe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dgvDanhSachLienHe.RowHeadersVisible = false;
-                dgvDanhSachLienHe.AllowUserToAddRows = false;
+                Resize += ucTinNhan_Resize;
+                isLayoutHooked = true;
             }
 
-            if (dgvDanhSachLienHe.Rows.Count > 0)
-            {
-                dgvDanhSachLienHe.Rows[0].Selected = true;
-                idKhachHangDangChat = Convert.ToInt32(dgvDanhSachLienHe.Rows[0].Cells["Id"].Value);
-                LoadTinNhan();
-            }
+            ApplyResponsiveLayout();
+        }
+
+        private void ucTinNhan_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
         }
 
         private void dgvDanhSachLienHe_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -93,6 +220,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             LoadTinNhan();
             txtSoanTin.Clear();
+            idTinNhanDangSua = 0;
+            btnGui.Text = "Gửi";
         }
 
         private void btnGui_Click(object sender, EventArgs e)
@@ -128,7 +257,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true; 
+                e.SuppressKeyPress = true;
                 btnGui_Click(sender, e);
             }
         }
@@ -150,7 +279,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             TinNhanItem selectedMsg = lbxNoiDungChat.SelectedItem as TinNhanItem;
             if (selectedMsg != null)
             {
-                if (!selectedMsg.LaToi) 
+                if (!selectedMsg.LaToi)
                 {
                     MessageBox.Show("Chỉ được sửa tin nhắn của chính mình!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;

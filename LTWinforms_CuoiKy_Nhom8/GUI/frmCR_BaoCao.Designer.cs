@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCR_BaoCao));
             this.crvBaoCao = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.SuspendLayout();
             // 
@@ -38,16 +39,20 @@
             this.crvBaoCao.Cursor = System.Windows.Forms.Cursors.Default;
             this.crvBaoCao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.crvBaoCao.Location = new System.Drawing.Point(0, 0);
+            this.crvBaoCao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.crvBaoCao.Name = "crvBaoCao";
-            this.crvBaoCao.Size = new System.Drawing.Size(987, 627);
+            this.crvBaoCao.Size = new System.Drawing.Size(740, 509);
             this.crvBaoCao.TabIndex = 0;
+            this.crvBaoCao.ToolPanelWidth = 150;
             // 
             // frmCR_BaoCao
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(987, 627);
+            this.ClientSize = new System.Drawing.Size(740, 509);
             this.Controls.Add(this.crvBaoCao);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "frmCR_BaoCao";
             this.Text = "frmCR_BaoCao";
             this.Load += new System.EventHandler(this.frmCR_BaoCao_Load);
