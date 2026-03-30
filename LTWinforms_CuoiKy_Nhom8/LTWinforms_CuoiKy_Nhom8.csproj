@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Assets\erasebg-transformed.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -87,6 +90,7 @@
     <Compile Include="GUI\frmCR_BaoCao.Designer.cs">
       <DependentUpon>frmCR_BaoCao.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ModernTheme.cs" />
     <Compile Include="GUI\rptDoanhThu.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -250,9 +254,6 @@
     <None Include="DAL\dsBaoCao.xss">
       <DependentUpon>dsBaoCao.xsd</DependentUpon>
     </None>
-    <None Include="DAL\QLTT.dbml.layout">
-      <DependentUpon>QLTT.dbml</DependentUpon>
-    </None>
     <EmbeddedResource Include="GUI\frmCR_BaoCao.resx">
       <DependentUpon>frmCR_BaoCao.cs</DependentUpon>
     </EmbeddedResource>
@@ -342,11 +343,15 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="DAL\QLTT.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>QLTT.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </None>
+    <None Include="DAL\QLTT.dbml.layout">
+      <DependentUpon>QLTT.dbml</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -367,6 +372,26 @@
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\erasebg-transformed.ico" />
+    <None Include="Resources\logo.ico" />
+    <None Include="Assets\MenuIcons\thongke.png" />
+    <None Include="Assets\MenuIcons\tinnhan.png" />
+    <None Include="Assets\MenuIcons\sanpham.png" />
+    <None Include="Assets\MenuIcons\quantri.png" />
+    <None Include="Assets\MenuIcons\phongtap.png" />
+    <None Include="Assets\MenuIcons\luongthuong.png" />
+    <None Include="Assets\MenuIcons\lophoc.png" />
+    <None Include="Assets\MenuIcons\lichhoc.png" />
+    <None Include="Assets\MenuIcons\hoso.png" />
+    <None Include="Assets\MenuIcons\hoivien.png" />
+    <None Include="Assets\MenuIcons\giaodich.png" />
+    <None Include="Assets\MenuIcons\goitap.png" />
+    <None Include="Assets\MenuIcons\dichvu.png" />
+    <None Include="Assets\MenuIcons\dangxuat.png" />
+    <None Include="Assets\MenuIcons\chamcong.png" />
+    <None Include="Assets\MenuIcons\banve.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

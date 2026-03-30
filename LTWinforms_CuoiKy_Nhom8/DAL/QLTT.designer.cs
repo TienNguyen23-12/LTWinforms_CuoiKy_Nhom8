@@ -78,7 +78,7 @@ namespace LTWinforms_CuoiKy_Nhom8.DAL
     #endregion
 		
 		public QLTTDataContext() : 
-				base(global::LTWinforms_CuoiKy_Nhom8.Properties.Settings.Default.QLTT_TheThaoConnectionString1, mappingSource)
+				base(global::LTWinforms_CuoiKy_Nhom8.Properties.Settings.Default.QLTT_TheThaoConnectionString2, mappingSource)
 		{
 			OnCreated();
 		}

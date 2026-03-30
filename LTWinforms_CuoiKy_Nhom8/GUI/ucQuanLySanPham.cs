@@ -1,20 +1,16 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucQuanLySanPham : UserControl
     {
-        SanPhamBUS spBUS = new SanPhamBUS();
-        int maSPDangChon = 0;
+        private readonly SanPhamBUS spBUS = new SanPhamBUS();
+        private int maSPDangChon = 0;
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucQuanLySanPham()
         {
@@ -23,8 +19,151 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucQuanLySanPham_Load(object sender, EventArgs e)
         {
+            ApplyTheme();
             LoadData();
+
             btnSua.Enabled = false;
+
+            if (!isLayoutHooked)
+            {
+                Resize += ucQuanLySanPham_Resize;
+                isLayoutHooked = true;
+            }
+
+            ApplyResponsiveLayout();
+        }
+
+        private void ucQuanLySanPham_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyTheme()
+        {
+            if (isThemeApplied)
+            {
+                return;
+            }
+
+            BackColor = Color.White;
+
+            label1.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(34, 49, 63);
+
+            StyleLabel(label2);
+            StyleLabel(label3);
+
+            StyleInput(txtTenSP);
+            StyleInput(txtGiaTien);
+
+            chkDangBan.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+            chkDangBan.ForeColor = Color.FromArgb(44, 62, 80);
+
+            StylePrimaryButton(btnLuu);
+            StyleSecondaryButton(btnThem);
+            StyleSecondaryButton(btnSua);
+
+            StyleGrid(dgvSanPham);
+
+            isThemeApplied = true;
+        }
+
+        private void StyleLabel(Label label)
+        {
+            label.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+            label.ForeColor = Color.FromArgb(44, 62, 80);
+        }
+
+        private void StyleInput(TextBox textBox)
+        {
+            textBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            textBox.ForeColor = Color.FromArgb(44, 62, 80);
+            textBox.BackColor = Color.White;
+            textBox.BorderStyle = BorderStyle.FixedSingle;
+        }
+
+        private void StylePrimaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(46, 134, 222), Color.White);
+        }
+
+        private void StyleSecondaryButton(Button button)
+        {
+            StyleButton(button, Color.FromArgb(52, 73, 94), Color.White);
+        }
+
+        private void StyleButton(Button button, Color backColor, Color foreColor)
+        {
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
+            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
+            button.BackColor = backColor;
+            button.ForeColor = foreColor;
+            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            button.Cursor = Cursors.Hand;
+            button.Height = 34;
+        }
+
+        private void StyleGrid(DataGridView grid)
+        {
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(46, 134, 222);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            grid.ColumnHeadersHeight = 38;
+
+            grid.RowTemplate.Height = 28;
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 249, 255);
+            grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(186, 222, 250);
+            grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(25, 42, 58);
+
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.RowHeadersVisible = false;
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Min(1100, ClientSize.Width - 40);
+            int left = Math.Max(20, (ClientSize.Width - contentWidth) / 2);
+
+            label1.AutoSize = true;
+            label1.Top = 16;
+            label1.Left = left + (contentWidth - label1.Width) / 2;
+
+            int formLeft = left + 40;
+            int labelWidth = 110;
+            int inputWidth = 340;
+
+            int y = label1.Bottom + 18;
+
+            label2.SetBounds(formLeft, y + 6, labelWidth, 24);
+            txtTenSP.SetBounds(formLeft + labelWidth + 10, y, inputWidth, 30);
+
+            y += 42;
+            label3.SetBounds(formLeft, y + 6, labelWidth, 24);
+            txtGiaTien.SetBounds(formLeft + labelWidth + 10, y, inputWidth, 30);
+
+            y += 40;
+            chkDangBan.SetBounds(formLeft + labelWidth + 10, y, 140, 24);
+
+            int btnY = y + 36;
+            btnLuu.SetBounds(formLeft, btnY, 120, 34);
+            btnThem.SetBounds(btnLuu.Right + 12, btnY, 120, 34);
+            btnSua.SetBounds(btnThem.Right + 12, btnY, 120, 34);
+
+            int gridTop = btnLuu.Bottom + 16;
+            int gridHeight = Math.Max(220, ClientSize.Height - gridTop - 20);
+            dgvSanPham.SetBounds(left, gridTop, contentWidth, gridHeight);
         }
 
         private void LoadData()
@@ -50,7 +189,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 txtGiaTien.Text = row.Cells["GiaTien"].Value.ToString();
 
                 string trangThai = row.Cells["TrangThai"].Value.ToString();
-                chkDangBan.Checked = (trangThai == "Đang bán");
+                chkDangBan.Checked = trangThai == "Đang bán";
 
                 btnSua.Enabled = true;
             }
@@ -58,25 +197,37 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            maSPDangChon = 0; 
+            maSPDangChon = 0;
             txtTenSP.Clear();
             txtGiaTien.Text = "0";
             chkDangBan.Checked = true;
+            btnSua.Enabled = false;
             txtTenSP.Focus();
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
             string ten = txtTenSP.Text.Trim();
-            if (string.IsNullOrEmpty(ten)) { MessageBox.Show("Tên không được để trống"); return; }
+            if (string.IsNullOrEmpty(ten))
+            {
+                MessageBox.Show("Tên không được để trống");
+                return;
+            }
 
-            decimal gia = decimal.Parse(txtGiaTien.Text);
+            decimal gia;
+            if (!decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out gia))
+            {
+                MessageBox.Show("Giá tiền không hợp lệ!");
+                return;
+            }
 
             string kq = spBUS.LuuSanPham(maSPDangChon, ten, gia, chkDangBan.Checked);
             if (kq == "")
             {
                 MessageBox.Show("Đã lưu thông tin sản phẩm!");
                 LoadData();
+                btnSua.Enabled = false;
+                maSPDangChon = 0;
             }
             else
             {
@@ -93,30 +244,29 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             string tenMoi = txtTenSP.Text.Trim();
-            decimal giaMoi = 0;
-
             if (string.IsNullOrEmpty(tenMoi))
             {
                 MessageBox.Show("Tên sản phẩm không được để trống!");
                 return;
             }
 
-            if (!decimal.TryParse(txtGiaTien.Text, out giaMoi))
+            decimal giaMoi;
+            if (!decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaMoi))
             {
                 MessageBox.Show("Giá tiền phải là số hợp lệ!");
                 return;
             }
 
-            if (MessageBox.Show($"Bạn có chắc muốn cập nhật thông tin cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Bạn có chắc muốn cập nhật thông tin cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 string kq = spBUS.CapNhatSanPham(maSPDangChon, tenMoi, giaMoi, chkDangBan.Checked);
 
                 if (kq == "")
                 {
                     MessageBox.Show("Cập nhật sản phẩm thành công!", "Thành công");
-                    LoadData(); 
-                    btnSua.Enabled = false; 
-                    maSPDangChon = 0; 
+                    LoadData();
+                    btnSua.Enabled = false;
+                    maSPDangChon = 0;
                 }
                 else
                 {

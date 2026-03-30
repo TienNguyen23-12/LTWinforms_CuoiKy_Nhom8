@@ -1,4 +1,4 @@
-﻿    using LTWinforms_CuoiKy_Nhom8.DAL;
+﻿using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +13,19 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object LayDanhSachLopHoc(string tuKhoa = "", string maHLV = "", DateTime? tuNgay = null, DateTime? denNgay = null)
         {
-            var query = db.LopHocs.Where(x => x.IsActive == true && x.TrangThai == "Chuẩn bị");
+            var query = db.LopHocs.Where(x => x.IsActive == true);
 
-            if (!string.IsNullOrEmpty(tuKhoa))
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
             {
-                query = query.Where(x => x.TenLop.Contains(tuKhoa));
+                query = query.Where(x =>
+                    x.MaLop.Contains(tuKhoa) ||
+                    x.TenLop.Contains(tuKhoa) ||
+                    x.ThoiGian.Contains(tuKhoa));
             }
 
             if (!string.IsNullOrEmpty(maHLV) && maHLV != "ALL")
             {
-                if (maHLV == "NONE")
+                if (maHLV == "NONE" || maHLV == "NULL")
                 {
                     query = query.Where(x => x.MaHLV == null || x.MaHLV == "");
                 }
@@ -32,7 +35,11 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 }
             }
 
-            if (tuNgay.HasValue) query = query.Where(x => x.NgayBatDau >= tuNgay.Value.Date);
+            if (tuNgay.HasValue)
+            {
+                query = query.Where(x => x.NgayBatDau >= tuNgay.Value.Date);
+            }
+
             if (denNgay.HasValue)
             {
                 DateTime denNgayEnd = denNgay.Value.Date.AddDays(1).AddSeconds(-1);
