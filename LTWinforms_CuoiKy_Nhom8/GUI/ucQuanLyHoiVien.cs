@@ -270,7 +270,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (string.IsNullOrEmpty(txtMaHoiVien.Text) || string.IsNullOrEmpty(txtHoTen.Text))
             {
-                MessageBox.Show("Vui lòng nhập đủ Mã và Họ Tên!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập đủ Mã và Họ Tên!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
@@ -288,13 +288,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = hvBUS.ThemHoiVien(hv);
             if (kq == "")
             {
-                MessageBox.Show("Thêm hội viên thành công!", "Thông báo");
+                ModernMessageBox.Show("Thêm hội viên thành công!", "Thông báo", ModernMessageType.Success);
                 LoadData();
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -312,30 +312,30 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = hvBUS.SuaHoiVien(hv);
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật thành công!", "Thông báo");
+                ModernMessageBox.Show("Cập nhật thành công!", "Thông báo", ModernMessageType.Success);
                 LoadData();
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
         private void btnKhoa_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có chắc muốn khóa hội viên này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ModernMessageBox.Show("Bạn có chắc muốn khóa hội viên này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = hvBUS.KhoaHoiVien(txtMaHoiVien.Text.Trim());
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã khóa hội viên!", "Thông báo");
+                    ModernMessageBox.Show("Đã khóa hội viên.", "Thông báo", ModernMessageType.Success);
                     LoadData();
                     btnLamMoi_Click(sender, e);
                 }
                 else
                 {
-                    MessageBox.Show(kq, "Lỗi");
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

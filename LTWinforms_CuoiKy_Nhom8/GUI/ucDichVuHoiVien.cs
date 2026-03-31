@@ -86,7 +86,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = hvBUS.GuiPhanHoi(Session.IdTaiKhoan, noiDung);
             if (kq == "")
             {
-                MessageBox.Show("Cảm ơn góp ý của bạn!", "Thành công");
+                ModernMessageBox.Show("Cảm ơn góp ý của bạn!", "Thành công", ModernMessageType.Success);
                 txtPhanHoi.Clear();
             }
         }
@@ -98,13 +98,17 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 string maGoi = dgvGoiTap.CurrentRow.Cells["MaGoi"].Value.ToString();
                 decimal giaTien = Convert.ToDecimal(dgvGoiTap.CurrentRow.Cells["GiaTien"].Value);
 
-                if (MessageBox.Show("Xác nhận đăng ký Online gói này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Xác nhận đăng ký online gói này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = hvBUS.DangKyGoiOnline(Session.IdTaiKhoan, maGoi, giaTien);
                     if (kq == "")
-                        MessageBox.Show("Đã đặt chỗ thành công! Hãy ghé quầy thu ngân để thanh toán.", "Thông báo");
+                    {
+                        ModernMessageBox.Show("Đã đặt chỗ thành công. Hãy ghé quầy thu ngân để thanh toán.", "Thông báo", ModernMessageType.Success);
+                    }
                     else
-                        MessageBox.Show("Lỗi: " + kq);
+                    {
+                        ModernMessageBox.Show("Lỗi: " + kq, "Lỗi", ModernMessageType.Error);
+                    }
                 }
             }
         }
@@ -116,13 +120,17 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 string maLop = dgvLopHoc.CurrentRow.Cells["MaLop"].Value.ToString();
                 string tenLop = dgvLopHoc.CurrentRow.Cells["TenLop"].Value.ToString();
 
-                if (MessageBox.Show($"Bạn muốn đăng ký học lớp [{tenLop}]?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Bạn muốn đăng ký học lớp [" + tenLop + "]?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = hvBUS.DangKyLopOnline(Session.IdTaiKhoan, maLop);
                     if (kq == "")
-                        MessageBox.Show("Đăng ký lớp thành công! Vui lòng đóng học phí tại quầy.", "Thông báo");
+                    {
+                        ModernMessageBox.Show("Đăng ký lớp thành công. Vui lòng đóng học phí tại quầy.", "Thông báo", ModernMessageType.Success);
+                    }
                     else
-                        MessageBox.Show(kq);
+                    {
+                        ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
+                    }
                 }
             }
         }
@@ -190,7 +198,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                 if (tuNgay > denNgay)
                 {
-                    MessageBox.Show("Từ ngày không thể lớn hơn Đến ngày!", "Cảnh báo");
+                    ModernMessageBox.Show("Từ ngày không thể lớn hơn Đến ngày!", "Cảnh báo", ModernMessageType.Warning);
                     return;
                 }
             }

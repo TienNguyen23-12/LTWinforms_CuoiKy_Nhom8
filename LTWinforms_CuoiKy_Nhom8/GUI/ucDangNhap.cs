@@ -2,7 +2,6 @@
 using LTWinforms_CuoiKy_Nhom8.DTO;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
@@ -12,8 +11,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private readonly TaiKhoanBUS tk = new TaiKhoanBUS();
         private bool isUiApplied;
 
-        private Panel pnlLogo;
-        private Label lblLogo;
         private Label lblSubTitle;
         private Panel lineUser;
         private Panel linePass;
@@ -70,7 +67,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 pnlCard.Controls.Add(linePass);
             }
 
-            lblTitle.Text = "Welcome!";
+            lblTitle.Text = "SPORTIFY!";
             lblTitle.Font = new Font("Segoe UI", 21F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(92, 100, 226);
             lblTitle.AutoSize = true;
@@ -108,56 +105,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             linkLabelDangKy.LinkColor = Color.FromArgb(145, 153, 179);
             linkQuenMatKhau.ActiveLinkColor = Color.FromArgb(92, 100, 226);
             linkLabelDangKy.ActiveLinkColor = Color.FromArgb(92, 100, 226);
-        }
-
-        private void ApplyBrandLogo()
-        {
-            Image logo = LoadBrandLogo(40, 40);
-            if (logo != null)
-            {
-                if (pnlLogo.BackgroundImage != null)
-                {
-                    pnlLogo.BackgroundImage.Dispose();
-                }
-
-                pnlLogo.BackgroundImage = logo;
-                pnlLogo.BackgroundImageLayout = ImageLayout.Center;
-                lblLogo.Visible = false;
-            }
-            else
-            {
-                lblLogo.Visible = true;
-                lblLogo.Text = "Logo";
-            }
-        }
-
-        private Image LoadBrandLogo(int w, int h)
-        {
-            object res = Properties.Resources.ResourceManager.GetObject("logo");
-            Bitmap bmp = res as Bitmap;
-            if (bmp != null)
-            {
-                return new Bitmap(bmp, new Size(w, h));
-            }
-
-            string[] paths =
-            {
-                Path.Combine(Application.StartupPath, "Assets", "logo.ico"),
-                Path.Combine(Application.StartupPath, "Resources", "logo.ico")
-            };
-
-            foreach (string path in paths)
-            {
-                if (File.Exists(path))
-                {
-                    using (Icon ico = new Icon(path))
-                    {
-                        return new Bitmap(ico.ToBitmap(), new Size(w, h));
-                    }
-                }
-            }
-
-            return null;
         }
 
         private void LayoutLoginCard()

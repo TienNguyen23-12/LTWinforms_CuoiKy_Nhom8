@@ -10,8 +10,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
     {
         private readonly TaiKhoanBUS tkBUS = new TaiKhoanBUS();
 
-        private Panel pnlLogo;
-        private Label lblLogo;
         private Label lblSubTitle;
         private Panel lineUser;
         private Panel linePhone;
@@ -50,59 +48,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             LayoutForgotCard();
 
             pnlCard.SizeChanged += delegate { LayoutForgotCard(); };
-        }
-
-        private void ApplyBrandLogo()
-        {
-            Image logo = LoadBrandLogo(34, 34);
-            if (logo != null)
-            {
-                if (pnlLogo.BackgroundImage != null)
-                {
-                    pnlLogo.BackgroundImage.Dispose();
-                }
-
-                pnlLogo.BackgroundImage = logo;
-                pnlLogo.BackgroundImageLayout = ImageLayout.Center;
-                if (lblLogo != null)
-                {
-                    lblLogo.Visible = false;
-                }
-            }
-            else if (lblLogo != null)
-            {
-                lblLogo.Visible = true;
-                lblLogo.Text = "Logo";
-            }
-        }
-
-        private Image LoadBrandLogo(int w, int h)
-        {
-            object res = Properties.Resources.ResourceManager.GetObject("logo");
-            Bitmap bmp = res as Bitmap;
-            if (bmp != null)
-            {
-                return new Bitmap(bmp, new Size(w, h));
-            }
-
-            string[] paths =
-            {
-        Path.Combine(Application.StartupPath, "Assets", "logo.ico"),
-        Path.Combine(Application.StartupPath, "Resources", "logo.ico")
-    };
-
-            foreach (string path in paths)
-            {
-                if (File.Exists(path))
-                {
-                    using (Icon ico = new Icon(path))
-                    {
-                        return new Bitmap(ico.ToBitmap(), new Size(w, h));
-                    }
-                }
-            }
-
-            return null;
         }
 
         private void EnsureVisualNodes()

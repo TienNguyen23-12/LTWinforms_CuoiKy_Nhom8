@@ -374,7 +374,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
-            DialogResult xacNhan = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult xacNhan = ModernMessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                ModernMessageType.Question);
 
             if (xacNhan == DialogResult.Yes)
             {

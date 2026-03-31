@@ -269,7 +269,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (string.IsNullOrEmpty(txtMaPhong.Text) || string.IsNullOrEmpty(txtTenPhong.Text))
             {
-                MessageBox.Show("Vui lòng nhập đủ Mã và Tên phòng!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập đủ Mã và Tên phòng!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
@@ -286,12 +286,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = ptBUS.ThemPhong(pt);
             if (kq == "")
             {
-                MessageBox.Show("Thêm thành công!");
+                ModernMessageBox.Show("Thêm thành công!", "Thông báo", ModernMessageType.Success);
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -314,12 +314,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = ptBUS.SuaPhong(pt);
             if (kq == "")
             {
-                MessageBox.Show("Sửa thành công!");
+                ModernMessageBox.Show("Sửa thành công!", "Thông báo", ModernMessageType.Success);
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -333,12 +333,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = ptBUS.KhoaPhong(txtMaPhong.Text.Trim());
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật trạng thái thành công!");
+                ModernMessageBox.Show("Cập nhật trạng thái thành công!", "Thông báo", ModernMessageType.Success);
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 

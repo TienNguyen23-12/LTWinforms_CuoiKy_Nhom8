@@ -234,140 +234,140 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtMaGoi.Text) || string.IsNullOrEmpty(txtTenGoi.Text))
-            {
-                MessageBox.Show("Nhập đủ thông tin Mã và Tên gói!", "Cảnh báo");
-                return;
-            }
+            if (string.IsNullOrEmpty(txtMaGoi.Text.Trim()) || string.IsNullOrEmpty(txtTenGoi.Text.Trim()) || string.IsNullOrEmpty(txtThoiHan.Text.Trim()) || string.IsNullOrEmpty(txtGiaTien.Text.Trim()))
+    {
+        ModernMessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", ModernMessageType.Warning);
+        return;
+    }
 
-            int thoiHan;
-            decimal giaTien;
+    int thoiHan;
+    decimal giaTien;
 
-            if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
-            {
-                MessageBox.Show("Thời hạn phải là số nguyên!", "Lỗi");
-                return;
-            }
+    if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
+    {
+        ModernMessageBox.Show("Thời hạn phải là số nguyên.", "Lỗi", ModernMessageType.Error);
+        return;
+    }
 
-            if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
-            {
-                MessageBox.Show("Giá tiền không hợp lệ!", "Lỗi");
-                return;
-            }
+    if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
+    {
+        ModernMessageBox.Show("Giá tiền không hợp lệ.", "Lỗi", ModernMessageType.Error);
+        return;
+    }
 
-            GoiTap gt = new GoiTap()
-            {
-                MaGoi = txtMaGoi.Text.Trim(),
-                TenGoi = txtTenGoi.Text.Trim(),
-                ThoiHanThang = thoiHan,
-                GiaTien = giaTien,
-                IsActive = true
-            };
+    GoiTap gt = new GoiTap()
+    {
+        MaGoi = txtMaGoi.Text.Trim(),
+        TenGoi = txtTenGoi.Text.Trim(),
+        ThoiHanThang = thoiHan,
+        GiaTien = giaTien,
+        IsActive = true
+    };
 
-            string kq = gtBUS.ThemGoiTap(gt);
-            if (kq == "")
-            {
-                MessageBox.Show("Thêm thành công!");
-                btnLamMoi_Click(sender, e);
-            }
-            else
-            {
-                MessageBox.Show(kq);
-            }
-        }
+    string kq = gtBUS.ThemGoiTap(gt);
+    if (kq == "")
+    {
+        ModernMessageBox.Show("Thêm thành công.", "Thành công", ModernMessageType.Success);
+        btnLamMoi_Click(sender, e);
+    }
+    else
+    {
+        ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
+    }
+}
 
-        private void btnSua_Click(object sender, EventArgs e)
+private void btnSua_Click(object sender, EventArgs e)
+{
+    int thoiHan;
+    decimal giaTien;
+
+    if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
+    {
+        ModernMessageBox.Show("Thời hạn phải là số nguyên.", "Lỗi", ModernMessageType.Error);
+        return;
+    }
+
+    if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
+    {
+        ModernMessageBox.Show("Giá tiền không hợp lệ.", "Lỗi", ModernMessageType.Error);
+        return;
+    }
+
+    GoiTap gt = new GoiTap()
+    {
+        MaGoi = txtMaGoi.Text.Trim(),
+        TenGoi = txtTenGoi.Text.Trim(),
+        ThoiHanThang = thoiHan,
+        GiaTien = giaTien
+    };
+
+    string kq = gtBUS.SuaGoiTap(gt);
+    if (kq == "")
+    {
+        ModernMessageBox.Show("Sửa thành công.", "Thành công", ModernMessageType.Success);
+        btnLamMoi_Click(sender, e);
+    }
+    else
+    {
+        ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
+    }
+}
+
+private void btnKhoa_Click(object sender, EventArgs e)
+{
+    if (ModernMessageBox.Show("Khóa gói tập này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
+    {
+        string kq = gtBUS.KhoaGoiTap(txtMaGoi.Text.Trim());
+        if (kq == "")
         {
-            int thoiHan;
-            decimal giaTien;
-
-            if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
-            {
-                MessageBox.Show("Thời hạn phải là số nguyên!", "Lỗi");
-                return;
-            }
-
-            if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
-            {
-                MessageBox.Show("Giá tiền không hợp lệ!", "Lỗi");
-                return;
-            }
-
-            GoiTap gt = new GoiTap()
-            {
-                MaGoi = txtMaGoi.Text.Trim(),
-                TenGoi = txtTenGoi.Text.Trim(),
-                ThoiHanThang = thoiHan,
-                GiaTien = giaTien
-            };
-
-            string kq = gtBUS.SuaGoiTap(gt);
-            if (kq == "")
-            {
-                MessageBox.Show("Sửa thành công!");
-                btnLamMoi_Click(sender, e);
-            }
-            else
-            {
-                MessageBox.Show(kq);
-            }
+            ModernMessageBox.Show("Đã khóa.", "Thành công", ModernMessageType.Success);
+            btnLamMoi_Click(sender, e);
         }
-
-        private void btnKhoa_Click(object sender, EventArgs e)
+        else
         {
-            if (MessageBox.Show("Khóa gói tập này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                string kq = gtBUS.KhoaGoiTap(txtMaGoi.Text.Trim());
-                if (kq == "")
-                {
-                    MessageBox.Show("Đã khóa!");
-                    btnLamMoi_Click(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show(kq);
-                }
-            }
+            ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
         }
+    }
+}
 
-        private void btnLamMoi_Click(object sender, EventArgs e)
+private void btnLamMoi_Click(object sender, EventArgs e)
+{
+    txtMaGoi.Clear();
+    txtTenGoi.Clear();
+    txtThoiHan.Clear();
+    txtGiaTien.Clear();
+    txtTimKiem.Clear();
+
+    txtMaGoi.Enabled = true;
+    txtMaGoi.Focus();
+    LoadData();
+}
+
+private void btnTimKiem_Click(object sender, EventArgs e)
+{
+    LoadData(txtTimKiem.Text.Trim());
+}
+
+private void dgvGoiTap_CellClick(object sender, DataGridViewCellEventArgs e)
+{
+    if (e.RowIndex >= 0)
+    {
+        DataGridViewRow row = dgvGoiTap.Rows[e.RowIndex];
+        txtMaGoi.Text = row.Cells["MaGoi"].Value == null ? "" : row.Cells["MaGoi"].Value.ToString();
+        txtTenGoi.Text = row.Cells["TenGoi"].Value == null ? "" : row.Cells["TenGoi"].Value.ToString();
+        txtThoiHan.Text = row.Cells["ThoiHanThang"].Value == null ? "" : row.Cells["ThoiHanThang"].Value.ToString();
+
+        if (row.Cells["GiaTien"].Value != null)
         {
-            txtMaGoi.Clear();
-            txtTenGoi.Clear();
-            txtThoiHan.Clear();
-            txtGiaTien.Clear();
-            txtTimKiem.Clear();
-
-            txtMaGoi.Enabled = true;
-            txtMaGoi.Focus();
-            LoadData();
+            txtGiaTien.Text = Convert.ToDecimal(row.Cells["GiaTien"].Value).ToString("0");
         }
-
-        private void btnTimKiem_Click(object sender, EventArgs e)
+        else
         {
-            LoadData(txtTimKiem.Text.Trim());
+            txtGiaTien.Text = "";
         }
 
-        private void dgvGoiTap_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvGoiTap.Rows[e.RowIndex];
-                txtMaGoi.Text = row.Cells["MaGoi"].Value == null ? "" : row.Cells["MaGoi"].Value.ToString();
-                txtTenGoi.Text = row.Cells["TenGoi"].Value == null ? "" : row.Cells["TenGoi"].Value.ToString();
-                txtThoiHan.Text = row.Cells["ThoiHanThang"].Value == null ? "" : row.Cells["ThoiHanThang"].Value.ToString();
-
-                if (row.Cells["GiaTien"].Value != null)
-                {
-                    txtGiaTien.Text = Convert.ToDecimal(row.Cells["GiaTien"].Value).ToString("0");
-                }
-                else
-                {
-                    txtGiaTien.Text = "";
-                }
-
-                txtMaGoi.Enabled = false;
-            }
-        }
+        txtMaGoi.Enabled = false;
+    }
+}
     }
 }

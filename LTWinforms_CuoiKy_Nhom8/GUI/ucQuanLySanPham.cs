@@ -200,28 +200,28 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string ten = txtTenSP.Text.Trim();
             if (string.IsNullOrEmpty(ten))
             {
-                MessageBox.Show("Tên không được để trống");
+                ModernMessageBox.Show("Tên không được để trống", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             decimal gia;
             if (!decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out gia))
             {
-                MessageBox.Show("Giá tiền không hợp lệ!");
+                ModernMessageBox.Show("Giá tiền không hợp lệ!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
             string kq = spBUS.LuuSanPham(maSPDangChon, ten, gia, chkDangBan.Checked);
             if (kq == "")
             {
-                MessageBox.Show("Đã lưu thông tin sản phẩm!");
+                ModernMessageBox.Show("Đã lưu thông tin sản phẩm!", "Thông báo", ModernMessageType.Success);
                 LoadData();
                 btnSua.Enabled = false;
                 maSPDangChon = 0;
             }
             else
             {
-                MessageBox.Show("Lỗi: " + kq);
+                ModernMessageBox.Show("Lỗi: " + kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -229,38 +229,38 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (maSPDangChon == 0)
             {
-                MessageBox.Show("Vui lòng chọn một sản phẩm từ danh sách trước khi sửa!", "Thông báo");
+                ModernMessageBox.Show("Vui lòng chọn một sản phẩm từ danh sách trước khi sửa!", "Thông báo", ModernMessageType.Warning);
                 return;
             }
 
             string tenMoi = txtTenSP.Text.Trim();
             if (string.IsNullOrEmpty(tenMoi))
             {
-                MessageBox.Show("Tên sản phẩm không được để trống!");
+                ModernMessageBox.Show("Tên sản phẩm không được để trống!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             decimal giaMoi;
             if (!decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaMoi))
             {
-                MessageBox.Show("Giá tiền phải là số hợp lệ!");
+                ModernMessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
-            if (MessageBox.Show("Bạn có chắc muốn cập nhật thông tin cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ModernMessageBox.Show("Bạn có chắc muốn cập nhật thông tin cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = spBUS.CapNhatSanPham(maSPDangChon, tenMoi, giaMoi, chkDangBan.Checked);
 
                 if (kq == "")
                 {
-                    MessageBox.Show("Cập nhật sản phẩm thành công!", "Thành công");
+                    ModernMessageBox.Show("Cập nhật sản phẩm thành công!", "Thành công", ModernMessageType.Success);
                     LoadData();
                     btnSua.Enabled = false;
                     maSPDangChon = 0;
                 }
                 else
                 {
-                    MessageBox.Show("Lỗi: " + kq);
+                    ModernMessageBox.Show("Lỗi: " + kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

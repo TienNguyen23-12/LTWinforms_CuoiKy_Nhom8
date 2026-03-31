@@ -279,12 +279,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo");
+                ModernMessageBox.Show("Cập nhật thông tin thành công.", "Thông báo", ModernMessageType.Success);
                 LoadData();
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -292,20 +292,20 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (idDangChon == 0)
             {
-                MessageBox.Show("Vui lòng chọn một nhân sự từ danh sách!", "Nhắc nhở", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Vui lòng chọn một nhân sự từ danh sách.", "Nhắc nhở", ModernMessageType.Warning);
                 return;
             }
 
             if (cboVaiTro.Text != "Huấn Luyện Viên" && cboVaiTro.Text != "Nhân Viên")
             {
-                MessageBox.Show("Chức năng cập nhật lương chỉ áp dụng cho Nhân Viên và Huấn Luyện Viên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ModernMessageBox.Show("Chức năng cập nhật lương chỉ áp dụng cho Nhân Viên và Huấn Luyện Viên.", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             decimal luongMoi;
             if (!decimal.TryParse(txtLuongCoBan.Text, out luongMoi))
             {
-                MessageBox.Show("Vui lòng nhập số tiền lương hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ModernMessageBox.Show("Vui lòng nhập số tiền lương hợp lệ.", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
@@ -313,12 +313,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật lương thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Cập nhật lương thành công.", "Thông báo", ModernMessageType.Success);
                 LoadData();
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ModernMessageBox.Show(kq, "Lỗi hệ thống", ModernMessageType.Error);
             }
         }
 
@@ -331,17 +331,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             string hanhDong = btnKhoaTaiKhoan.Text.Contains("Mở") ? "mở khóa" : "khóa";
 
-            if (MessageBox.Show("Bạn có chắc chắn muốn " + hanhDong + " tài khoản này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (ModernMessageBox.Show(
+                "Bạn có chắc chắn muốn " + hanhDong + " tài khoản này?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = qtBUS.KhoaMoTaiKhoan(idDangChon);
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã " + hanhDong + " thành công!");
+                    ModernMessageBox.Show("Đã " + hanhDong + " thành công.", "Thông báo", ModernMessageType.Success);
                     LoadData();
                 }
                 else
                 {
-                    MessageBox.Show(kq, "Lỗi");
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }
@@ -353,16 +357,20 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            if (MessageBox.Show("Bạn có chắc muốn đặt lại mật khẩu về mặc định (123456)?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ModernMessageBox.Show(
+                "Bạn có chắc muốn đặt lại mật khẩu về mặc định (123456)?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = qtBUS.DatLaiMatKhau(idDangChon);
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã đặt lại mật khẩu thành công!");
+                    ModernMessageBox.Show("Đã đặt lại mật khẩu thành công.", "Thông báo", ModernMessageType.Success);
                 }
                 else
                 {
-                    MessageBox.Show(kq);
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

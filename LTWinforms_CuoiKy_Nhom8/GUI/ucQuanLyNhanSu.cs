@@ -187,7 +187,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (idNhanSuDangChon == 0)
             {
-                MessageBox.Show("Vui lòng chọn 1 nhân sự từ danh sách trước!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng chọn 1 nhân sự từ danh sách trước!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
@@ -196,11 +196,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = nsBUS.ChamCongHomNay(idNhanSuDangChon, trangThai);
             if (kq == "")
             {
-                MessageBox.Show("Đã điểm danh [" + trangThai + "] thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Đã điểm danh [" + trangThai + "] thành công!", "Thông báo", ModernMessageType.Success);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -208,36 +208,36 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (idNhanSuDangChon == 0)
             {
-                MessageBox.Show("Vui lòng chọn 1 nhân sự từ danh sách trước!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng chọn 1 nhân sự từ danh sách trước!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             decimal tienPhat;
             if (string.IsNullOrEmpty(txtTienPhat.Text) || !decimal.TryParse(txtTienPhat.Text.Replace(",", ""), out tienPhat))
             {
-                MessageBox.Show("Vui lòng nhập số tiền phạt hợp lệ!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập số tiền phạt hợp lệ!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             string lyDo = txtLyDoPhat.Text.Trim();
             if (string.IsNullOrEmpty(lyDo))
             {
-                MessageBox.Show("Vui lòng nhập lý do phạt!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập lý do phạt!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
-            if (MessageBox.Show("Xác nhận phạt nhân sự này số tiền " + tienPhat.ToString("N0") + " VNĐ?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (ModernMessageBox.Show("Xác nhận phạt nhân sự này số tiền " + tienPhat.ToString("N0") + " VNĐ?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = nsBUS.GhiNhanPhat(idNhanSuDangChon, tienPhat, lyDo);
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã ghi nhận phạt thành công!", "Thông báo");
+                    ModernMessageBox.Show("Đã ghi nhận phạt thành công!", "Thông báo", ModernMessageType.Success);
                     txtTienPhat.Clear();
                     txtLyDoPhat.Clear();
                 }
                 else
                 {
-                    MessageBox.Show(kq, "Lỗi");
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

@@ -241,27 +241,27 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (string.IsNullOrEmpty(passCu) || string.IsNullOrEmpty(passMoi) || string.IsNullOrEmpty(xacNhan))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin mật khẩu!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập đầy đủ thông tin mật khẩu!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             if (passMoi != xacNhan)
             {
-                MessageBox.Show("Mật khẩu xác nhận không khớp!", "Lỗi");
+                ModernMessageBox.Show("Mật khẩu xác nhận không khớp!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
             string kq = tkBUS.DoiMatKhau(Session.IdTaiKhoan, passCu, passMoi);
             if (kq == "")
             {
-                MessageBox.Show("Đổi mật khẩu thành công! Vui lòng ghi nhớ mật khẩu mới.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Đổi mật khẩu thành công! Vui lòng ghi nhớ mật khẩu mới.", "Thông báo", ModernMessageType.Success);
                 txtPassCu.Clear();
                 txtPassMoi.Clear();
                 txtXacNhanPass.Clear();
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -269,7 +269,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (Session.Role != 2 && Session.Role != 3 && Session.Role != 4)
             {
-                MessageBox.Show("Tài khoản này không hỗ trợ cập nhật hồ sơ tại màn này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Tài khoản này không hỗ trợ cập nhật hồ sơ tại màn này.", "Thông báo", ModernMessageType.Info);
                 return;
             }
 
@@ -283,12 +283,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật thông tin cá nhân thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ModernMessageBox.Show("Cập nhật thông tin cá nhân thành công!", "Thông báo", ModernMessageType.Success);
                 ucHoSoCaNhan_Load(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi cập nhật", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ModernMessageBox.Show(kq, "Lỗi cập nhật", ModernMessageType.Error);
             }
         }
     }

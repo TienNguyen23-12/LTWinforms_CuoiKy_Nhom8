@@ -54,7 +54,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                     if (hoiVien == null)
                     {
-                        MessageBox.Show("Lỗi: Tài khoản này chưa được liên kết với hồ sơ Hội viên nào!", "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ModernMessageBox.Show("Lỗi: Tài khoản này chưa được liên kết với hồ sơ Hội viên nào!", "Lỗi hệ thống", ModernMessageType.Error);
                         return;
                     }
 
@@ -81,7 +81,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                     if (rawLichSu.Count == 0)
                     {
-                        MessageBox.Show("Bạn không có giao dịch thanh toán nào trong khoảng thời gian này!");
+                        ModernMessageBox.Show("Bạn không có giao dịch thanh toán nào trong khoảng thời gian này!", "Thông báo", ModernMessageType.Info);
                         return;
                     }
 
@@ -110,7 +110,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ModernMessageBox.Show("Đã xảy ra lỗi: \n" + ex.Message, "Lỗi", ModernMessageType.Error);
             }
         }
     }

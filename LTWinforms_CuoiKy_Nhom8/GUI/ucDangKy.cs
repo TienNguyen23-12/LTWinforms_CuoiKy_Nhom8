@@ -11,8 +11,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private readonly TaiKhoanBUS tk = new TaiKhoanBUS();
         private bool isUiApplied;
 
-        private Panel pnlLogo;
-        private Label lblLogo;
         private Label lblSubTitle;
         private Panel lineUser;
         private Panel linePass;
@@ -76,7 +74,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 pnlCard.Controls.Add(lineConfirm);
             }
 
-            lblTitle.Text = "Tạo tài khoản";
+            lblTitle.Text = "SPORTIFY!";
             lblTitle.Font = new Font("Segoe UI", 21F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(92, 100, 226);
             lblTitle.AutoSize = true;
@@ -144,7 +142,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             lineConfirm.SetBounds(x, txtConfirmPass.Bottom + 2, w, 1);
 
             btnDangKy.SetBounds((pnlCard.Width - 96) / 2, lineConfirm.Bottom + 12, 96, 30);
-            linkLabelDangNhap.Location = new Point((pnlCard.Width - linkLabelDangNhap.PreferredWidth) / 2, btnDangKy.Bottom + 10);
+
+            int linkBottomMargin = 28;
+            linkLabelDangNhap.Location = new Point(
+                (pnlCard.Width - linkLabelDangNhap.PreferredWidth) / 2,
+                pnlCard.Height - linkBottomMargin);
         }
 
         private void btnDangKy_Click(object sender, EventArgs e)
@@ -181,88 +183,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void linkLabelDangNhap_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmMainContainer.Instance.LoadUserControl(new ucDangNhap());
-        }
-
-        private void ApplyBrandLogo()
-        {
-            Image logo = LoadBrandLogo(40, 40);
-            if (logo != null)
-            {
-                if (pnlLogo.BackgroundImage != null)
-                {
-                    pnlLogo.BackgroundImage.Dispose();
-                }
-
-                pnlLogo.BackgroundImage = logo;
-                pnlLogo.BackgroundImageLayout = ImageLayout.Zoom;
-                lblLogo.Visible = false;
-            }
-            else
-            {
-                lblLogo.Visible = true;
-                lblLogo.Text = "Logo";
-            }
-        }
-
-        private Image LoadBrandLogo(int w, int h)
-        {
-            object res = Properties.Resources.ResourceManager.GetObject("logo");
-            if (res is Bitmap bmpRes)
-            {
-                return new Bitmap(bmpRes, new Size(w, h));
-            }
-
-            if (res is Icon icoRes)
-            {
-                return new Bitmap(icoRes.ToBitmap(), new Size(w, h));
-            }
-
-            string[] relativeCandidates =
-            {
-                @"Assets\logo.png",
-                @"Assets\logo.ico",
-                @"Resources\logo.png",
-                @"Resources\logo.ico",
-                @"logo.png",
-                @"logo.ico"
-            };
-
-            string baseDir = Application.StartupPath;
-            for (int level = 0; level < 5; level++)
-            {
-                foreach (string rel in relativeCandidates)
-                {
-                    string path = Path.Combine(baseDir, rel);
-                    if (!File.Exists(path))
-                    {
-                        continue;
-                    }
-
-                    string ext = Path.GetExtension(path).ToLowerInvariant();
-                    if (ext == ".ico")
-                    {
-                        using (Icon ico = new Icon(path))
-                        {
-                            return new Bitmap(ico.ToBitmap(), new Size(w, h));
-                        }
-                    }
-
-                    using (Image img = Image.FromFile(path))
-                    {
-                        return new Bitmap(img, new Size(w, h));
-                    }
-                }
-
-                DirectoryInfo parent = Directory.GetParent(baseDir);
-                if (parent == null)
-                {
-                    break;
-                }
-
-                baseDir = parent.FullName;
-            }
-
-            return null;
         }
     }
 }
