@@ -57,10 +57,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void ucDangKyLop_Load(object sender, EventArgs e)
         {
             maHoiVienDangLogin = dkBUS.LayMaHoiVien(Session.IdTaiKhoan);
-
             if (string.IsNullOrEmpty(maHoiVienDangLogin))
             {
-                MessageBox.Show("Tài khoản của bạn chưa được liên kết với hồ sơ Hội viên nào!", "Lỗi");
+                ModernMessageBox.Show("Tài khoản của bạn chưa được liên kết với hồ sơ Hội viên nào.", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
@@ -79,29 +78,34 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 int idDangKy = Convert.ToInt32(dgvLopDaDangKy.CurrentRow.Cells["Id"].Value);
                 string tenLop = dgvLopDaDangKy.CurrentRow.Cells["TenLop"].Value.ToString();
 
-                if (MessageBox.Show($"Bạn có chắc chắn muốn rút khỏi {tenLop}?", "Cảnh báo", 
-                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Bạn có chắc chắn muốn rút khỏi " + tenLop + "?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = dkBUS.HuyDangKy(idDangKy);
                     if (kq == "")
                     {
-                        MessageBox.Show("Đã hủy đăng ký thành công.");
-                        LoadData(); 
+                        ModernMessageBox.Show("Đã hủy đăng ký thành công.", "Thành công", ModernMessageType.Success);
+                        LoadData();
                     }
                     else
                     {
-                        MessageBox.Show(kq, "Lỗi");
+                        ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn 1 lớp ở bảng dưới để hủy!", "Nhắc nhở");
+                ModernMessageBox.Show("Vui lòng chọn 1 lớp ở bảng dưới để hủy.", "Nhắc nhở", ModernMessageType.Warning);
             }
         }
 
         private void btnDangKy_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(maHoiVienDangLogin))
+            {
+                ModernMessageBox.Show("Không xác định được hội viên đăng nhập. Vui lòng đăng nhập lại.", "Lỗi", ModernMessageType.Error);
+                return;
+            }
+
             if (dgvLopChuaDangKy.CurrentRow != null)
             {
                 string maLop = dgvLopChuaDangKy.CurrentRow.Cells["MaLop"].Value.ToString();
@@ -110,7 +114,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 string slotCon = dgvLopChuaDangKy.CurrentRow.Cells["SlotCon"].Value.ToString();
                 if (slotCon == "Đã đầy")
                 {
-                    MessageBox.Show($"Rất tiếc! Lớp {tenLop} đã hết chỗ. Vui lòng chọn lớp khác nhé!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ModernMessageBox.Show("Rất tiếc, lớp " + tenLop + " đã hết chỗ. Vui lòng chọn lớp khác.", "Thông báo", ModernMessageType.Warning);
                     return;
                 }
 
@@ -120,25 +124,25 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     giaTien = Convert.ToDecimal(dgvLopChuaDangKy.CurrentRow.Cells["GiaTien"].Value);
                 }
 
-                string thongBao = $"Lớp học [{tenLop}] có học phí là: {giaTien.ToString("N0")} VNĐ.\n\nBạn có chắc chắn muốn đăng ký và thanh toán ngay?";
+                string thongBao = "Lớp học [" + tenLop + "] có học phí là: " + giaTien.ToString("N0") + " VNĐ.\n\nBạn có chắc chắn muốn đăng ký và thanh toán ngay?";
 
-                if (MessageBox.Show(thongBao, "Xác nhận thanh toán", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (ModernMessageBox.Show(thongBao, "Xác nhận thanh toán", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = dkBUS.DangKy(maHoiVienDangLogin, maLop);
                     if (kq == "")
                     {
-                        MessageBox.Show("Thanh toán và Ghi danh thành công!", "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ModernMessageBox.Show("Thanh toán và ghi danh thành công.", "Hoàn tất", ModernMessageType.Success);
                         LoadData();
                     }
                     else
                     {
-                        MessageBox.Show(kq, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ModernMessageBox.Show(kq, "Lỗi hệ thống", ModernMessageType.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn 1 lớp ở bảng trên để đăng ký!", "Nhắc nhở");
+                ModernMessageBox.Show("Vui lòng chọn 1 lớp ở bảng trên để đăng ký.", "Nhắc nhở", ModernMessageType.Warning);
             }
         }
     }

@@ -47,25 +47,24 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 string maLop = dgvLopTrong.CurrentRow.Cells["MaLop"].Value.ToString();
                 string tenLop = dgvLopTrong.CurrentRow.Cells["TenLop"].Value.ToString();
 
-                if (MessageBox.Show($"Bạn muốn gửi yêu cầu nhận dạy lớp {tenLop} tới Quản lý?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Bạn muốn gửi yêu cầu nhận dạy lớp " + tenLop + " tới Quản lý?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
-                    string noiDungMsg = $"Xin chào Quản lý, tôi muốn đăng ký nhận giảng dạy lớp {tenLop} (Mã: {maLop}). Vui lòng xem xét và duyệt cho tôi nhé!";
-
+                    string noiDungMsg = "Xin chào Quản lý, tôi muốn đăng ký nhận giảng dạy lớp " + tenLop + " (Mã: " + maLop + "). Vui lòng xem xét và duyệt cho tôi nhé!";
                     string kq = tnBUS.GuiTinNhan(Session.IdTaiKhoan, 1, noiDungMsg);
 
                     if (kq == "")
                     {
-                        MessageBox.Show("Yêu cầu của bạn đã được gửi trực tiếp đến hộp thư của Quản lý thành công! Vui lòng chờ phản hồi.", "Thành công");
+                        ModernMessageBox.Show("Yêu cầu của bạn đã được gửi trực tiếp đến hộp thư của Quản lý thành công. Vui lòng chờ phản hồi.", "Thành công", ModernMessageType.Success);
                     }
                     else
                     {
-                        MessageBox.Show(kq, "Lỗi gửi yêu cầu");
+                        ModernMessageBox.Show(kq, "Lỗi gửi yêu cầu", ModernMessageType.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn 1 lớp trong danh sách để đăng ký!", "Nhắc nhở");
+                ModernMessageBox.Show("Vui lòng chọn 1 lớp trong danh sách để đăng ký.", "Nhắc nhở", ModernMessageType.Warning);
             }
         }
     }

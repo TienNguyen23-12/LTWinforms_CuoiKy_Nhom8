@@ -58,14 +58,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleButton(Button button, Color backColor, Color foreColor)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
-            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
-            button.BackColor = backColor;
-            button.ForeColor = foreColor;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, backColor, foreColor);
             button.Height = 34;
         }
 
@@ -234,7 +227,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (idKhachHangDangChat == 0)
             {
-                MessageBox.Show("Vui lòng chọn 1 người bên trái để nhắn tin!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng chọn 1 người bên trái để nhắn tin!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
@@ -281,7 +274,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 if (!selectedMsg.LaToi)
                 {
-                    MessageBox.Show("Chỉ được sửa tin nhắn của chính mình!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ModernMessageBox.Show("Chỉ được sửa tin nhắn của chính mình!", "Cảnh báo", ModernMessageType.Warning);
                     return;
                 }
 
@@ -299,11 +292,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 if (!selectedMsg.LaToi)
                 {
-                    MessageBox.Show("Chỉ được xóa tin nhắn của chính mình!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ModernMessageBox.Show("Chỉ được xóa tin nhắn của chính mình!", "Cảnh báo", ModernMessageType.Warning);
                     return;
                 }
 
-                if (MessageBox.Show("Thu hồi tin nhắn này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Thu hồi tin nhắn này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     chatBUS.XoaTinNhan(selectedMsg.Id);
                     LoadTinNhan();

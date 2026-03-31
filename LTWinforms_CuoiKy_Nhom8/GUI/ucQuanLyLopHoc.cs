@@ -79,21 +79,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(Control control)
         {
-            control.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            control.ForeColor = Color.FromArgb(44, 62, 80);
-            control.BackColor = Color.White;
-
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
-            {
-                textBox.BorderStyle = BorderStyle.FixedSingle;
-            }
-
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null)
-            {
-                ModernTheme.StyleDataComboBox(comboBox);
-            }
+            ModernTheme.StyleInput(control);
         }
 
         private void StylePrimaryButton(Button button)
@@ -113,14 +99,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleButton(Button button, Color backColor, Color foreColor)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
-            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
-            button.BackColor = backColor;
-            button.ForeColor = foreColor;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, backColor, foreColor);
             button.Height = 34;
         }
 
@@ -424,28 +403,28 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (string.IsNullOrEmpty(txtMaLop.Text) || string.IsNullOrEmpty(txtTenLop.Text))
             {
-                MessageBox.Show("Vui lòng nhập đủ Mã lớp và Tên lớp!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập đủ Mã lớp và Tên lớp!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
             decimal giaTien = 0;
             if (!string.IsNullOrEmpty(txtGiaTien.Text) && !decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaTien))
             {
-                MessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi");
+                ModernMessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
             int siSo = 1;
             if (!string.IsNullOrEmpty(txtSoLuongToiDa.Text) && !int.TryParse(txtSoLuongToiDa.Text, out siSo))
             {
-                MessageBox.Show("Sĩ số tối đa phải là số nguyên!", "Lỗi");
+                ModernMessageBox.Show("Sĩ số tối đa phải là số nguyên!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
             int soBuoi = 0;
             if (!string.IsNullOrEmpty(txtSoBuoi.Text) && !int.TryParse(txtSoBuoi.Text, out soBuoi))
             {
-                MessageBox.Show("Số buổi học phải là số nguyên!", "Lỗi");
+                ModernMessageBox.Show("Số buổi học phải là số nguyên!", "Lỗi", ModernMessageType.Error);
                 return;
             }
 
@@ -470,12 +449,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = lopBUS.ThemLop(lop);
             if (kq == "")
             {
-                MessageBox.Show("Thêm thành công!");
+                ModernMessageBox.Show("Thêm thành công!", "Thông báo", ModernMessageType.Success);
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq);
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -524,12 +503,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = lopBUS.SuaLop(lop);
             if (kq == "")
             {
-                MessageBox.Show("Sửa thành công!");
+                ModernMessageBox.Show("Sửa thành công!", "Thông báo", ModernMessageType.Success);
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq);
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -540,17 +519,17 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            if (MessageBox.Show("Cập nhật trạng thái lớp học này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ModernMessageBox.Show("Cập nhật trạng thái lớp học này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = lopBUS.KhoaLop(txtMaLop.Text.Trim());
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã cập nhật!");
+                    ModernMessageBox.Show("Đã cập nhật!", "Thông báo", ModernMessageType.Success);
                     btnLamMoi_Click(sender, e);
                 }
                 else
                 {
-                    MessageBox.Show(kq, "Lỗi");
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

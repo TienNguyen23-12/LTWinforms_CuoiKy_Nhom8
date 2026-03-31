@@ -2,15 +2,8 @@
 {
     partial class ucDangNhap
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -21,12 +14,6 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
-
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
@@ -48,7 +35,7 @@
             // 
             this.tableLayoutPanelMain.ColumnCount = 3;
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 360F));
+            this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 340F));
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelMain.Controls.Add(this.pnlCard, 1, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -56,9 +43,9 @@
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 3;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 290F));
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 430F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(760, 520);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(430, 540);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // pnlCard
@@ -75,123 +62,110 @@
             this.pnlCard.Controls.Add(this.label1);
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard.Location = new System.Drawing.Point(203, 118);
+            this.pnlCard.Location = new System.Drawing.Point(48, 58);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(20);
-            this.pnlCard.Size = new System.Drawing.Size(354, 284);
+            this.pnlCard.Size = new System.Drawing.Size(334, 424);
             this.pnlCard.TabIndex = 0;
             // 
             // linkQuenMatKhau
             // 
             this.linkQuenMatKhau.AutoSize = true;
-            this.linkQuenMatKhau.LinkColor = System.Drawing.Color.RoyalBlue;
-            this.linkQuenMatKhau.Location = new System.Drawing.Point(43, 241);
+            this.linkQuenMatKhau.Location = new System.Drawing.Point(28, 458);
             this.linkQuenMatKhau.Name = "linkQuenMatKhau";
-            this.linkQuenMatKhau.Size = new System.Drawing.Size(94, 16);
+            this.linkQuenMatKhau.Size = new System.Drawing.Size(109, 16);
             this.linkQuenMatKhau.TabIndex = 8;
             this.linkQuenMatKhau.TabStop = true;
-            this.linkQuenMatKhau.Text = "Quên mật khẩu?";
+            this.linkQuenMatKhau.Text = "Forgot Password";
             this.linkQuenMatKhau.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkQuenMatKhau_LinkClicked);
             // 
             // btnThoat
             // 
-            this.btnThoat.Location = new System.Drawing.Point(183, 184);
+            this.btnThoat.Location = new System.Drawing.Point(180, 308);
             this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(124, 32);
+            this.btnThoat.Size = new System.Drawing.Size(90, 30);
             this.btnThoat.TabIndex = 7;
-            this.btnThoat.Text = "Thoát";
+            this.btnThoat.Text = "Exit";
             this.btnThoat.UseVisualStyleBackColor = true;
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // linkLabelDangKy
             // 
             this.linkLabelDangKy.AutoSize = true;
-            this.linkLabelDangKy.LinkColor = System.Drawing.Color.RoyalBlue;
-            this.linkLabelDangKy.Location = new System.Drawing.Point(43, 222);
+            this.linkLabelDangKy.Location = new System.Drawing.Point(223, 458);
             this.linkLabelDangKy.Name = "linkLabelDangKy";
-            this.linkLabelDangKy.Size = new System.Drawing.Size(154, 16);
+            this.linkLabelDangKy.Size = new System.Drawing.Size(58, 16);
             this.linkLabelDangKy.TabIndex = 6;
             this.linkLabelDangKy.TabStop = true;
-            this.linkLabelDangKy.Text = "Chưa có tài khoản? Đăng ký";
+            this.linkLabelDangKy.Text = "Register";
             this.linkLabelDangKy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDangKy_LinkClicked);
             // 
             // btnDangNhap
             // 
-            this.btnDangNhap.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnDangNhap.FlatAppearance.BorderSize = 0;
-            this.btnDangNhap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDangNhap.ForeColor = System.Drawing.Color.White;
-            this.btnDangNhap.Location = new System.Drawing.Point(46, 184);
+            this.btnDangNhap.Location = new System.Drawing.Point(112, 308);
             this.btnDangNhap.Name = "btnDangNhap";
-            this.btnDangNhap.Size = new System.Drawing.Size(124, 32);
+            this.btnDangNhap.Size = new System.Drawing.Size(90, 30);
             this.btnDangNhap.TabIndex = 5;
-            this.btnDangNhap.Text = "Đăng nhập";
-            this.btnDangNhap.UseVisualStyleBackColor = false;
+            this.btnDangNhap.Text = "Login";
+            this.btnDangNhap.UseVisualStyleBackColor = true;
             this.btnDangNhap.Click += new System.EventHandler(this.btnDangNhap_Click);
             // 
             // txtPassword
             // 
-            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtPassword.Location = new System.Drawing.Point(46, 142);
+            this.txtPassword.Location = new System.Drawing.Point(28, 272);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(261, 30);
+            this.txtPassword.Size = new System.Drawing.Size(258, 22);
             this.txtPassword.TabIndex = 4;
             // 
             // txtUsername
             // 
-            this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtUsername.Location = new System.Drawing.Point(46, 94);
+            this.txtUsername.Location = new System.Drawing.Point(28, 218);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(261, 30);
+            this.txtUsername.Size = new System.Drawing.Size(258, 22);
             this.txtUsername.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.DimGray;
-            this.label2.Location = new System.Drawing.Point(43, 124);
+            this.label2.Location = new System.Drawing.Point(28, 252);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 16);
+            this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Mật khẩu";
+            this.label2.Text = "Password";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.DimGray;
-            this.label1.Location = new System.Drawing.Point(43, 76);
+            this.label1.Location = new System.Drawing.Point(28, 198);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 16);
+            this.label1.Size = new System.Drawing.Size(98, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Tên đăng nhập";
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(41, 31);
+            this.lblTitle.Location = new System.Drawing.Point(28, 128);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(171, 30);
+            this.lblTitle.Size = new System.Drawing.Size(104, 16);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "Đăng nhập hệ thống";
+            this.lblTitle.Text = "Welcome back !";
             // 
             // ucDangNhap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(240, 244, 248);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Name = "ucDangNhap";
-            this.Size = new System.Drawing.Size(760, 520);
+            this.Size = new System.Drawing.Size(430, 540);
             this.Load += new System.EventHandler(this.ucDangNhap_Load);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.pnlCard.ResumeLayout(false);
             this.pnlCard.PerformLayout();
             this.ResumeLayout(false);
-        }
 
-        #endregion
+        }
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.Panel pnlCard;

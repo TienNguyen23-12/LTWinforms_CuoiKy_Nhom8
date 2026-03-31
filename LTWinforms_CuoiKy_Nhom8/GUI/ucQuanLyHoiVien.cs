@@ -59,21 +59,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleInput(Control control)
         {
-            control.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            control.ForeColor = Color.FromArgb(44, 62, 80);
-            control.BackColor = Color.White;
-
-            TextBox textBox = control as TextBox;
-            if (textBox != null)
-            {
-                textBox.BorderStyle = BorderStyle.FixedSingle;
-            }
-
-            ComboBox comboBox = control as ComboBox;
-            if (comboBox != null)
-            {
-                ModernTheme.StyleDataComboBox(comboBox);
-            }
+            ModernTheme.StyleInput(control);
 
             DateTimePicker dateTimePicker = control as DateTimePicker;
             if (dateTimePicker != null)
@@ -99,14 +85,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleButton(Button button, Color backColor, Color foreColor)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backColor, 0.1f);
-            button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backColor, 0.1f);
-            button.BackColor = backColor;
-            button.ForeColor = foreColor;
-            button.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            ModernTheme.StyleButton(button, backColor, foreColor);
             button.Height = 34;
         }
 
@@ -291,7 +270,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             if (string.IsNullOrEmpty(txtMaHoiVien.Text) || string.IsNullOrEmpty(txtHoTen.Text))
             {
-                MessageBox.Show("Vui lòng nhập đủ Mã và Họ Tên!", "Cảnh báo");
+                ModernMessageBox.Show("Vui lòng nhập đủ Mã và Họ Tên!", "Cảnh báo", ModernMessageType.Warning);
                 return;
             }
 
@@ -309,13 +288,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = hvBUS.ThemHoiVien(hv);
             if (kq == "")
             {
-                MessageBox.Show("Thêm hội viên thành công!", "Thông báo");
+                ModernMessageBox.Show("Thêm hội viên thành công!", "Thông báo", ModernMessageType.Success);
                 LoadData();
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
@@ -333,30 +312,30 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             string kq = hvBUS.SuaHoiVien(hv);
             if (kq == "")
             {
-                MessageBox.Show("Cập nhật thành công!", "Thông báo");
+                ModernMessageBox.Show("Cập nhật thành công!", "Thông báo", ModernMessageType.Success);
                 LoadData();
                 btnLamMoi_Click(sender, e);
             }
             else
             {
-                MessageBox.Show(kq, "Lỗi");
+                ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
             }
         }
 
         private void btnKhoa_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn có chắc muốn khóa hội viên này?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (ModernMessageBox.Show("Bạn có chắc muốn khóa hội viên này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
             {
                 string kq = hvBUS.KhoaHoiVien(txtMaHoiVien.Text.Trim());
                 if (kq == "")
                 {
-                    MessageBox.Show("Đã khóa hội viên!", "Thông báo");
+                    ModernMessageBox.Show("Đã khóa hội viên.", "Thông báo", ModernMessageType.Success);
                     LoadData();
                     btnLamMoi_Click(sender, e);
                 }
                 else
                 {
-                    MessageBox.Show(kq, "Lỗi");
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
                 }
             }
         }

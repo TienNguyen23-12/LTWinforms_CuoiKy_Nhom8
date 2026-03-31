@@ -374,7 +374,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
-            DialogResult xacNhan = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult xacNhan = ModernMessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                ModernMessageType.Question);
 
             if (xacNhan == DialogResult.Yes)
             {
@@ -591,30 +595,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             Button button = sender as Button;
             if (button != null)
             {
-                ApplyRoundedButtonRegion(button, 8);
+                ModernTheme.ApplyRoundedButtons(button, 8);
             }
         }
 
         private void ApplyRoundedButtonRegion(Button button, int radius)
         {
-            Rectangle rect = new Rectangle(0, 0, button.Width, button.Height);
-            int diameter = radius * 2;
-
-            GraphicsPath path = new GraphicsPath();
-            path.StartFigure();
-            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
-            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
-            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
-            path.CloseFigure();
-
-            if (button.Region != null)
-            {
-                button.Region.Dispose();
-            }
-
-            button.Region = new Region(path);
-            path.Dispose();
+            ModernTheme.ApplyRoundedButtons(button, radius);
         }
     }
 }
