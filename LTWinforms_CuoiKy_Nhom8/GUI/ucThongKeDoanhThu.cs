@@ -260,7 +260,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     {
                         NgayThang = Convert.ToDateTime(hd.NgayThanhToan),
                         MaChungTu = hd.MaHoaDon.ToString(),
-                        DienGiai = "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")",
+
+                        DienGiai = string.IsNullOrEmpty(hd.GhiChu)
+               ? "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")"
+               : hd.GhiChu,
+
                         LoaiGiaoDich = "1. TỔNG DOANH THU",
                         SoTien = Convert.ToDecimal(hd.SoTien)
                     }).ToList();
