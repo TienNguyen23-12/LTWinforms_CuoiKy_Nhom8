@@ -232,13 +232,71 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     e.Graphics.FillPath(fillBrush, path);
                 }
 
-                TextRenderer.DrawText(
-                    e.Graphics,
-                    btn.Text,
-                    btn.Font,
-                    new Rectangle(0, 0, btn.Width, btn.Height),
-                    btn.ForeColor,
-                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+                Rectangle contentRect = new Rectangle(
+                    btn.Padding.Left,
+                    0,
+                    Math.Max(0, btn.Width - btn.Padding.Left - btn.Padding.Right),
+                    btn.Height);
+
+                int textLeft = contentRect.Left;
+
+                if (btn.Image != null)
+                {
+                    int imgY = (btn.Height - btn.Image.Height) / 2;
+                    int imgX;
+
+                    if (btn.ImageAlign == ContentAlignment.MiddleLeft ||
+                        btn.ImageAlign == ContentAlignment.TopLeft ||
+                        btn.ImageAlign == ContentAlignment.BottomLeft)
+                    {
+                        imgX = contentRect.Left;
+                    }
+                    else if (btn.ImageAlign == ContentAlignment.MiddleRight ||
+                             btn.ImageAlign == ContentAlignment.TopRight ||
+                             btn.ImageAlign == ContentAlignment.BottomRight)
+                    {
+                        imgX = contentRect.Right - btn.Image.Width;
+                    }
+                    else
+                    {
+                        imgX = contentRect.Left + (contentRect.Width - btn.Image.Width) / 2;
+                    }
+
+                    e.Graphics.DrawImage(btn.Image, imgX, imgY, btn.Image.Width, btn.Image.Height);
+
+                    if (btn.TextImageRelation == TextImageRelation.ImageBeforeText ||
+                        btn.TextImageRelation == TextImageRelation.Overlay)
+                    {
+                        textLeft = imgX + btn.Image.Width + 4;
+                    }
+                }
+
+                TextFormatFlags flags = TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis;
+
+                if (btn.TextAlign == ContentAlignment.MiddleLeft ||
+                    btn.TextAlign == ContentAlignment.TopLeft ||
+                    btn.TextAlign == ContentAlignment.BottomLeft)
+                {
+                    flags |= TextFormatFlags.Left;
+                }
+                else if (btn.TextAlign == ContentAlignment.MiddleRight ||
+                         btn.TextAlign == ContentAlignment.TopRight ||
+                         btn.TextAlign == ContentAlignment.BottomRight)
+                {
+                    flags |= TextFormatFlags.Right;
+                }
+                else
+                {
+                    flags |= TextFormatFlags.HorizontalCenter;
+                }
+
+                Rectangle textRect = new Rectangle(
+                    textLeft,
+                    0,
+                    Math.Max(0, btn.Width - textLeft - btn.Padding.Right),
+                    btn.Height);
+
+                TextRenderer.DrawText(e.Graphics, btn.Text, btn.Font, textRect, btn.ForeColor, flags);
             };
 
             EventHandler invalidateHandler = delegate { button.Invalidate(); };
