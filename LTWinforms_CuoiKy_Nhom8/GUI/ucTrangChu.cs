@@ -102,19 +102,24 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             button.FlatAppearance.BorderSize = 0;
 
             button.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            button.TextAlign = ContentAlignment.MiddleLeft;
-            button.ImageAlign = ContentAlignment.MiddleLeft;
-            button.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button.Padding = new Padding(12, 0, 8, 0);
             button.Cursor = Cursors.Hand;
             button.AutoEllipsis = true;
             button.UseVisualStyleBackColor = false;
 
+            AlignSidebarButtonContent(button);
             ApplyDefaultMenuButtonColor(button);
 
             button.SizeChanged -= MenuButton_SizeChanged;
             button.SizeChanged += MenuButton_SizeChanged;
             ApplyRoundedButtonRegion(button, 8);
+        }
+
+        private void AlignSidebarButtonContent(Button button)
+        {
+            button.TextAlign = ContentAlignment.MiddleLeft;
+            button.ImageAlign = ContentAlignment.MiddleLeft;
+            button.TextImageRelation = TextImageRelation.ImageBeforeText;
+            button.Padding = new Padding(14, 0, 8, 0);
         }
 
         private void ApplyMenuStyle()
@@ -473,45 +478,112 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ApplyMenuIcons()
         {
-            SetMenuIconFromResource(btnQuanTriHeThong, "quantri");
-            SetMenuIconFromResource(btnChamCong, "chamcong");
-            SetMenuIconFromResource(btnThongKeDoanhThu, "thongke");
-            SetMenuIconFromResource(btnQuanLySanPham, "sanpham");
-            SetMenuIconFromResource(btnQuanLyHoiVien, "hoivien");
-            SetMenuIconFromResource(btnQuanLyGoiTap, "goitap");
-            SetMenuIconFromResource(btnQuanLyLopHoc, "lophoc");
-            SetMenuIconFromResource(btnBanVeThuNgan, "banve");
-            SetMenuIconFromResource(btnTinNhan, "tinnhan");
-            SetMenuIconFromResource(btnDangKyDichVu, "dichvu");
-            SetMenuIconFromResource(btnLichSuGiaoDich, "giaodich");
-            SetMenuIconFromResource(btnLuongThuong, "luongthuong");
-            SetMenuIconFromResource(btnLichHoc, "lichhoc");
-            SetMenuIconFromResource(btnQuanLyPhongTap, "phongtap");
-            SetMenuIconFromResource(btnHoSoCaNhan, "hoso");
-            SetMenuIconFromResource(btnDangXuat, "dangxuat");
+            ApplyMenuIcon(btnQuanTriHeThong, "quantri");
+            ApplyMenuIcon(btnChamCong, "chamcong");
+            ApplyMenuIcon(btnThongKeDoanhThu, "thongke");
+            ApplyMenuIcon(btnQuanLySanPham, "sanpham");
+            ApplyMenuIcon(btnQuanLyHoiVien, "hoivien");
+            ApplyMenuIcon(btnQuanLyGoiTap, "goitap");
+            ApplyMenuIcon(btnQuanLyLopHoc, "lophoc");
+            ApplyMenuIcon(btnBanVeThuNgan, "banve");
+            ApplyMenuIcon(btnTinNhan, "tinnhan");
+            ApplyMenuIcon(btnDangKyDichVu, "dichvu");
+            ApplyMenuIcon(btnLichSuGiaoDich, "giaodich");
+            ApplyMenuIcon(btnLuongThuong, "luongthuong");
+            ApplyMenuIcon(btnLichHoc, "lichhoc");
+            ApplyMenuIcon(btnQuanLyPhongTap, "phongtap");
+            ApplyMenuIcon(btnHoSoCaNhan, "hoso");
+            ApplyMenuIcon(btnDangXuat, "dangxuat");
         }
 
-        private void SetMenuIconFromResource(Button button, string resourceName)
+        private void ApplyMenuIcon(Button button, string key)
         {
-            object resourceObject = Properties.Resources.ResourceManager.GetObject(resourceName);
-
-            if (resourceObject is Bitmap bitmap)
-            {
-                if (button.Image != null)
-                {
-                    button.Image.Dispose();
-                    button.Image = null;
-                }
-
-                button.Image = CreateWhiteMenuIcon(bitmap, 16, 8); // 8 = khoảng cách icon-chữ
-                return;
-            }
-
             if (button.Image != null)
             {
                 button.Image.Dispose();
                 button.Image = null;
             }
+
+            using (Bitmap source = GetMenuIconSource(key))
+            {
+                if (source != null)
+                {
+                    button.Image = CreateWhiteMenuIcon(source, 16, 8);
+                }
+            }
+
+            AlignSidebarButtonContent(button);
+        }
+
+        private Bitmap GetMenuIconSource(string key)
+        {
+            // Ưu tiên file thật trong Assets/MenuIcons trước
+            Bitmap fromAssets = GetMenuIconFromAssets(key);
+            if (fromAssets != null)
+            {
+                return fromAssets;
+            }
+
+            // Fallback Resources nếu không tìm thấy file
+            return GetMenuIconFromResources(key);
+        }
+
+        private Bitmap GetMenuIconFromResources(string key)
+        {
+            // Ưu tiên strongly-typed Resources
+            Bitmap bmp = null;
+
+            if (key == "quantri") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.quantri;
+            else if (key == "chamcong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.chamcong;
+            else if (key == "thongke") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.thongke;
+            else if (key == "sanpham") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.sanpham;
+            else if (key == "hoivien") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoivien;
+            else if (key == "goitap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.goitap;
+            else if (key == "lophoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lophoc;
+            else if (key == "banve") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.banve;
+            else if (key == "tinnhan") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.tinnhan;
+            else if (key == "dichvu") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dichvu;
+            else if (key == "giaodich") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.giaodich;
+            else if (key == "luongthuong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.luongthuong;
+            else if (key == "lichhoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lichhoc;
+            else if (key == "phongtap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.phongtap;
+            else if (key == "hoso") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoso;
+            else if (key == "dangxuat") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dangxuat;
+
+            return bmp != null ? new Bitmap(bmp) : null;
+        }
+
+        private Bitmap GetMenuIconFromAssets(string key)
+        {
+            // Runtime thường ở ...\bin\Debug hoặc ...\bin\Release
+            string[] candidateFolders =
+            {
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Assets\MenuIcons")),
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\Assets\MenuIcons")),
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"Assets\MenuIcons"))
+            };
+
+            foreach (string folder in candidateFolders)
+            {
+                if (!Directory.Exists(folder))
+                {
+                    continue;
+                }
+
+                string filePath = Path.Combine(folder, key + ".png");
+                if (!File.Exists(filePath))
+                {
+                    continue;
+                }
+
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (Image img = Image.FromStream(fs))
+                {
+                    return new Bitmap(img);
+                }
+            }
+
+            return null;
         }
 
         private Bitmap CreateWhiteMenuIcon(Bitmap source, int iconSize, int gap)
