@@ -34,7 +34,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             ModernTheme.StyleGrid(dgvLopTrong);
             dgvLopTrong.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             ModernTheme.StyleButton(btnDangKyDay, Color.FromArgb(46, 134, 222), Color.White);
             btnDangKyDay.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
@@ -80,7 +80,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             dgvLopTrong.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         }
 
         private void ucDangKyDay_Load(object sender, EventArgs e)

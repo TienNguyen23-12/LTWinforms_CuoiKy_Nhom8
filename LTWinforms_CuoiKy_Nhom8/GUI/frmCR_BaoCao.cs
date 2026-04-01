@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         public frmCR_BaoCao()
         {
             InitializeComponent();
+
+            var iconPath = Path.Combine(Application.StartupPath, "Assets", "sportify.ico");
+            if (File.Exists(iconPath))
+            {
+                Icon = new Icon(iconPath);
+            }
         }
 
         public void HienThiBaoCao(object rpt)

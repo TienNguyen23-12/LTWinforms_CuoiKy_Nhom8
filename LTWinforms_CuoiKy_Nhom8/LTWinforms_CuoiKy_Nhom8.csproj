@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Assets\erasebg-transformed.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\sportify.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -377,6 +377,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\erasebg-transformed.ico" />
+    <Content Include="Assets\sportify.ico" />
     <None Include="Resources\logo.ico" />
     <None Include="Assets\MenuIcons\thongke.png" />
     <None Include="Assets\MenuIcons\tinnhan.png" />

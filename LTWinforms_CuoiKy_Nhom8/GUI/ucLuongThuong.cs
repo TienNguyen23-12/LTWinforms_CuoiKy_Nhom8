@@ -159,7 +159,12 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvBangLuong.Columns["MaNhanSu"].HeaderText = "Mã NS";
                 dgvBangLuong.Columns["HoTen"].HeaderText = "Họ và Tên";
                 dgvBangLuong.Columns["VaiTro"].HeaderText = "Vai Trò";
-                dgvBangLuong.Columns["SoNgayLam"].HeaderText = "Số Công / Buổi";
+                if (dgvBangLuong.Columns.Contains("SoNgayLam")) dgvBangLuong.Columns["SoNgayLam"].HeaderText = "Số Công / Buổi";
+                if (dgvBangLuong.Columns.Contains("Thuong"))
+                {
+                    dgvBangLuong.Columns["Thuong"].HeaderText = "Thưởng";
+                    dgvBangLuong.Columns["Thuong"].DefaultCellStyle.Format = "N0";
+                }
 
                 dgvBangLuong.Columns["TienPhat"].HeaderText = "Bị Phạt (VNĐ)";
                 dgvBangLuong.Columns["TienPhat"].DefaultCellStyle.Format = "N0";
@@ -190,7 +195,20 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             txtTongLuong.Text = tongTien.ToString("N0") + " VNĐ";
-            txtTongLuong.ForeColor = Color.FromArgb(39, 174, 96);
+            txtTongLuong.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+
+            if (tongTien > 0)
+            {
+                txtTongLuong.ForeColor = Color.FromArgb(39, 174, 96); // xanh
+            }
+            else if (tongTien < 0)
+            {
+                txtTongLuong.ForeColor = Color.FromArgb(231, 76, 60); // đỏ
+            }
+            else
+            {
+                txtTongLuong.ForeColor = ModernTheme.TextPrimary; // = 0
+            }
         }
 
         private void btnXuat_Click(object sender, EventArgs e)

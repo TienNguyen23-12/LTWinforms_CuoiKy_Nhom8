@@ -107,7 +107,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             ModernTheme.StyleGrid(dgv);
             dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             dgv.RowHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
         }
 
