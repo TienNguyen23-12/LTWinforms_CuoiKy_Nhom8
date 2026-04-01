@@ -42,7 +42,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             StylePrimaryButton(btnThem);
             StyleSecondaryButton(btnSua);
-            StyleDangerButton(btnKhoa);
             StyleSecondaryButton(btnLamMoi);
             StylePrimaryButton(btnTimKiem);
 
@@ -180,8 +179,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             btnThem.SetBounds(btnStart, btnY, btnWidth, 34);
             btnSua.SetBounds(btnThem.Right + btnSpacing, btnY, btnWidth, 34);
-            btnKhoa.SetBounds(btnSua.Right + btnSpacing, btnY, btnWidth, 34);
-            btnLamMoi.SetBounds(btnKhoa.Right + btnSpacing, btnY, btnWidth, 34);
+            btnLamMoi.SetBounds(btnSua.Right + btnSpacing, btnY, btnWidth, 34);
 
             // Search row
             int searchY = btnThem.Bottom + 18;

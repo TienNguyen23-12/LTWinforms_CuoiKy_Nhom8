@@ -40,6 +40,19 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 {
                     return "Mã hội viên này đã tồn tại!";
                 }
+                TaiKhoan tkMoi = new TaiKhoan();
+                tkMoi.Username = hvMoi.MaHoiVien; 
+                tkMoi.Password = "123456";       
+                tkMoi.Role = 3;
+                tkMoi.IsActive = true;
+                tkMoi.FailedLogin = 0;
+
+                db.TaiKhoans.InsertOnSubmit(tkMoi);
+                db.SubmitChanges(); 
+
+                hvMoi.IdTaiKhoan = tkMoi.Id;
+                hvMoi.IsActive = true;
+                hvMoi.NgayDangKy = DateTime.Now;
 
                 db.HoiViens.InsertOnSubmit(hvMoi);
                 db.SubmitChanges();
@@ -85,7 +98,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     return "Không tìm thấy hội viên cần xóa!";
                 }
 
-                hv.IsActive = false; 
+                hv.IsActive = false;
                 db.SubmitChanges();
                 return "";
             }

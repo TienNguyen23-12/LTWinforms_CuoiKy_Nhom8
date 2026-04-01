@@ -37,8 +37,8 @@ namespace LTWinforms_CuoiKy_Nhom8.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=QLTT_TheThao;Integrated Security=True;Encry" +
-            "pt=True;TrustServerCertificate=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;Initial Catalog=QLTT_TheThao;Integrated Security=True;En" +
+            "crypt=True;TrustServerCertificate=True")]
         public string QLTT_TheThaoConnectionString1 {
             get {
                 return ((string)(this["QLTT_TheThaoConnectionString1"]));
@@ -53,6 +53,17 @@ namespace LTWinforms_CuoiKy_Nhom8.Properties {
         public string QLTT_TheThaoConnectionString2 {
             get {
                 return ((string)(this["QLTT_TheThaoConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;Initial Catalog=QLTT_TheThao;Integrated Security=True;En" +
+            "crypt=True;TrustServerCertificate=True")]
+        public string QLTT_TheThaoConnectionString3 {
+            get {
+                return ((string)(this["QLTT_TheThaoConnectionString3"]));
             }
         }
     }

@@ -40,7 +40,6 @@
             this.dtpNgaySinh = new System.Windows.Forms.DateTimePicker();
             this.btnThem = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
-            this.btnKhoa = new System.Windows.Forms.Button();
             this.btnLamMoi = new System.Windows.Forms.Button();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -148,7 +147,7 @@
             // 
             // btnSua
             // 
-            this.btnSua.Location = new System.Drawing.Point(309, 196);
+            this.btnSua.Location = new System.Drawing.Point(358, 196);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(75, 23);
             this.btnSua.TabIndex = 11;
@@ -156,19 +155,9 @@
             this.btnSua.UseVisualStyleBackColor = true;
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
             // 
-            // btnKhoa
-            // 
-            this.btnKhoa.Location = new System.Drawing.Point(434, 196);
-            this.btnKhoa.Name = "btnKhoa";
-            this.btnKhoa.Size = new System.Drawing.Size(75, 23);
-            this.btnKhoa.TabIndex = 12;
-            this.btnKhoa.Text = "Khóa";
-            this.btnKhoa.UseVisualStyleBackColor = true;
-            this.btnKhoa.Click += new System.EventHandler(this.btnKhoa_Click);
-            // 
             // btnLamMoi
             // 
-            this.btnLamMoi.Location = new System.Drawing.Point(548, 196);
+            this.btnLamMoi.Location = new System.Drawing.Point(547, 196);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(75, 23);
             this.btnLamMoi.TabIndex = 13;
@@ -222,7 +211,6 @@
             this.Controls.Add(this.txtTimKiem);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnLamMoi);
-            this.Controls.Add(this.btnKhoa);
             this.Controls.Add(this.btnSua);
             this.Controls.Add(this.btnThem);
             this.Controls.Add(this.dtpNgaySinh);
@@ -258,7 +246,6 @@
         private System.Windows.Forms.DateTimePicker dtpNgaySinh;
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.Button btnSua;
-        private System.Windows.Forms.Button btnKhoa;
         private System.Windows.Forms.Button btnLamMoi;
         private System.Windows.Forms.TextBox txtTimKiem;
         private System.Windows.Forms.Label label6;

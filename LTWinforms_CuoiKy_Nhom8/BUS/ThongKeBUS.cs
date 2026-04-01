@@ -22,30 +22,60 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                                            && x.NgayThanhToan.Value <= denNgayEnd)
                                   .ToList();
 
-            var query = hoaDonTrongKy
+            var queryGoi = hoaDonTrongKy
                         .GroupBy(x => x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu)
                         .Select(g => new
                         {
                             TenDichVu = g.Key,
                             SoLuongBan = g.Count(),
                             TongDoanhThu = g.Sum(x => x.SoTien)
-                        })
-                        .OrderByDescending(x => x.TongDoanhThu)
-                        .ToList();
+                        });
 
-            return query;
+            var dangKyLopTrongKy = db.DangKyLops
+                                     .Where(d => d.TrangThaiThanhToan == "Đã thanh toán"
+                                              && d.NgayDangKy.HasValue
+                                              && d.NgayDangKy.Value >= tuNgay.Date
+                                              && d.NgayDangKy.Value <= denNgayEnd)
+                                     .ToList();
+
+            var queryLop = (from d in dangKyLopTrongKy
+                            join l in db.LopHocs on d.MaLop equals l.MaLop
+                            group l by l.TenLop into g
+                            select new
+                            {
+                                TenDichVu = g.Key,
+                                SoLuongBan = g.Count(),
+                                TongDoanhThu = g.Sum(x => x.GiaTien ?? 0)
+                            });
+
+            var combined = queryGoi
+                           .Concat(queryLop)
+                           .OrderByDescending(x => x.TongDoanhThu)
+                           .ToList();
+
+            return combined;
         }
 
         public decimal TinhTongDoanhThu(DateTime tuNgay, DateTime denNgay)
         {
             DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
 
-            return db.HoaDons
+            decimal thuHoaDon = db.HoaDons
                      .Where(x => x.TrangThai == "Đã thanh toán"
                               && x.NgayThanhToan.HasValue
                               && x.NgayThanhToan.Value >= tuNgay.Date
                               && x.NgayThanhToan.Value <= denNgayEnd)
                      .Sum(x => (decimal?)x.SoTien) ?? 0;
+
+            decimal thuDangKyLop = (from d in db.DangKyLops
+                                    join l in db.LopHocs on d.MaLop equals l.MaLop
+                                    where d.TrangThaiThanhToan == "Đã thanh toán"
+                                          && d.NgayDangKy.HasValue
+                                          && d.NgayDangKy.Value >= tuNgay.Date
+                                          && d.NgayDangKy.Value <= denNgayEnd
+                                    select (decimal?)(l.GiaTien ?? 0)).Sum() ?? 0;
+
+            return thuHoaDon + thuDangKyLop;
         }
 
         public object ThongKeTaiChinh(DateTime tuNgay, DateTime denNgay)
