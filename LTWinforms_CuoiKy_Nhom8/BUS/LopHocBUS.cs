@@ -46,7 +46,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 query = query.Where(x => x.NgayBatDau <= denNgayEnd);
             }
 
-            return query.Select(x => new
+            var list = query.Select(x => new
             {
                 x.MaLop,
                 x.TenLop,
@@ -57,8 +57,42 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 GiaTien = x.GiaTien,
                 SoBuoi = x.SoBuoi,
                 TenHLV = x.HuanLuyenVien != null ? x.HuanLuyenVien.TenHLV : "Chưa phân công",
-                PhongTap = x.PhongTap1 != null ? x.PhongTap1.TenPhong : "N/A"
+                PhongTap = x.PhongTap1 != null ? x.PhongTap1.TenPhong : x.PhongTap
             }).ToList();
+
+            var result = list.Select(x =>
+            {
+                int daDangKy = db.DangKyLops.Count(dk => dk.MaLop == x.MaLop);
+                int toiDa = x.SoLuongToiDa ?? 0;
+                int slotLeft = toiDa - daDangKy;
+                string slotCon;
+                if (toiDa <= 0)
+                {
+                    slotCon = "N/A";
+                }
+                else
+                {
+                    slotCon = slotLeft > 0 ? slotLeft.ToString() : "Đã đầy";
+                }
+
+                return new
+                {
+                    x.MaLop,
+                    x.TenLop,
+                    x.ThoiGian,
+                    x.NgayBatDau,
+                    x.SoLuongToiDa,
+                    x.TrangThai,
+                    x.GiaTien,
+                    x.SoBuoi,
+                    x.TenHLV,
+                    x.PhongTap,
+                    SiSo = $"{daDangKy} / {toiDa}",
+                    SlotCon = slotCon
+                };
+            }).ToList();
+
+            return result;
         }
 
         public string ThemLop(LopHoc lopMoi)

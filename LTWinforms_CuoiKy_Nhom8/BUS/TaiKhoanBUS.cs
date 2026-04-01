@@ -28,7 +28,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     return "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin!";
                 }
 
-                if (user.Password != password)
+                if (!SecurityHelper.VerifyPassword(user.Password, password))
                 {
                     user.FailedLogin += 1;
 
@@ -71,7 +71,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
                 TaiKhoan tkMoi = new TaiKhoan();
                 tkMoi.Username = username;
-                tkMoi.Password = password;
+                tkMoi.Password = SecurityHelper.HashPassword(password);
                 tkMoi.Role = 3; 
                 tkMoi.IsActive = true;
                 tkMoi.FailedLogin = 0;
@@ -103,14 +103,17 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             try
             {
                 var tk = db.TaiKhoans.SingleOrDefault(x => x.Id == idTaiKhoan);
-                if (tk == null) return "Lỗi: Không tìm thấy tài khoản!";
+                if (tk == null)
+                {
+                    return "Lỗi: Không tìm thấy tài khoản!";
+                }
 
-                if (tk.Password != passCu)
+                if (!SecurityHelper.VerifyPassword(tk.Password, passCu))
                 {
                     return "Mật khẩu cũ không chính xác!";
                 }
 
-                tk.Password = passMoi;
+                tk.Password = SecurityHelper.HashPassword(passMoi);
                 db.SubmitChanges();
                 return ""; 
             }
@@ -174,7 +177,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 Random rnd = new Random();
                 matKhauMoi = rnd.Next(100000, 999999).ToString();
 
-                tk.Password = matKhauMoi;
+                tk.Password = SecurityHelper.HashPassword(matKhauMoi);
                 db.SubmitChanges();
 
                 return ""; 

@@ -105,7 +105,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     return "Không tìm thấy tài khoản!";
                 }
 
-                tk.Password = "123456";
+                tk.Password = SecurityHelper.HashPassword("123456");
                 db.SubmitChanges();
                 return "";
             }

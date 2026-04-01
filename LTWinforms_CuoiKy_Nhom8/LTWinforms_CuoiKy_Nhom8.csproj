@@ -83,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QLTT.dbml</DependentUpon>
     </Compile>
+    <Compile Include="DAL\SecurityHelper.cs" />
     <Compile Include="DTO\Session.cs" />
     <Compile Include="GUI\frmCR_BaoCao.cs">
       <SubType>Form</SubType>
