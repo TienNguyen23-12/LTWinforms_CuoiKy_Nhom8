@@ -27,7 +27,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            BackColor = Color.White;
+            BackColor = ModernTheme.PageBackground;
 
             StyleHeaderLabel(lblXinChao);
             StyleLabel(lblQuyen);
@@ -59,12 +59,15 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             StylePrimaryButton(btnLuuMatKhau);
             StylePrimaryButton(btnLuuHoSo);
 
+            btnLuuMatKhau.Size = new Size(92, 36);
+            btnLuuHoSo.Size = new Size(92, 36);
+
             isThemeApplied = true;
         }
 
         private void StyleHeaderLabel(Label label)
         {
-            label.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            label.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label.ForeColor = Color.FromArgb(34, 49, 63);
         }
 
@@ -76,7 +79,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void StyleGroup(GroupBox group)
         {
-            group.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            group.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
             group.ForeColor = Color.FromArgb(44, 62, 80);
             group.BackColor = Color.FromArgb(245, 249, 255);
         }
@@ -94,26 +97,37 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ApplyResponsiveLayout()
         {
-            int contentWidth = Math.Min(1100, ClientSize.Width - 40);
-            int left = Math.Max(20, (ClientSize.Width - contentWidth) / 2);
+            int contentWidth = Math.Min(1140, ClientSize.Width - 36);
+            if (contentWidth < 940)
+            {
+                contentWidth = 940;
+            }
 
+            int left = Math.Max(12, (ClientSize.Width - contentWidth) / 2);
             int top = 20;
 
-            lblXinChao.SetBounds(left, top, 420, 28);
-            lblQuyen.SetBounds(left, lblXinChao.Bottom + 6, 420, 24);
+            int colGap = 24;
+            int leftColWidth = 430;
+            int rightLeft = left + leftColWidth + colGap;
+            int rightColWidth = contentWidth - leftColWidth - colGap;
 
-            lblThongTinThem.MaximumSize = new Size(420, 0);
+            // Cột trái: thông tin tài khoản
+            lblXinChao.SetBounds(left, top, leftColWidth, 30);
+            lblQuyen.SetBounds(left, lblXinChao.Bottom + 6, leftColWidth, 24);
+
+            lblThongTinThem.MaximumSize = new Size(leftColWidth, 0);
             lblThongTinThem.AutoSize = true;
             lblThongTinThem.Left = left;
             lblThongTinThem.Top = lblQuyen.Bottom + 6;
 
-            int rightLeft = left + 460;
-            int rightWidth = Math.Max(360, Math.Min(500, contentWidth - 460));
+            // Cột phải: Đổi mật khẩu ở trên
+            groupBox1.SetBounds(rightLeft, top, rightColWidth, 210);
 
-            groupBox2.SetBounds(rightLeft, top, rightWidth, 240);
-
-            int passTop = Math.Max(lblThongTinThem.Bottom + 18, groupBox2.Visible ? groupBox2.Bottom + 18 : lblThongTinThem.Bottom + 18);
-            groupBox1.SetBounds(left, passTop, Math.Min(560, contentWidth), 185);
+            // Cột phải: Đổi thông tin ở dưới
+            if (groupBox2.Visible)
+            {
+                groupBox2.SetBounds(rightLeft, groupBox1.Bottom + 16, rightColWidth, 262);
+            }
         }
 
         private void ucHoSoCaNhan_Load(object sender, EventArgs e)
@@ -226,6 +240,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
 
             ApplyResponsiveLayout();
+            BeginInvoke((Action)ApplyResponsiveLayout);
         }
 
         private void ucHoSoCaNhan_Resize(object sender, EventArgs e)

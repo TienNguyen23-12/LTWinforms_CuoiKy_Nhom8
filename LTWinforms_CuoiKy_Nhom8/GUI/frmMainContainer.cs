@@ -17,14 +17,23 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             InitializeComponent();
             Instance = this;
 
+            StartPosition = FormStartPosition.CenterScreen;
+
             var iconPath = Path.Combine(Application.StartupPath, "Assets", "sportify.ico");
             if (File.Exists(iconPath))
             {
-                this.Icon = new Icon(iconPath);
+                Icon = new Icon(iconPath);
             }
 
             ApplyGlobalFont(this);
             ModernTheme.ApplyRoundedButtons(this, 10);
+
+            Shown += frmMainContainer_Shown;
+        }
+
+        private void frmMainContainer_Shown(object sender, System.EventArgs e)
+        {
+            CenterToScreen();
         }
 
         public void LoadUserControl(UserControl uc)

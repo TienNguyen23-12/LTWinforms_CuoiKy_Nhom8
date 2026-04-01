@@ -236,30 +236,36 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             // Search row
             int searchY = btnThem.Bottom + 16;
-            int searchLabelWidth = 70;
             int searchInputWidth = 260;
             int searchBtnWidth = 120;
-
-            int searchTotal = searchLabelWidth + 10 + searchInputWidth + 14 + searchBtnWidth;
             int searchStart = left + 10;
 
-            label7.Left = searchStart;
-            label7.Top = searchY + 8;
-
-            txtTimKiem.Left = label7.Right + 10;
-            txtTimKiem.Top = searchY;
+            txtTimKiem.Left = searchStart + 80;
             txtTimKiem.Width = searchInputWidth;
 
-            btnTimKiem.SetBounds(txtTimKiem.Right + 14, searchY, searchBtnWidth, 34);
+            btnTimKiem.SetBounds(txtTimKiem.Right + 14, 0, searchBtnWidth, 34);
 
             label12.Left = btnTimKiem.Right + 25;
-            label12.Top = searchY + 8;
             cboLocHLV.Left = label12.Right + 10;
-            cboLocHLV.Top = searchY;
             cboLocHLV.Width = 220;
 
+            // Canh giữa theo chiều dọc cho cả hàng tìm kiếm
+            int searchRowHeight = Math.Max(
+                Math.Max(label7.Height, txtTimKiem.Height),
+                Math.Max(btnTimKiem.Height, Math.Max(label12.Height, cboLocHLV.Height)));
+
+            label7.Left = searchStart;
+            label7.Top = searchY + (searchRowHeight - label7.Height) / 2;
+
+            txtTimKiem.Top = searchY + (searchRowHeight - txtTimKiem.Height) / 2;
+            btnTimKiem.Top = searchY + (searchRowHeight - btnTimKiem.Height) / 2;
+
+            label12.Top = searchY + (searchRowHeight - label12.Height) / 2;
+            cboLocHLV.Top = searchY + (searchRowHeight - cboLocHLV.Height) / 2;
+
             // Date filter row
-            int filterY = txtTimKiem.Bottom + 12;
+            int filterTopBase = Math.Max(Math.Max(txtTimKiem.Bottom, btnTimKiem.Bottom), cboLocHLV.Bottom);
+            int filterY = filterTopBase + 12;
 
             label14.Left = searchStart;
             label14.Top = filterY + 6;

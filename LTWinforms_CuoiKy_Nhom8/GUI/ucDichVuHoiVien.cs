@@ -1,21 +1,17 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using LTWinforms_CuoiKy_Nhom8.DTO;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucDichVuHoiVien : UserControl
     {
-        HoiVienBUS hvBUS = new HoiVienBUS();
-        LopHocBUS lopBUS = new LopHocBUS();
+        private readonly HoiVienBUS hvBUS = new HoiVienBUS();
+        private readonly LopHocBUS lopBUS = new LopHocBUS();
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucDichVuHoiVien()
         {
@@ -24,12 +20,176 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ucDichVuHoiVien_Load(object sender, EventArgs e)
         {
+            ApplyTheme();
+
             dtpTuNgay.Enabled = false;
             dtpDenNgay.Enabled = false;
 
             LoadDuLieuGoi();
             LoadDuLieuLop();
             LoadComboHLV();
+
+            if (!isLayoutHooked)
+            {
+                Resize += ucDichVuHoiVien_Resize;
+                isLayoutHooked = true;
+            }
+
+            ApplyResponsiveLayout();
+            BeginInvoke((Action)ApplyResponsiveLayout);
+        }
+
+        private void ucDichVuHoiVien_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        private void ApplyTheme()
+        {
+            if (isThemeApplied)
+            {
+                return;
+            }
+
+            BackColor = ModernTheme.PageBackground;
+            ApplyRegularFont(this);
+
+            tabControl1.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            // Quan trọng: tránh nền tab mặc định gây góc đen khi paint rounded button
+            tpGoiTap.UseVisualStyleBackColor = false;
+            tpLopHoc.UseVisualStyleBackColor = false;
+            tpLichSu.UseVisualStyleBackColor = false;
+            tpGoiTap.BackColor = ModernTheme.PageBackground;
+            tpLopHoc.BackColor = ModernTheme.PageBackground;
+            tpLichSu.BackColor = ModernTheme.PageBackground;
+
+            ModernTheme.StyleDataComboBox(cboLocHLV);
+            chkLocNgay.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            chkLocNgay.ForeColor = ModernTheme.TextPrimary;
+
+            dtpTuNgay.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dtpDenNgay.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            StyleGridRegular(dgvGoiTap);
+            StyleGridRegular(dgvLopHoc);
+            StyleGridRegular(dgvLichSu);
+
+            StyleModernButton(btnDangKyGoi, Color.FromArgb(46, 134, 222));
+            StyleModernButton(btnDangKyLop, Color.FromArgb(46, 134, 222));
+            StyleModernButton(btnLoc, Color.FromArgb(52, 73, 94));
+            StyleModernButton(btnGuiPhanHoi, Color.FromArgb(46, 134, 222));
+
+            txtPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            txtPhanHoi.BorderStyle = BorderStyle.FixedSingle;
+            txtPhanHoi.BackColor = Color.White;
+            txtPhanHoi.ForeColor = ModernTheme.TextPrimary;
+
+            isThemeApplied = true;
+        }
+
+        private void ApplyRegularFont(Control root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            root.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            foreach (Control child in root.Controls)
+            {
+                ApplyRegularFont(child);
+            }
+        }
+
+        private void StyleGridRegular(DataGridView dgv)
+        {
+            ModernTheme.StyleGrid(dgv);
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgv.RowHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+        }
+
+        private void StyleModernButton(Button button, Color backColor)
+        {
+            ModernTheme.StyleButton(button, backColor, Color.White);
+            button.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            button.Size = new Size(150, 40);
+            button.TextAlign = ContentAlignment.MiddleCenter;
+            button.Padding = new Padding(0);
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Min(1160, ClientSize.Width - 24);
+            if (contentWidth < 940)
+            {
+                contentWidth = 940;
+            }
+
+            int left = Math.Max(8, (ClientSize.Width - contentWidth) / 2);
+
+            int top = 12;
+            int tabHeight = Math.Max(360, ClientSize.Height / 2);
+            tabControl1.SetBounds(left, top, contentWidth, tabHeight);
+
+            Rectangle pageRect = tabControl1.DisplayRectangle;
+            int pageWidth = Math.Max(760, pageRect.Width);
+            int pageHeight = Math.Max(250, pageRect.Height);
+
+            // ===== Tab Gói tập =====
+            int goiGridWidth = Math.Max(700, pageWidth - 80);
+            int goiGridLeft = (pageWidth - goiGridWidth) / 2;
+            int goiGridTop = 16;
+            int goiGridHeight = Math.Max(170, pageHeight - 120);
+            dgvGoiTap.SetBounds(goiGridLeft, goiGridTop, goiGridWidth, goiGridHeight);
+
+            int goiBtnLeft = (pageWidth - btnDangKyGoi.Width) / 2;
+            btnDangKyGoi.SetBounds(goiBtnLeft, dgvGoiTap.Bottom + 10, btnDangKyGoi.Width, btnDangKyGoi.Height);
+
+            // ===== Tab Lớp học =====
+            int filterTop = 16;
+            int comboW = 170;
+            int dateW = 190;
+            int gap = 12;
+            int checkW = 130;
+
+            int filterWidth = comboW + gap + dateW + gap + dateW + gap + checkW;
+            int filterLeft = (pageWidth - filterWidth) / 2;
+
+            cboLocHLV.SetBounds(filterLeft, filterTop, comboW, 32);
+            dtpTuNgay.SetBounds(cboLocHLV.Right + gap, filterTop, dateW, 32);
+            dtpDenNgay.SetBounds(dtpTuNgay.Right + gap, filterTop, dateW, 32);
+            chkLocNgay.SetBounds(dtpDenNgay.Right + gap, filterTop + 6, checkW, 24);
+
+            int locLeft = (pageWidth - btnLoc.Width) / 2;
+            btnLoc.SetBounds(locLeft, dtpTuNgay.Bottom + 8, btnLoc.Width, btnLoc.Height);
+
+            int lopGridWidth = Math.Max(700, pageWidth - 80);
+            int lopGridLeft = (pageWidth - lopGridWidth) / 2;
+            int lopGridTop = btnLoc.Bottom + 10;
+            int lopGridHeight = Math.Max(145, pageHeight - lopGridTop - 58);
+            dgvLopHoc.SetBounds(lopGridLeft, lopGridTop, lopGridWidth, lopGridHeight);
+
+            int lopBtnLeft = (pageWidth - btnDangKyLop.Width) / 2;
+            btnDangKyLop.SetBounds(lopBtnLeft, dgvLopHoc.Bottom + 8, btnDangKyLop.Width, btnDangKyLop.Height);
+
+            // ===== Tab Lịch sử =====
+            int lsGridWidth = Math.Max(700, pageWidth - 80);
+            int lsGridLeft = (pageWidth - lsGridWidth) / 2;
+            int lsGridTop = 16;
+            int lsGridHeight = Math.Max(180, pageHeight - 32);
+            dgvLichSu.SetBounds(lsGridLeft, lsGridTop, lsGridWidth, lsGridHeight);
+
+            // ===== Khu phản hồi =====
+            int phTop = tabControl1.Bottom + 18;
+            int phWidth = Math.Min(820, contentWidth - 80);
+            int phLeft = left + (contentWidth - phWidth) / 2;
+            txtPhanHoi.SetBounds(phLeft, phTop, phWidth, 110);
+
+            int phBtnLeft = left + (contentWidth - btnGuiPhanHoi.Width) / 2;
+            btnGuiPhanHoi.SetBounds(phBtnLeft, txtPhanHoi.Bottom + 12, btnGuiPhanHoi.Width, btnGuiPhanHoi.Height);
         }
 
         private void LoadDuLieuGoi()
@@ -144,16 +304,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 case "tpGoiTap":
                     LoadDuLieuGoi();
                     break;
-
                 case "tpLopHoc":
                     LoadDuLieuLop();
                     break;
-
                 case "tpLichSu":
                     LoadLichSu();
-                    break;
-
-                default:
                     break;
             }
         }
@@ -164,11 +319,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 if (e.Value.ToString() == "Chờ thanh toán")
                 {
-                    e.CellStyle.ForeColor = Color.Red; // Chưa đóng tiền: Màu Đỏ
+                    e.CellStyle.ForeColor = Color.Red;
                 }
                 else
                 {
-                    e.CellStyle.ForeColor = Color.Green; // Đã xong: Màu Xanh
+                    e.CellStyle.ForeColor = Color.Green;
                 }
             }
         }
