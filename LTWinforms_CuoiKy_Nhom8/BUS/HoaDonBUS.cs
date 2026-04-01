@@ -1,9 +1,6 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LTWinforms_CuoiKy_Nhom8.BUS
 {
@@ -28,6 +25,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                             NgayThanhToan = hd.NgayThanhToan,
                             Trạng_Thái = hd.TrangThai ?? "Đã thanh toán"
                         };
+
             return query.ToList();
         }
 
@@ -35,6 +33,11 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(maHoiVien) || string.IsNullOrWhiteSpace(maGoi))
+                {
+                    return "Dữ liệu không hợp lệ!";
+                }
+
                 var hv = db.HoiViens.SingleOrDefault(x => x.MaHoiVien == maHoiVien);
                 var goi = db.GoiTaps.SingleOrDefault(x => x.MaGoi == maGoi);
 
@@ -43,23 +46,25 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     return "Dữ liệu không hợp lệ!";
                 }
 
+                int thoiHan = goi.ThoiHanThang ?? 0;
                 DateTime ngayBatDau = (hv.NgayHetHan.HasValue && hv.NgayHetHan.Value > DateTime.Now)
                                       ? hv.NgayHetHan.Value
                                       : DateTime.Now;
 
-                hv.NgayHetHan = ngayBatDau.AddMonths(goi.ThoiHanThang.Value);
+                hv.NgayHetHan = ngayBatDau.AddMonths(thoiHan);
 
-                HoaDon hd = new HoaDon();
-                hd.MaHoiVien = maHoiVien;
-                hd.MaGoi = maGoi;
-                hd.IdNhanVien = idNhanVien;
-                hd.SoTien = goi.GiaTien;
-                hd.NgayThanhToan = DateTime.Now;
-                hd.TrangThai = "Đã thanh toán";
-                hd.GhiChu = "Đăng ký gói " + goi.TenGoi;
+                HoaDon hd = new HoaDon
+                {
+                    MaHoiVien = maHoiVien,
+                    MaGoi = maGoi,
+                    IdNhanVien = idNhanVien,
+                    SoTien = goi.GiaTien,
+                    NgayThanhToan = DateTime.Now,
+                    TrangThai = "Đã thanh toán",
+                    GhiChu = "Đăng ký gói " + goi.TenGoi
+                };
 
                 db.HoaDons.InsertOnSubmit(hd);
-
                 db.SubmitChanges();
 
                 return "";
@@ -80,7 +85,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
             var listDaThanhToan = db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
                              .Select(x => new {
-                                 MaHoaDon = x.MaHoaDon.ToString(), 
+                                 MaHoaDon = x.MaHoaDon.ToString(),
                                  TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
                                  SoTien = x.SoTien,
                                  NgayThanhToan = x.NgayThanhToan,
@@ -92,9 +97,9 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                               where dk.MaHoiVien == hv.MaHoiVien && dk.TrangThaiThanhToan == "Chờ thanh toán"
                               select new
                               {
-                                  MaHoaDon = "---", 
+                                  MaHoaDon = "---",
                                   TenGoi = "Chưa đóng học phí: " + lop.TenLop,
-                                  SoTien = lop.GiaTien ?? 0, 
+                                  SoTien = lop.GiaTien ?? 0,
                                   NgayThanhToan = dk.NgayDangKy,
                                   TrangThai = dk.TrangThaiThanhToan
                               }).ToList();
@@ -105,6 +110,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
             return lichSuTongHop;
         }
+
         public string DuyetHoaDonOnline(int maHD, int idNhanVienThuTien)
         {
             try
@@ -131,10 +137,11 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
                     if (hv != null && goi != null)
                     {
+                        int thoiHan = goi.ThoiHanThang ?? 0;
                         DateTime ngayBatDau = (hv.NgayHetHan.HasValue && hv.NgayHetHan.Value > DateTime.Now)
                                               ? hv.NgayHetHan.Value
                                               : DateTime.Now;
-                        hv.NgayHetHan = ngayBatDau.AddMonths(goi.ThoiHanThang ?? 0);
+                        hv.NgayHetHan = ngayBatDau.AddMonths(thoiHan);
                     }
                 }
 
@@ -151,19 +158,26 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         {
             try
             {
-                HoaDon hd = new HoaDon();
-                hd.MaHoiVien = maHoiVien;
-                hd.MaGoi = null;               
-                hd.SoTien = giaTien;           
-                hd.NgayThanhToan = DateTime.Now;
-                hd.IdNhanVien = idNhanVien;   
-                hd.TrangThai = "Đã thanh toán";
-                hd.GhiChu = "Mua SP: " + tenSP;  
+                if (string.IsNullOrWhiteSpace(maHoiVien))
+                {
+                    return "Mã hội viên không hợp lệ!";
+                }
+
+                HoaDon hd = new HoaDon
+                {
+                    MaHoiVien = maHoiVien,
+                    MaGoi = null,
+                    SoTien = giaTien,
+                    NgayThanhToan = DateTime.Now,
+                    IdNhanVien = idNhanVien,
+                    TrangThai = "Đã thanh toán",
+                    GhiChu = "Mua SP: " + (tenSP ?? string.Empty)
+                };
 
                 db.HoaDons.InsertOnSubmit(hd);
                 db.SubmitChanges();
 
-                return ""; 
+                return "";
             }
             catch (Exception ex)
             {

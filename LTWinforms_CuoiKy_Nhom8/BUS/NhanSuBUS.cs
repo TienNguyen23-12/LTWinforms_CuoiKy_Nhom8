@@ -60,6 +60,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return "Lỗi chấm công: " + ex.Message;
             }
         }
+
         public string GhiNhanPhat(int idTaiKhoan, decimal soTien, string lyDo)
         {
             try
@@ -79,10 +80,26 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return "Lỗi ghi nhận kỷ luật: " + ex.Message;
             }
         }
+
+        // Centralized commission rate provider to avoid default parameter initializers
+        private decimal GetCommissionRate()
+        {
+            // According to formula: 10% commission for HLV
+            return 0.10m;
+        }
+
         public object TinhBangLuongChiTiet(DateTime tuNgay, DateTime denNgay)
         {
-            var listChamCong = db.ChamCongs.Where(x => x.NgayCham.Value.Date >= tuNgay.Date && x.NgayCham.Value.Date <= denNgay.Date && x.TrangThai == "Có mặt").ToList();
-            var listPhat = db.KyLuats.Where(x => x.NgayPhat.Value.Date >= tuNgay.Date && x.NgayPhat.Value.Date <= denNgay.Date).ToList();
+            DateTime start = tuNgay.Date;
+            DateTime end = denNgay.Date.AddDays(1).AddSeconds(-1);
+
+            var listChamCong = db.ChamCongs
+                .Where(x => x.NgayCham >= start && x.NgayCham <= end && x.TrangThai == "Có mặt")
+                .ToList();
+
+            var listPhat = db.KyLuats
+                .Where(x => x.NgayPhat >= start && x.NgayPhat <= end)
+                .ToList();
 
             var result = new List<dynamic>();
 
@@ -92,7 +109,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 int soCong = listChamCong.Count(c => c.IdTaiKhoan == nv.IdTaiKhoan);
                 decimal tienPhat = listPhat.Where(p => p.IdTaiKhoan == nv.IdTaiKhoan).Sum(p => (decimal?)p.SoTien) ?? 0;
 
-                decimal luong1Ngay = (nv.Luong ?? 0) / 30; 
+                decimal luong1Ngay = (nv.Luong ?? 0) / 26m;
                 decimal luongThucLanh = (luong1Ngay * soCong) - tienPhat;
 
                 if (luongThucLanh < 0) luongThucLanh = 0;
@@ -114,18 +131,35 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 int soBuoi = listChamCong.Count(c => c.IdTaiKhoan == hlv.IdTaiKhoan);
                 decimal tienPhat = listPhat.Where(p => p.IdTaiKhoan == hlv.IdTaiKhoan).Sum(p => (decimal?)p.SoTien) ?? 0;
 
-                decimal luongThucLanh = ((hlv.LuongCoBan ?? 0) * soBuoi) - tienPhat;
+                decimal luongCoBan = hlv.LuongCoBan ?? 0;
+                decimal luongTheoCong = (luongCoBan / 26m) * soBuoi;
 
-                if (luongThucLanh < 0) luongThucLanh = 0;
+                decimal commissionRate = GetCommissionRate();
+                decimal commissionTotal = 0m;
+
+                var cacLop = db.LopHocs.Where(l => l.MaHLV == hlv.MaHLV && l.IsActive == true).ToList();
+                foreach (var lop in cacLop)
+                {
+                    int soHocVien = db.DangKyLops.Count(dk =>
+                        dk.MaLop == lop.MaLop &&
+                        dk.NgayDangKy >= start &&
+                        dk.NgayDangKy <= end
+                    );
+                    decimal giaLop = lop.GiaTien ?? 0m;
+                    commissionTotal += giaLop * soHocVien * commissionRate;
+                }
+
+                decimal tongLuong = luongTheoCong + commissionTotal - tienPhat;
 
                 result.Add(new
                 {
                     MaNhanSu = hlv.MaHLV,
                     HoTen = hlv.TenHLV,
                     VaiTro = "Huấn luyện viên",
-                    SoNgayLam = soBuoi, 
+                    SoNgayLam = soBuoi,
                     TienPhat = tienPhat,
-                    ThucLanh = Math.Round(luongThucLanh, 0)
+                    Thuong = Math.Round(commissionTotal, 0),
+                    ThucLanh = Math.Round(tongLuong, 0)
                 });
             }
 
@@ -134,8 +168,16 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object TinhLuongCaNhan(int idTaiKhoan, int role, DateTime tuNgay, DateTime denNgay)
         {
-            var listChamCong = db.ChamCongs.Where(x => x.NgayCham.Value.Date >= tuNgay.Date && x.NgayCham.Value.Date <= denNgay.Date && x.TrangThai == "Có mặt" && x.IdTaiKhoan == idTaiKhoan).ToList();
-            var listPhat = db.KyLuats.Where(x => x.NgayPhat.Value.Date >= tuNgay.Date && x.NgayPhat.Value.Date <= denNgay.Date && x.IdTaiKhoan == idTaiKhoan).ToList();
+            DateTime start = tuNgay.Date;
+            DateTime end = denNgay.Date.AddDays(1).AddSeconds(-1);
+
+            var listChamCong = db.ChamCongs
+                .Where(x => x.NgayCham >= start && x.NgayCham <= end && x.TrangThai == "Có mặt" && x.IdTaiKhoan == idTaiKhoan)
+                .ToList();
+
+            var listPhat = db.KyLuats
+                .Where(x => x.NgayPhat >= start && x.NgayPhat <= end && x.IdTaiKhoan == idTaiKhoan)
+                .ToList();
 
             var result = new List<dynamic>();
             int soBuoiCoMat = listChamCong.Count;
@@ -146,7 +188,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 var nv = db.NhanViens.FirstOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                 if (nv != null)
                 {
-                    decimal luong1Ngay = (nv.Luong ?? 0) / 30;
+                    decimal luong1Ngay = (nv.Luong ?? 0) / 26m;
                     decimal luongThucLanh = (luong1Ngay * soBuoiCoMat) - tienPhat;
                     if (luongThucLanh < 0) luongThucLanh = 0;
 
@@ -156,6 +198,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         HoTen = nv.HoTen,
                         VaiTro = "Nhân viên",
                         SoNgayLam = soBuoiCoMat,
+                        Luong1Ngay = Math.Round(luong1Ngay,0),
                         TienPhat = tienPhat,
                         ThucLanh = Math.Round(luongThucLanh, 0)
                     });
@@ -166,8 +209,26 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 var hlv = db.HuanLuyenViens.FirstOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                 if (hlv != null)
                 {
-                    decimal luongThucLanh = ((hlv.LuongCoBan ?? 0) * soBuoiCoMat) - tienPhat;
-                    if (luongThucLanh < 0) luongThucLanh = 0;
+                    decimal luongCoBan = hlv.LuongCoBan ?? 0;
+                    decimal luongTheoCong = (luongCoBan / 26m) * soBuoiCoMat;
+
+                    decimal commissionRate = GetCommissionRate();
+                    decimal commissionTotal = 0m;
+
+                    var cacLop = db.LopHocs.Where(l => l.MaHLV == hlv.MaHLV && l.IsActive == true).ToList();
+                    foreach (var lop in cacLop)
+                    {
+                        int soHocVien = db.DangKyLops.Count(dk =>
+                            dk.MaLop == lop.MaLop &&
+                            dk.NgayDangKy >= start &&
+                            dk.NgayDangKy <= end
+                        );
+                        decimal giaLop = lop.GiaTien ?? 0m;
+                        commissionTotal += giaLop * soHocVien * commissionRate;
+                    }
+
+                    decimal tongLuong = luongTheoCong + commissionTotal - tienPhat;
+                    Console.WriteLine($"Luong theo cong: {luongTheoCong}, Commission: {commissionTotal}, Tien phat: {tienPhat}, Tong luong: {tongLuong}");
 
                     result.Add(new
                     {
@@ -176,7 +237,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         VaiTro = "Huấn luyện viên",
                         SoNgayLam = soBuoiCoMat,
                         TienPhat = tienPhat,
-                        ThucLanh = Math.Round(luongThucLanh, 0)
+                        Thuong = Math.Round(commissionTotal, 0),
+                        ThucLanh = Math.Round(tongLuong, 0)
                     });
                 }
             }

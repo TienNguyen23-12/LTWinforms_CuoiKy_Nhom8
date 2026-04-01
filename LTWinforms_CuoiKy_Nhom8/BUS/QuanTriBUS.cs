@@ -43,25 +43,51 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             try
             {
                 var tk = db.TaiKhoans.SingleOrDefault(x => x.Id == idTaiKhoan);
-                if (tk.Role == 4)
+                if (tk == null)
+                {
+                    return "Không tìm thấy tài khoản!";
+                }
+
+                bool updated = false;
+
+                if (tk.Role == 4) // Huấn luyện viên
                 {
                     var hlv = db.HuanLuyenViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                     if (hlv != null)
                     {
                         hlv.LuongCoBan = luongMoi;
+                        updated = true;
+                    }
+                    else
+                    {
+                        return "Không tìm thấy hồ sơ Huấn luyện viên cho tài khoản này.";
                     }
                 }
-                else if (tk.Role == 2)
+                else if (tk.Role == 2) // Nhân viên
                 {
                     var nv = db.NhanViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
                     if (nv != null)
                     {
                         nv.Luong = luongMoi;
+                        updated = true;
+                    }
+                    else
+                    {
+                        return "Không tìm thấy hồ sơ Nhân viên cho tài khoản này.";
                     }
                 }
+                else
+                {
+                    return "Tài khoản không phải Nhân viên hoặc Huấn luyện viên.";
+                }
 
-                db.SubmitChanges();
-                return "";
+                if (updated)
+                {
+                    db.SubmitChanges();
+                    return "";
+                }
+
+                return "Không có thay đổi nào được thực hiện.";
             }
             catch (Exception ex) 
             { 

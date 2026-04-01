@@ -1,9 +1,6 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LTWinforms_CuoiKy_Nhom8.BUS
 {
@@ -142,13 +139,31 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             try
             {
                 var hv = db.HoiViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                if (hv == null)
+                {
+                    return "Lỗi: Không tìm thấy hồ sơ hội viên!";
+                }
+
                 if (db.DangKyLops.Any(d => d.MaHoiVien == hv.MaHoiVien && d.MaLop == maLop))
                 {
                     return "Bạn đã đăng ký lớp học này rồi!";
-
                 }
 
-                DangKyLop dk = new DangKyLop
+                var lop = db.LopHocs.SingleOrDefault(l => l.MaLop == maLop && l.IsActive == true);
+                if (lop == null)
+                {
+                    return "Lỗi: Lớp học không tồn tại!";
+                }
+
+                int soNguoiHienTai = db.DangKyLops.Count(x => x.MaLop == maLop);
+                int maxSoLuong = lop.SoLuongToiDa ?? 0;
+
+                if (maxSoLuong > 0 && soNguoiHienTai >= maxSoLuong)
+                {
+                    return $"Rất tiếc! Lớp {lop.TenLop} đã đầy ({maxSoLuong}/{maxSoLuong}). Vui lòng chọn lớp khác.";
+                }
+
+                var dk = new DangKyLop
                 {
                     MaHoiVien = hv.MaHoiVien,
                     MaLop = maLop,
@@ -159,9 +174,9 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 db.SubmitChanges();
                 return "";
             }
-            catch (Exception ex) 
-            { 
-                return ex.Message; 
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 
@@ -215,24 +230,69 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
         public object LayLichSuDangKy(int idTaiKhoan)
         {
             var hv = db.HoiViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
-            if (hv == null) return null;
+            if (hv == null)
+            {
+                return null;
+            }
 
-            var dsGoi = db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
-                .Select(x => new {
-                    Loai = "Gói Tập",
-                    TenDichVu = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
-                    SoTien = x.SoTien,
-                    NgayDky = x.NgayThanhToan,
+            var hoaDons = db.HoaDons
+                .Where(x => x.MaHoiVien == hv.MaHoiVien)
+                .Select(x => new
+                {
+                    x.MaHoaDon,
+                    x.MaGoi,
+                    TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : null,
+                    x.GhiChu,
+                    x.SoTien,
+                    x.NgayThanhToan,
                     TrangThai = x.TrangThai ?? "Đã thanh toán"
                 }).ToList();
 
+            var dsGoi = hoaDons.Select(x =>
+            {
+                string loai;
+                string tenDichVu;
+                string maLop = "";
+
+                if (!string.IsNullOrEmpty(x.MaGoi))
+                {
+                    loai = "Gói Tập";
+                    tenDichVu = x.TenGoi ?? x.GhiChu;
+                }
+                else if (!string.IsNullOrEmpty(x.GhiChu) && x.GhiChu.StartsWith("Thanh toán lớp học: "))
+                {
+                    maLop = x.GhiChu.Substring("Thanh toán lớp học: ".Length);
+                    var lop = db.LopHocs.SingleOrDefault(l => l.MaLop == maLop);
+                    loai = "Lớp Học";
+                    tenDichVu = lop != null ? lop.TenLop : ("Lớp " + maLop);
+                }
+                else
+                {
+                    loai = "Khác";
+                    tenDichVu = x.GhiChu;
+                }
+
+                return new
+                {
+                    Loai = loai,
+                    TenDichVu = tenDichVu,
+                    MaLop = maLop,
+                    IdDangKy = x.MaHoaDon,
+                    SoTien = x.SoTien,
+                    NgayDky = x.NgayThanhToan,
+                    TrangThai = x.TrangThai
+                };
+            }).ToList();
+
             var dsLop = (from dk in db.DangKyLops
                          join lop in db.LopHocs on dk.MaLop equals lop.MaLop
-                         where dk.MaHoiVien == hv.MaHoiVien
+                         where dk.MaHoiVien == hv.MaHoiVien && (dk.TrangThaiThanhToan ?? "") != "Đã thanh toán"
                          select new
                          {
                              Loai = "Lớp Học",
                              TenDichVu = lop.TenLop,
+                             MaLop = dk.MaLop,
+                             IdDangKy = dk.Id,
                              SoTien = lop.GiaTien ?? 0,
                              NgayDky = dk.NgayDangKy,
                              TrangThai = dk.TrangThaiThanhToan
@@ -249,7 +309,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     select new
                     {
                         Mã_PH = ph.Id,
-                        Người_Gửi = tk.Username, 
+                        Người_Gửi = tk.Username,
                         Nội_Dung = ph.NoiDung,
                         Ngày_Gửi = ph.NgayGui,
                         Trạng_Thái = ph.TrangThai
@@ -266,6 +326,66 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return true;
             }
             return false;
+        }
+
+        public string HuyDangKy(int idTaiKhoan, string loai, int idDangKy)
+        {
+            try
+            {
+                var hv = db.HoiViens.SingleOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+                if (hv == null)
+                {
+                    return "Lỗi: Không tìm thấy hồ sơ hội viên!";
+                }
+
+                if (string.IsNullOrEmpty(loai))
+                {
+                    return "Loại đăng ký không hợp lệ!";
+                }
+
+                if (loai == "Lớp Học")
+                {
+                    var dk = db.DangKyLops.SingleOrDefault(d => d.Id == idDangKy && d.MaHoiVien == hv.MaHoiVien);
+                    if (dk == null)
+                    {
+                        return "Không tìm thấy đăng ký lớp này!";
+                    }
+
+                    if (!string.IsNullOrEmpty(dk.TrangThaiThanhToan) && dk.TrangThaiThanhToan == "Đã thanh toán")
+                    {
+                        return "Không thể hủy đăng ký đã thanh toán!";
+                    }
+
+                    db.DangKyLops.DeleteOnSubmit(dk);
+                    db.SubmitChanges();
+                    return "";
+                }
+                else if (loai == "Gói Tập")
+                {
+                    var hd = db.HoaDons.SingleOrDefault(h => h.MaHoaDon == idDangKy && h.MaHoiVien == hv.MaHoiVien);
+                    if (hd == null)
+                    {
+                        return "Không tìm thấy giao dịch gói này!";
+                    }
+
+                    if (!string.IsNullOrEmpty(hd.TrangThai) && hd.TrangThai != "Chờ thanh toán")
+                    {
+                        return "Không thể hủy giao dịch đã thanh toán hoặc đã duyệt!";
+                    }
+
+                    db.HoaDons.DeleteOnSubmit(hd);
+                    db.SubmitChanges();
+                    return "";
+                }
+                else
+                {
+                    return "Loại đăng ký không được hỗ trợ!";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

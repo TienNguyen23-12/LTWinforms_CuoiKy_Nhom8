@@ -33,17 +33,18 @@
             this.tpLichSu = new System.Windows.Forms.TabPage();
             this.dgvLichSu = new System.Windows.Forms.DataGridView();
             this.tpLopHoc = new System.Windows.Forms.TabPage();
+            this.btnLoc = new System.Windows.Forms.Button();
+            this.chkLocNgay = new System.Windows.Forms.CheckBox();
+            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
+            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
+            this.cboLocHLV = new System.Windows.Forms.ComboBox();
             this.btnDangKyLop = new System.Windows.Forms.Button();
             this.dgvLopHoc = new System.Windows.Forms.DataGridView();
             this.tpGoiTap = new System.Windows.Forms.TabPage();
             this.btnDangKyGoi = new System.Windows.Forms.Button();
             this.dgvGoiTap = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.cboLocHLV = new System.Windows.Forms.ComboBox();
-            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
-            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
-            this.chkLocNgay = new System.Windows.Forms.CheckBox();
-            this.btnLoc = new System.Windows.Forms.Button();
+            this.btnHuyDangKy = new System.Windows.Forms.Button();
             this.tpLichSu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLichSu)).BeginInit();
             this.tpLopHoc.SuspendLayout();
@@ -73,6 +74,7 @@
             // 
             // tpLichSu
             // 
+            this.tpLichSu.Controls.Add(this.btnHuyDangKy);
             this.tpLichSu.Controls.Add(this.dgvLichSu);
             this.tpLichSu.Location = new System.Drawing.Point(4, 25);
             this.tpLichSu.Name = "tpLichSu";
@@ -109,6 +111,55 @@
             this.tpLopHoc.TabIndex = 1;
             this.tpLopHoc.Text = "Lớp học";
             this.tpLopHoc.UseVisualStyleBackColor = true;
+            // 
+            // btnLoc
+            // 
+            this.btnLoc.Location = new System.Drawing.Point(401, 56);
+            this.btnLoc.Name = "btnLoc";
+            this.btnLoc.Size = new System.Drawing.Size(117, 23);
+            this.btnLoc.TabIndex = 6;
+            this.btnLoc.Text = "Lọc dữ liệu";
+            this.btnLoc.UseVisualStyleBackColor = true;
+            this.btnLoc.Click += new System.EventHandler(this.btnLoc_Click);
+            // 
+            // chkLocNgay
+            // 
+            this.chkLocNgay.AutoSize = true;
+            this.chkLocNgay.Location = new System.Drawing.Point(805, 31);
+            this.chkLocNgay.Name = "chkLocNgay";
+            this.chkLocNgay.Size = new System.Drawing.Size(113, 20);
+            this.chkLocNgay.TabIndex = 5;
+            this.chkLocNgay.Text = "Lọc theo ngày";
+            this.chkLocNgay.UseVisualStyleBackColor = true;
+            this.chkLocNgay.CheckedChanged += new System.EventHandler(this.chkLocNgay_CheckedChanged);
+            // 
+            // dtpDenNgay
+            // 
+            this.dtpDenNgay.CustomFormat = "dd/MM/yyyy";
+            this.dtpDenNgay.Enabled = false;
+            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpDenNgay.Location = new System.Drawing.Point(583, 28);
+            this.dtpDenNgay.Name = "dtpDenNgay";
+            this.dtpDenNgay.Size = new System.Drawing.Size(200, 22);
+            this.dtpDenNgay.TabIndex = 4;
+            // 
+            // dtpTuNgay
+            // 
+            this.dtpTuNgay.CustomFormat = "dd/MM/yyyy";
+            this.dtpTuNgay.Enabled = false;
+            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpTuNgay.Location = new System.Drawing.Point(334, 28);
+            this.dtpTuNgay.Name = "dtpTuNgay";
+            this.dtpTuNgay.Size = new System.Drawing.Size(200, 22);
+            this.dtpTuNgay.TabIndex = 3;
+            // 
+            // cboLocHLV
+            // 
+            this.cboLocHLV.FormattingEnabled = true;
+            this.cboLocHLV.Location = new System.Drawing.Point(151, 27);
+            this.cboLocHLV.Name = "cboLocHLV";
+            this.cboLocHLV.Size = new System.Drawing.Size(121, 24);
+            this.cboLocHLV.TabIndex = 2;
             // 
             // btnDangKyLop
             // 
@@ -175,54 +226,15 @@
             this.tabControl1.TabIndex = 4;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // cboLocHLV
+            // btnHuyDangKy
             // 
-            this.cboLocHLV.FormattingEnabled = true;
-            this.cboLocHLV.Location = new System.Drawing.Point(151, 27);
-            this.cboLocHLV.Name = "cboLocHLV";
-            this.cboLocHLV.Size = new System.Drawing.Size(121, 24);
-            this.cboLocHLV.TabIndex = 2;
-            // 
-            // dtpTuNgay
-            // 
-            this.dtpTuNgay.CustomFormat = "dd/MM/yyyy";
-            this.dtpTuNgay.Enabled = false;
-            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpTuNgay.Location = new System.Drawing.Point(334, 28);
-            this.dtpTuNgay.Name = "dtpTuNgay";
-            this.dtpTuNgay.Size = new System.Drawing.Size(200, 22);
-            this.dtpTuNgay.TabIndex = 3;
-            // 
-            // dtpDenNgay
-            // 
-            this.dtpDenNgay.CustomFormat = "dd/MM/yyyy";
-            this.dtpDenNgay.Enabled = false;
-            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpDenNgay.Location = new System.Drawing.Point(583, 28);
-            this.dtpDenNgay.Name = "dtpDenNgay";
-            this.dtpDenNgay.Size = new System.Drawing.Size(200, 22);
-            this.dtpDenNgay.TabIndex = 4;
-            // 
-            // chkLocNgay
-            // 
-            this.chkLocNgay.AutoSize = true;
-            this.chkLocNgay.Location = new System.Drawing.Point(805, 31);
-            this.chkLocNgay.Name = "chkLocNgay";
-            this.chkLocNgay.Size = new System.Drawing.Size(113, 20);
-            this.chkLocNgay.TabIndex = 5;
-            this.chkLocNgay.Text = "Lọc theo ngày";
-            this.chkLocNgay.UseVisualStyleBackColor = true;
-            this.chkLocNgay.CheckedChanged += new System.EventHandler(this.chkLocNgay_CheckedChanged);
-            // 
-            // btnLoc
-            // 
-            this.btnLoc.Location = new System.Drawing.Point(401, 56);
-            this.btnLoc.Name = "btnLoc";
-            this.btnLoc.Size = new System.Drawing.Size(117, 23);
-            this.btnLoc.TabIndex = 6;
-            this.btnLoc.Text = "Lọc dữ liệu";
-            this.btnLoc.UseVisualStyleBackColor = true;
-            this.btnLoc.Click += new System.EventHandler(this.btnLoc_Click);
+            this.btnHuyDangKy.Location = new System.Drawing.Point(443, 244);
+            this.btnHuyDangKy.Name = "btnHuyDangKy";
+            this.btnHuyDangKy.Size = new System.Drawing.Size(75, 23);
+            this.btnHuyDangKy.TabIndex = 10;
+            this.btnHuyDangKy.Text = "Hủy đăng ký";
+            this.btnHuyDangKy.UseVisualStyleBackColor = true;
+            this.btnHuyDangKy.Click += new System.EventHandler(this.btnHuyDangKy_Click);
             // 
             // ucDichVuHoiVien
             // 
@@ -263,5 +275,6 @@
         private System.Windows.Forms.CheckBox chkLocNgay;
         private System.Windows.Forms.DateTimePicker dtpDenNgay;
         private System.Windows.Forms.DateTimePicker dtpTuNgay;
+        private System.Windows.Forms.Button btnHuyDangKy;
     }
 }

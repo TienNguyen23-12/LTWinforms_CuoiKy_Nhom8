@@ -1,13 +1,7 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using LTWinforms_CuoiKy_Nhom8.DTO;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
@@ -56,8 +50,14 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (dgvLichSu.Columns.Count > 0)
             {
-                dgvLichSu.Columns["SoTien"].DefaultCellStyle.Format = "N0";
-                dgvLichSu.Columns["NgayDky"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                if (dgvLichSu.Columns.Contains("MaLop")) dgvLichSu.Columns["MaLop"].Visible = false;
+                if (dgvLichSu.Columns.Contains("IdDangKy")) dgvLichSu.Columns["IdDangKy"].Visible = false;
+
+                if (dgvLichSu.Columns.Contains("SoTien"))
+                    dgvLichSu.Columns["SoTien"].DefaultCellStyle.Format = "N0";
+                if (dgvLichSu.Columns.Contains("NgayDky"))
+                    dgvLichSu.Columns["NgayDky"].DefaultCellStyle.Format = "dd/MM/yyyy";
+
                 dgvLichSu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
@@ -210,6 +210,51 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             dtpTuNgay.Enabled = chkLocNgay.Checked;
             dtpDenNgay.Enabled = chkLocNgay.Checked;
+        }
+
+        private void btnHuyDangKy_Click(object sender, EventArgs e)
+        {
+            if (dgvLichSu.CurrentRow == null)
+            {
+                return;
+            }
+
+            var row = dgvLichSu.CurrentRow;
+
+            if (!dgvLichSu.Columns.Contains("Loai") || row.Cells["Loai"].Value == null)
+            {
+                ModernMessageBox.Show("Vui lòng chọn một mục trong Lịch sử để hủy.", "Thông báo", ModernMessageType.Warning);
+                return;
+            }
+
+            string loai = row.Cells["Loai"].Value.ToString();
+            string ten = row.Cells["TenDichVu"]?.Value?.ToString() ?? "";
+            int idDangKy = 0;
+
+            if (dgvLichSu.Columns.Contains("IdDangKy") && row.Cells["IdDangKy"].Value != null)
+            {
+                int.TryParse(row.Cells["IdDangKy"].Value.ToString(), out idDangKy);
+            }
+
+            if (idDangKy <= 0)
+            {
+                ModernMessageBox.Show("Không thể xác định bản ghi để hủy.", "Lỗi", ModernMessageType.Error);
+                return;
+            }
+
+            if (ModernMessageBox.Show("Bạn có chắc muốn hủy " + loai + " [" + ten + "]?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
+            {
+                string kq = hvBUS.HuyDangKy(Session.IdTaiKhoan, loai, idDangKy);
+                if (kq == "")
+                {
+                    ModernMessageBox.Show("Hủy thành công.", "Thông báo", ModernMessageType.Success);
+                    LoadLichSu();
+                }
+                else
+                {
+                    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
+                }
+            }
         }
     }
 }
