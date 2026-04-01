@@ -213,43 +213,67 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnXuat_Click(object sender, EventArgs e)
         {
-            if (dgvBangLuong.Rows.Count == 0 || dgvBangLuong.Rows[0].Cells[0].Value == null)
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddSeconds(-1);
+
+            // BƯỚC 2: BẮT DỮ LIỆU TỪ CLASS SESSION DTO CỦA BẠN
+            // Tự động lấy chính xác ID và Role của người đang thao tác trên phần mềm
+            int currentIdTaiKhoan = Session.IdTaiKhoan;
+            int currentRole = Session.Role;
+
+            // Chốt chặn an toàn: Nếu ID = 0 tức là chưa đăng nhập hoặc lỗi phiên bản
+            if (currentIdTaiKhoan == 0)
             {
-                MessageBox.Show("Chưa có dữ liệu lương để xuất phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không tìm thấy thông tin đăng nhập. Vui lòng đăng xuất và đăng nhập lại!", "Lỗi bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             try
             {
-                DataGridViewRow row = dgvBangLuong.Rows[0];
+                // BƯỚC 3: GỌI TẦNG BUS ĐỂ TÍNH TOÁN
+                NhanSuBUS nhanSuBUS = new NhanSuBUS();
+                IEnumerable<dynamic> rawData = (IEnumerable<dynamic>)nhanSuBUS.TinhLuongCaNhan(
+                                                                            currentIdTaiKhoan,
+                                                                            currentRole,
+                                                                            tuNgay,
+                                                                            denNgay);
 
-                var lstPhieuLuong = new[]
+                // BƯỚC 4: NẮN KHUÔN DỮ LIỆU ĐỂ ĐẨY VÀO CRYSTAL REPORTS
+                var lstPhieuLuong = rawData.Select(x => new
                 {
-            new
-            {
-                MaNS = row.Cells[0].Value.ToString(),
-                HoTen = row.Cells[1].Value.ToString(),
-                VaiTro = row.Cells[2].Value.ToString(),
-                
-                SoCong = Convert.ToDouble(row.Cells[3].Value?.ToString() ?? "0"),
-                BiPhat = Convert.ToDecimal(row.Cells[4].Value?.ToString().Replace(",", "").Replace(".", "") ?? "0"),
-                ThucLanh = Convert.ToDecimal(row.Cells[5].Value?.ToString().Replace(",", "").Replace(".", "") ?? "0")
-            }
-        }.ToList();
+                    MaNS = (string)x.MaNhanSu,
+                    HoTen = (string)x.HoTen,
+                    VaiTro = (string)x.VaiTro,
+                    SoCong = (int)x.SoNgayLam,
+                    BiPhat = (decimal)x.TienPhat,
+                    Luong1Ngay = currentRole == 2 ? (decimal)x.Luong1Ngay : 0m,
+                    Thuong = currentRole == 4 ? (decimal)x.Thuong : 0m,
+                    ThucLanh = (decimal)x.ThucLanh
+                }).ToList();
 
+                // BƯỚC 5: KIỂM TRA RỖNG
+                if (lstPhieuLuong.Count == 0)
+                {
+                    MessageBox.Show("Bạn không có dữ liệu công trong khoảng thời gian này để in phiếu lương!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // BƯỚC 6: XUẤT RA GIAO DIỆN IN
+                frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
+
+                // Nhớ đổi tên 'rptPhieuLuongCaNhan' thành tên file .rpt thực tế của bạn
                 rptPhieuLuongCaNhan rpt = new rptPhieuLuongCaNhan();
                 rpt.SetDataSource(lstPhieuLuong);
 
-                rpt.SetParameterValue("pTuNgay", dtpTuNgay.Value.ToString("dd/MM/yyyy"));
-                rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.Date.ToString("dd/MM/yyyy"));
 
-                frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
                 frmBaoCao.HienThiBaoCao(rpt);
                 frmBaoCao.ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xuất phiếu lương: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã xảy ra lỗi hệ thống khi in phiếu lương: \n" + ex.Message, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

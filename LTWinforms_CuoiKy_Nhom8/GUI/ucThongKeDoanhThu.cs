@@ -2,6 +2,7 @@
 using LTWinforms_CuoiKy_Nhom8.DAL;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -252,6 +253,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 using (QLTTDataContext db = new QLTTDataContext())
                 {
+                    // BƯỚC 1: LẤY DỮ LIỆU TỔNG THU (Từ Database)
                     var rawThu = db.HoaDons
                         .Where(hd => hd.NgayThanhToan >= tuNgay && hd.NgayThanhToan <= denNgay)
                         .ToList();
@@ -260,45 +262,38 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                     {
                         NgayThang = Convert.ToDateTime(hd.NgayThanhToan),
                         MaChungTu = hd.MaHoaDon.ToString(),
-
+                        // Tích hợp logic xử lý Ghi chú thông minh
                         DienGiai = string.IsNullOrEmpty(hd.GhiChu)
-               ? "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")"
-               : hd.GhiChu,
-
+                                   ? "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")"
+                                   : hd.GhiChu,
                         LoaiGiaoDich = "1. TỔNG DOANH THU",
                         SoTien = Convert.ToDecimal(hd.SoTien)
                     }).ToList();
 
-                    var rawChiNV = (from cc in db.ChamCongs
-                                    join nv in db.NhanViens on cc.IdTaiKhoan equals nv.IdTaiKhoan
-                                    where cc.NgayCham >= tuNgay && cc.NgayCham <= denNgay
-                                    select new { cc.NgayCham, cc.Id, nv.HoTen, nv.Luong }).ToList();
+                    // BƯỚC 2: LẤY DỮ LIỆU TỔNG CHI (Gọi từ tầng BUS)
+                    NhanSuBUS nhanSuBUS = new NhanSuBUS();
+                    IEnumerable<dynamic> rawChi = (IEnumerable<dynamic>)nhanSuBUS.TinhBangLuongChiTiet(tuNgay, denNgay);
 
-                    var lstChiNV = rawChiNV.Select(x => new
+                    // Thêm các lệnh ép kiểu (string) và (decimal) để đồng bộ cấu trúc với lstThu
+                    var lstChi = rawChi.Select(x => new
                     {
-                        NgayThang = Convert.ToDateTime(x.NgayCham),
-                        MaChungTu = "CC_" + x.Id.ToString(),
-                        DienGiai = "Lương NV: " + x.HoTen,
+                        NgayThang = denNgay.Date,
+
+                        // Ép kiểu cứng về string
+                        MaChungTu = (string)("L_" + x.MaNhanSu.ToString()),
+
+                        // Ép kiểu cứng về string
+                        DienGiai = (string)("Thanh toán lương " + x.VaiTro.ToString().ToLower() + ": " + x.HoTen),
+
                         LoaiGiaoDich = "2. TỔNG CHI LƯƠNG",
-                        SoTien = Convert.ToDecimal(x.Luong)
+
+                        // Ép kiểu cứng về decimal
+                        SoTien = (decimal)x.ThucLanh
+
                     }).ToList();
 
-                    var rawChiHLV = (from cc in db.ChamCongs
-                                     join hlv in db.HuanLuyenViens on cc.IdTaiKhoan equals hlv.IdTaiKhoan
-                                     where cc.NgayCham >= tuNgay && cc.NgayCham <= denNgay
-                                     select new { cc.NgayCham, cc.Id, hlv.TenHLV, hlv.LuongCoBan }).ToList();
-
-                    var lstChiHLV = rawChiHLV.Select(x => new
-                    {
-                        NgayThang = Convert.ToDateTime(x.NgayCham),
-                        MaChungTu = "CC_" + x.Id.ToString(),
-                        DienGiai = "Lương HLV: " + x.TenHLV,
-                        LoaiGiaoDich = "2. TỔNG CHI LƯƠNG",
-                        SoTien = Convert.ToDecimal(x.LuongCoBan)
-                    }).ToList();
-
-                    var lstBaoCao = lstThu.Concat(lstChiNV)
-                                          .Concat(lstChiHLV)
+                    // BƯỚC 3: GỘP DỮ LIỆU VÀ SẮP XẾP
+                    var lstBaoCao = lstThu.Concat(lstChi)
                                           .OrderBy(x => x.LoaiGiaoDich)
                                           .ThenBy(x => x.NgayThang)
                                           .ToList();
@@ -309,14 +304,16 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                         return;
                     }
 
+                    // BƯỚC 4: TÍNH TOÁN LỢI NHUẬN RÒNG ĐỂ ĐẨY LÊN GIAO DIỆN
                     decimal tongThu = lstThu.Sum(x => x.SoTien);
-                    decimal tongChi = lstChiNV.Sum(x => x.SoTien) + lstChiHLV.Sum(x => x.SoTien);
+                    decimal tongChi = lstChi.Sum(x => x.SoTien);
                     decimal loiNhuanRong = tongThu - tongChi;
 
                     txtDoanhThu.Text = tongThu.ToString("#,##0") + " VNĐ";
                     txtChiLuong.Text = tongChi.ToString("#,##0") + " VNĐ";
                     txtLoiNhuan.Text = loiNhuanRong.ToString("#,##0") + " VNĐ";
 
+                    // BƯỚC 5: ĐẨY DỮ LIỆU VÀO CRYSTAL REPORTS
                     rptDoanhThu rpt = new rptDoanhThu();
                     rpt.SetDataSource(lstBaoCao);
 
@@ -330,7 +327,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi hệ thống: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã xảy ra lỗi hệ thống khi in báo cáo: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
