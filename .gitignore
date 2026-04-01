@@ -361,3 +361,9 @@ MigrationBackup/
 FodyWeavers.xsd
 
 !*.bak
+
+# LINQ to SQL
+*.dbml
+*.dbml
+*.dbml.layout
+*.designer.cs
