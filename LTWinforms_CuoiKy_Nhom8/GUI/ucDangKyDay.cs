@@ -1,30 +1,75 @@
 ﻿using LTWinforms_CuoiKy_Nhom8.BUS;
 using LTWinforms_CuoiKy_Nhom8.DTO;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
 {
     public partial class ucDangKyDay : UserControl
     {
-        LopHocBUS lopBUS = new LopHocBUS();
-        TinNhanBUS tnBUS = new TinNhanBUS();
+        private readonly LopHocBUS lopBUS = new LopHocBUS();
+        private readonly TinNhanBUS tnBUS = new TinNhanBUS();
+        private bool isThemeApplied;
+        private bool isLayoutHooked;
 
         public ucDangKyDay()
         {
             InitializeComponent();
         }
 
+        private void ApplyTheme()
+        {
+            if (isThemeApplied)
+            {
+                return;
+            }
+
+            BackColor = ModernTheme.PageBackground;
+
+            label1.AutoSize = false;
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            label1.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
+            label1.ForeColor = Color.FromArgb(37, 48, 66);
+
+            ModernTheme.StyleGrid(dgvLopTrong);
+            dgvLopTrong.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            ModernTheme.StyleButton(btnDangKyDay, Color.FromArgb(46, 134, 222), Color.White);
+            btnDangKyDay.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+
+            isThemeApplied = true;
+        }
+
+        private void ApplyResponsiveLayout()
+        {
+            int contentWidth = Math.Min(1120, ClientSize.Width - 40);
+            int left = Math.Max(12, (ClientSize.Width - contentWidth) / 2);
+
+            int top = 18;
+            label1.SetBounds(left, top, contentWidth, 30);
+
+            int gridTop = label1.Bottom + 12;
+            int gridHeight = ClientSize.Height - gridTop - 90;
+            if (gridHeight < 220)
+            {
+                gridHeight = 220;
+            }
+
+            dgvLopTrong.SetBounds(left, gridTop, contentWidth, gridHeight);
+
+            int buttonWidth = 160;
+            int buttonHeight = 38;
+            int buttonLeft = left + (contentWidth - buttonWidth) / 2;
+            int buttonTop = dgvLopTrong.Bottom + 14;
+            btnDangKyDay.SetBounds(buttonLeft, buttonTop, buttonWidth, buttonHeight);
+        }
+
         private void LoadData()
         {
             dgvLopTrong.DataSource = lopBUS.LayDanhSachLopChuaCoHLV();
+
             if (dgvLopTrong.Columns.Count > 0)
             {
                 dgvLopTrong.Columns["MaLop"].HeaderText = "Mã Lớp";
@@ -33,11 +78,28 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 dgvLopTrong.Columns["PhongTap"].HeaderText = "Phòng Tập";
                 dgvLopTrong.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+
+            dgvLopTrong.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgvLopTrong.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
         }
 
         private void ucDangKyDay_Load(object sender, EventArgs e)
         {
+            ApplyTheme();
+
+            if (!isLayoutHooked)
+            {
+                Resize += ucDangKyDay_Resize;
+                isLayoutHooked = true;
+            }
+
+            ApplyResponsiveLayout();
             LoadData();
+        }
+
+        private void ucDangKyDay_Resize(object sender, EventArgs e)
+        {
+            ApplyResponsiveLayout();
         }
 
         private void btnDangKyDay_Click(object sender, EventArgs e)

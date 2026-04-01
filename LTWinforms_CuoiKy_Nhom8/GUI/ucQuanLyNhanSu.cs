@@ -123,10 +123,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             int contentWidth = Math.Min(1100, ClientSize.Width - 40);
             int left = Math.Max(12, (ClientSize.Width - contentWidth) / 2);
 
-            // Left panel (danh sách nhân sự)
-            int leftPanelWidth = 330;
-            int rightLeft = left + leftPanelWidth + 20;
-            int rightWidth = contentWidth - leftPanelWidth - 20;
+            // Left panel = nửa trang
+            int panelGap = 20;
+            int leftPanelWidth = (contentWidth - panelGap) / 2;
+            int rightLeft = left + leftPanelWidth + panelGap;
+            int rightWidth = contentWidth - leftPanelWidth - panelGap;
 
             lblTenNhanSu.SetBounds(left, 16, leftPanelWidth, 24);
             dgvNhanSu.SetBounds(left, 46, leftPanelWidth, ClientSize.Height - 58);
@@ -140,12 +141,19 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             btnChamCong.SetBounds(rightLeft, y + 36, 140, 38);
 
             y += 100;
-            label1.SetBounds(rightLeft, y + 6, 80, 24);
-            txtTienPhat.SetBounds(rightLeft + 90, y, Math.Min(320, rightWidth - 90), 30);
+
+            // Cột nhãn + cột ô nhập để luôn thẳng hàng
+            int labelWidth = 88;
+            int inputGap = 12;
+            int inputLeft = rightLeft + labelWidth + inputGap;
+            int inputWidth = Math.Min(420, rightWidth - labelWidth - inputGap);
+
+            label1.SetBounds(rightLeft, y + 4, labelWidth, 24);
+            txtTienPhat.SetBounds(inputLeft, y, inputWidth, 30);
 
             y += 44;
-            label2.SetBounds(rightLeft, y + 6, 80, 24);
-            txtLyDoPhat.SetBounds(rightLeft + 90, y, Math.Min(420, rightWidth - 90), 120);
+            label2.SetBounds(rightLeft, y + 4, labelWidth, 24);
+            txtLyDoPhat.SetBounds(inputLeft, y, inputWidth, 120);
 
             btnPhat.SetBounds(rightLeft, txtLyDoPhat.Bottom + 14, 140, 38);
         }

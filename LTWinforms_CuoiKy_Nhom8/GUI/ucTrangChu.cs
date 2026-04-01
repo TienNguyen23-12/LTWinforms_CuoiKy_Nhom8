@@ -297,7 +297,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
             else if (Session.Role == 4)
             {
-                btnLichHoc.Text = "Lịch dạy & Điểm danh";
+                btnLichHoc.Text = "Lịch dạy";
                 btnDangKyDichVu.Text = "Đăng ký nhận lớp";
                 btnLichHoc.Visible = true;
                 btnDangKyDichVu.Visible = true;
