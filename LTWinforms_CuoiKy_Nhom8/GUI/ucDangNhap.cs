@@ -178,9 +178,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             }
         }
 
-        private void txtPassword_MouseEnter(object sender, EventArgs e)
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
         {
-            btnDangNhap_Click(sender, e);
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnDangNhap.PerformClick();
+            }
         }
     }
 }

@@ -66,5 +66,16 @@ namespace LTWinforms_CuoiKy_Nhom8.Properties {
                 return ((string)(this["QLTT_TheThaoConnectionString3"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=HUO\\SQLEXPRESS01;Initial Catalog=QLTT_TheThao;Integrated Security=Tru" +
+            "e;Encrypt=True;TrustServerCertificate=True")]
+        public string QLTT_TheThaoConnectionString4 {
+            get {
+                return ((string)(this["QLTT_TheThaoConnectionString4"]));
+            }
+        }
     }
 }
