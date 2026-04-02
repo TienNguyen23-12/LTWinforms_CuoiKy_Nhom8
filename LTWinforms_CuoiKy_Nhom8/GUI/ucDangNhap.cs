@@ -177,5 +177,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 Application.Exit();
             }
         }
+
+        private void txtPassword_MouseEnter(object sender, EventArgs e)
+        {
+            btnDangNhap_Click(sender, e);
+        }
     }
 }

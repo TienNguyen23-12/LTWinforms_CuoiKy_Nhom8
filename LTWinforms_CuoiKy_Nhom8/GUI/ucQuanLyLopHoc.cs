@@ -322,6 +322,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 }
                 if (dgvLopHoc.Columns.Contains("TrangThai")) dgvLopHoc.Columns["TrangThai"].HeaderText = "Trạng Thái";
 
+                if (dgvLopHoc.Columns.Contains("SiSo")) dgvLopHoc.Columns["SiSo"].HeaderText = "Sỉ Số";
+                if (dgvLopHoc.Columns.Contains("SlotCon")) dgvLopHoc.Columns["SlotCon"].HeaderText = "Slot Còn";
+
                 dgvLopHoc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }

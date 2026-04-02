@@ -117,6 +117,7 @@
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(258, 22);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.MouseEnter += new System.EventHandler(this.txtPassword_MouseEnter);
             // 
             // txtUsername
             // 
