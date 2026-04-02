@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace LTWinforms_CuoiKy_Nhom8.GUI
@@ -15,6 +16,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         public ucTrangChu()
         {
             InitializeComponent();
+            Disposed += ucTrangChu_Disposed;
+        }
+
+        private void ucTrangChu_Disposed(object sender, EventArgs e)
+        {
+            if (flowMenuMain != null)
+            {
+                flowMenuMain.ControlAdded -= flowMenuMain_ControlAdded;
+            }
+
+            if (isSidebarWheelHooked && sidebarWheelFilter != null)
+            {
+                Application.RemoveMessageFilter(sidebarWheelFilter);
+                isSidebarWheelHooked = false;
+            }
         }
 
         public void TaiChucNang(UserControl uc)
@@ -144,29 +160,33 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void ConfigureMenuLayout()
         {
+            RestoreBottomMenuIfNeeded();
+
             flowMenuMain.WrapContents = false;
             flowMenuMain.FlowDirection = FlowDirection.TopDown;
             flowMenuMain.AutoScroll = true;
             flowMenuMain.Padding = new Padding(0, 12, 0, 8);
             flowMenuMain.HorizontalScroll.Enabled = false;
             flowMenuMain.HorizontalScroll.Visible = false;
+            flowMenuMain.Dock = DockStyle.Fill;
 
             flowMenuBottom.WrapContents = false;
             flowMenuBottom.FlowDirection = FlowDirection.TopDown;
             flowMenuBottom.AutoScroll = false;
             flowMenuBottom.Padding = new Padding(0, 8, 0, 8);
-
-            // Không BringToFront để tránh layout chồng khi dock
-            // flowMenuBottom.BringToFront();
-            // panelMenuTop.BringToFront();
+            flowMenuBottom.Dock = DockStyle.Bottom;
+            flowMenuBottom.Visible = true;
 
             flowMenuMain.SizeChanged += MenuArea_SizeChanged;
             flowMenuBottom.SizeChanged += MenuArea_SizeChanged;
             pnlThanhMenu.SizeChanged += MenuArea_SizeChanged;
 
+            SetupSidebarMouseWheelSupport();
+
             UpdateBottomMenuHeight();
             FixFirstVisibleMainButtonMargin();
             ResizeSidebarButtons();
+            UpdateMainMenuScrollArea();
         }
 
         private void MenuArea_SizeChanged(object sender, EventArgs e)
@@ -174,6 +194,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             UpdateBottomMenuHeight();
             FixFirstVisibleMainButtonMargin();
             ResizeSidebarButtons();
+            UpdateMainMenuScrollArea();
         }
 
         private void ResizeSidebarButtons()
@@ -200,11 +221,25 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             ResizeButton(btnQuanLyPhongTap, bottomWidth);
             ResizeButton(btnHoSoCaNhan, bottomWidth);
             ResizeButton(btnDangXuat, bottomWidth);
+
+            UpdateMainMenuScrollArea();
         }
 
-        private void ResizeButton(Button button, int width)
+        private void UpdateMainMenuScrollArea()
         {
-            button.Width = width;
+            int totalHeight = flowMenuMain.Padding.Top + flowMenuMain.Padding.Bottom;
+
+            foreach (Control control in flowMenuMain.Controls)
+            {
+                if (!control.Visible)
+                {
+                    continue;
+                }
+
+                totalHeight += control.Margin.Top + control.Height + control.Margin.Bottom;
+            }
+
+            flowMenuMain.AutoScrollMinSize = new Size(0, totalHeight + 4);
         }
 
         private void LoadWelcomeScreen()
@@ -307,6 +342,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             UpdateBottomMenuHeight();
             ResizeSidebarButtons();
+            UpdateMainMenuScrollArea();
             LoadWelcomeScreen();
         }
 
@@ -438,13 +474,30 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            int buttonHeight = 38;
+            int buttonHeight = 40;
             int topMargin = 6;
-            int verticalPadding = 16; // flowMenuBottom.Padding.Top + Bottom
+            int verticalPadding = flowMenuBottom.Padding.Top + flowMenuBottom.Padding.Bottom;
             int reserve = 8;
 
             int requiredHeight = (visibleCount * buttonHeight) + (visibleCount * topMargin) + verticalPadding + reserve;
             flowMenuBottom.Height = requiredHeight;
+        }
+
+        private void RestoreBottomMenuIfNeeded()
+        {
+            Button[] bottomButtons = { btnLichHoc, btnQuanLyPhongTap, btnHoSoCaNhan, btnDangXuat };
+
+            foreach (Button button in bottomButtons)
+            {
+                if (flowMenuMain.Controls.Contains(button))
+                {
+                    flowMenuMain.Controls.Remove(button);
+                    flowMenuBottom.Controls.Add(button);
+                }
+            }
+
+            flowMenuBottom.Visible = true;
+            flowMenuBottom.Dock = DockStyle.Bottom;
         }
 
         private void FixFirstVisibleMainButtonMargin()
@@ -515,75 +568,75 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             AlignSidebarButtonContent(button);
         }
 
-        private Bitmap GetMenuIconSource(string key)
+        private Bitmap GetMenuIconSource(String key)
         {
-            // Ưu tiên file thật trong Assets/MenuIcons trước
-            Bitmap fromAssets = GetMenuIconFromAssets(key);
-            if (fromAssets != null)
-            {
-                return fromAssets;
-            }
+          // Ưu tiên file thật trong Assets/MenuIcons trước
+          Bitmap fromAssets = GetMenuIconFromAssets(key);
+          if (fromAssets != null)
+          {
+            return fromAssets;
+          }
 
-            // Fallback Resources nếu không tìm thấy file
-            return GetMenuIconFromResources(key);
+          // Fallback Resources nếu không tìm thấy file
+          return GetMenuIconFromResources(key);
         }
 
-        private Bitmap GetMenuIconFromResources(string key)
+        private Bitmap GetMenuIconFromResources(String key)
         {
-            // Ưu tiên strongly-typed Resources
-            Bitmap bmp = null;
+          // Ưu tiên strongly-typed Resources
+          Bitmap bmp = null;
 
-            if (key == "quantri") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.quantri;
-            else if (key == "chamcong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.chamcong;
-            else if (key == "thongke") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.thongke;
-            else if (key == "sanpham") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.sanpham;
-            else if (key == "hoivien") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoivien;
-            else if (key == "goitap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.goitap;
-            else if (key == "lophoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lophoc;
-            else if (key == "banve") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.banve;
-            else if (key == "tinnhan") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.tinnhan;
-            else if (key == "dichvu") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dichvu;
-            else if (key == "giaodich") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.giaodich;
-            else if (key == "luongthuong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.luongthuong;
-            else if (key == "lichhoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lichhoc;
-            else if (key == "phongtap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.phongtap;
-            else if (key == "hoso") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoso;
-            else if (key == "dangxuat") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dangxuat;
+          if (key == "quantri") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.quantri;
+          else if (key == "chamcong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.chamcong;
+          else if (key == "thongke") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.thongke;
+          else if (key == "sanpham") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.sanpham;
+          else if (key == "hoivien") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoivien;
+          else if (key == "goitap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.goitap;
+          else if (key == "lophoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lophoc;
+          else if (key == "banve") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.banve;
+          else if (key == "tinnhan") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.tinnhan;
+          else if (key == "dichvu") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dichvu;
+          else if (key == "giaodich") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.giaodich;
+          else if (key == "luongthuong") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.luongthuong;
+          else if (key == "lichhoc") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.lichhoc;
+          else if (key == "phongtap") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.phongtap;
+          else if (key == "hoso") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.hoso;
+          else if (key == "dangxuat") bmp = global::LTWinforms_CuoiKy_Nhom8.Properties.Resources.dangxuat;
 
-            return bmp != null ? new Bitmap(bmp) : null;
+          return bmp != null ? new Bitmap(bmp) : null;
         }
 
-        private Bitmap GetMenuIconFromAssets(string key)
+        private Bitmap GetMenuIconFromAssets(String key)
         {
-            // Runtime thường ở ...\bin\Debug hoặc ...\bin\Release
-            string[] candidateFolders =
+          // Runtime thường ở ...\bin\Debug hoặc ...\bin\Release
+          String[] candidateFolders =
+          {
+            Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Assets\MenuIcons")),
+            Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\Assets\MenuIcons")),
+            Path.GetFullPath(Path.Combine(Application.StartupPath, @"Assets\MenuIcons"))
+          };
+
+          foreach (String folder in candidateFolders)
+          {
+            if (!Directory.Exists(folder))
             {
-                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Assets\MenuIcons")),
-                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\Assets\MenuIcons")),
-                Path.GetFullPath(Path.Combine(Application.StartupPath, @"Assets\MenuIcons"))
-            };
-
-            foreach (string folder in candidateFolders)
-            {
-                if (!Directory.Exists(folder))
-                {
-                    continue;
-                }
-
-                string filePath = Path.Combine(folder, key + ".png");
-                if (!File.Exists(filePath))
-                {
-                    continue;
-                }
-
-                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (Image img = Image.FromStream(fs))
-                {
-                    return new Bitmap(img);
-                }
+              continue;
             }
 
-            return null;
+            String filePath = Path.Combine(folder, key + ".png");
+            if (!File.Exists(filePath))
+            {
+              continue;
+            }
+
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (Image img = Image.FromStream(fs))
+            {
+              return new Bitmap(img);
+            }
+          }
+
+          return null;
         }
 
         private Bitmap CreateWhiteMenuIcon(Bitmap source, int iconSize, int gap)
@@ -674,6 +727,101 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void ApplyRoundedButtonRegion(Button button, int radius)
         {
             ModernTheme.ApplyRoundedButtons(button, radius);
+        }
+
+        private bool isSidebarWheelHooked;
+        private SidebarWheelMessageFilter sidebarWheelFilter;
+
+        private void SetupSidebarMouseWheelSupport()
+        {
+            if (isSidebarWheelHooked)
+            {
+                return;
+            }
+
+            flowMenuMain.ControlAdded += flowMenuMain_ControlAdded;
+            flowMenuMain.MouseEnter += flowMenuMain_MouseEnter;
+
+            sidebarWheelFilter = new SidebarWheelMessageFilter(this);
+            Application.AddMessageFilter(sidebarWheelFilter);
+
+            isSidebarWheelHooked = true;
+        }
+
+        private void flowMenuMain_ControlAdded(object sender, ControlEventArgs e)
+        {
+            if (e.Control != null)
+            {
+                e.Control.MouseEnter -= flowMenuMain_MouseEnter;
+                e.Control.MouseEnter += flowMenuMain_MouseEnter;
+            }
+        }
+
+        private void flowMenuMain_MouseEnter(object sender, EventArgs e)
+        {
+            if (flowMenuMain.CanFocus)
+            {
+                flowMenuMain.Focus();
+            }
+        }
+
+        private bool TryHandleMainMenuWheel(ref Message m)
+        {
+            if (flowMenuMain == null || flowMenuMain.IsDisposed || !flowMenuMain.Visible)
+            {
+                return false;
+            }
+
+            Rectangle mainMenuScreenRect = flowMenuMain.RectangleToScreen(flowMenuMain.ClientRectangle);
+            if (!mainMenuScreenRect.Contains(Control.MousePosition))
+            {
+                return false;
+            }
+
+            if (!flowMenuMain.Focused && flowMenuMain.CanFocus)
+            {
+                flowMenuMain.Focus();
+            }
+
+            NativeMethods.SendMessage(flowMenuMain.Handle, m.Msg, m.WParam, m.LParam);
+            return true;
+        }
+
+        private void ResizeButton(Button button, int width)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.Width = width;
+        }
+
+        private static class NativeMethods
+        {
+            [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        }
+
+        private sealed class SidebarWheelMessageFilter : IMessageFilter
+        {
+            private const int WM_MOUSEWHEEL = 0x020A;
+            private readonly ucTrangChu owner;
+
+            public SidebarWheelMessageFilter(ucTrangChu ownerControl)
+            {
+                owner = ownerControl;
+            }
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.Msg != WM_MOUSEWHEEL || owner == null || owner.IsDisposed)
+                {
+                    return false;
+                }
+
+                return owner.TryHandleMainMenuWheel(ref m);
+            }
         }
     }
 }

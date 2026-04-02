@@ -77,16 +77,30 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (dgvLichSu.Columns.Count > 0)
             {
-                if (dgvLichSu.Columns.Contains("SoTien"))
+                SetHeaderText(dgvLichSu, "Mã hóa đơn", "MaHoaDon", "Mã_HĐ", "Ma_HD");
+                SetHeaderText(dgvLichSu, "Mã hội viên", "MaHoiVien", "Mã_HV", "Ma_HV");
+                SetHeaderText(dgvLichSu, "Họ tên khách", "HoTen", "Tên_Khách", "Ten_Khach");
+                SetHeaderText(dgvLichSu, "Dịch vụ", "TenDichVu", "Dịch_Vụ", "Dich_Vu");
+                SetHeaderText(dgvLichSu, "Thu ngân", "ThuNgan", "Thu_Ngân", "Thu_Ngan");
+                SetHeaderText(dgvLichSu, "Loại dịch vụ", "LoaiDichVu", "Loai_Dich_Vu");
+                SetHeaderText(dgvLichSu, "Số tiền (VNĐ)", "SoTien", "Số_tiền_(VND)", "So_tien_(VND)");
+                SetHeaderText(dgvLichSu, "Ngày thanh toán", "NgayThanhToan", "Ngày_thanh_toán", "Ngay_thanh_toan");
+                SetHeaderText(dgvLichSu, "Trạng thái", "TrangThai", "Trạng_Thái", "Trang_Thai");
+                SetHeaderText(dgvLichSu, "Ghi chú", "GhiChu", "Ghi_Chu");
+
+                DataGridViewColumn colSoTien = GetColumn(dgvLichSu, "SoTien", "Số_tiền_(VND)", "So_tien_(VND)");
+                if (colSoTien != null)
                 {
-                    dgvLichSu.Columns["SoTien"].DefaultCellStyle.Format = "N0";
+                    colSoTien.DefaultCellStyle.Format = "N0";
                 }
 
-                if (dgvLichSu.Columns.Contains("NgayThanhToan"))
+                DataGridViewColumn colNgayThanhToan = GetColumn(dgvLichSu, "NgayThanhToan", "Ngày_thanh_toán", "Ngay_thanh_toan");
+                if (colNgayThanhToan != null)
                 {
-                    dgvLichSu.Columns["NgayThanhToan"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                    colNgayThanhToan.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
                 }
 
+                NormalizeHeaderUnderscoreToSpace(dgvLichSu);
                 dgvLichSu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
@@ -156,11 +170,20 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             if (dgvPhanHoi.Columns.Count > 0)
             {
-                if (dgvPhanHoi.Columns.Contains("Ngày_Gửi"))
+                SetHeaderText(dgvPhanHoi, "Mã phản hồi", "Id", "Mã_PH", "Ma_PH");
+                SetHeaderText(dgvPhanHoi, "Mã hội viên", "MaHoiVien", "Mã_HV", "Ma_HV");
+                SetHeaderText(dgvPhanHoi, "Họ tên hội viên", "HoTen", "Tên_Khách", "Ten_Khach");
+                SetHeaderText(dgvPhanHoi, "Nội dung", "NoiDung", "Nội_Dung", "Noi_Dung");
+                SetHeaderText(dgvPhanHoi, "Trạng thái", "TrangThai", "Trạng_Thái", "Trang_Thai");
+                SetHeaderText(dgvPhanHoi, "Ngày gửi", "NgayGui", "Ngày_Gửi", "Ngay_Gui");
+
+                DataGridViewColumn colNgayGui = GetColumn(dgvPhanHoi, "NgayGui", "Ngày_Gửi", "Ngay_Gui");
+                if (colNgayGui != null)
                 {
-                    dgvPhanHoi.Columns["Ngày_Gửi"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                    colNgayGui.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
                 }
 
+                NormalizeHeaderUnderscoreToSpace(dgvPhanHoi);
                 dgvPhanHoi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
@@ -309,8 +332,17 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            int maHD = Convert.ToInt32(dgvLichSu.CurrentRow.Cells["Mã_HĐ"].Value);
-            string trangThai = dgvLichSu.CurrentRow.Cells["Trạng_Thái"].Value.ToString();
+            object maHdObj = GetCellValue(dgvLichSu.CurrentRow, "MaHoaDon", "Mã_HĐ", "Ma_HD");
+            object trangThaiObj = GetCellValue(dgvLichSu.CurrentRow, "TrangThai", "Trạng_Thái", "Trang_Thai");
+
+            if (maHdObj == null || trangThaiObj == null)
+            {
+                ModernMessageBox.Show("Không đọc được dữ liệu hóa đơn từ dòng đang chọn.", "Lỗi", ModernMessageType.Error);
+                return;
+            }
+
+            int maHD = Convert.ToInt32(maHdObj);
+            string trangThai = Convert.ToString(trangThaiObj);
 
             if (trangThai == "Đã thanh toán")
             {
@@ -356,8 +388,17 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 return;
             }
 
-            int id = Convert.ToInt32(dgvPhanHoi.CurrentRow.Cells["Mã_PH"].Value);
-            string trangThai = dgvPhanHoi.CurrentRow.Cells["Trạng_Thái"].Value.ToString();
+            object idObj = GetCellValue(dgvPhanHoi.CurrentRow, "Id", "Mã_PH", "Ma_PH");
+            object trangThaiObj = GetCellValue(dgvPhanHoi.CurrentRow, "TrangThai", "Trạng_Thái", "Trang_Thai");
+
+            if (idObj == null || trangThaiObj == null)
+            {
+                ModernMessageBox.Show("Không đọc được dữ liệu phản hồi từ dòng đang chọn.", "Lỗi", ModernMessageType.Error);
+                return;
+            }
+
+            int id = Convert.ToInt32(idObj);
+            string trangThai = Convert.ToString(trangThaiObj);
 
             if (trangThai == "Đã xử lý")
             {
@@ -374,39 +415,105 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void dgvLichSu_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvLichSu.Columns[e.ColumnIndex].Name == "Trạng_Thái" && e.Value != null)
+            string colName = dgvLichSu.Columns[e.ColumnIndex].Name;
+            if (!IsAnyOf(colName, "TrangThai", "Trạng_Thái", "Trang_Thai") || e.Value == null)
             {
-                string tt = e.Value.ToString();
-                if (tt == "Chờ thanh toán")
-                {
-                    e.CellStyle.ForeColor = Color.Red;
-                    e.CellStyle.Font = new Font(dgvLichSu.Font, FontStyle.Bold);
-                }
-                else
-                {
-                    e.CellStyle.ForeColor = Color.Green;
-                }
+                return;
+            }
+
+            string tt = e.Value.ToString();
+            if (tt == "Chờ thanh toán")
+            {
+                e.CellStyle.ForeColor = Color.Red;
+                e.CellStyle.Font = new Font(dgvLichSu.Font, FontStyle.Bold);
+            }
+            else
+            {
+                e.CellStyle.ForeColor = Color.Green;
             }
         }
 
         private void dgvPhanHoi_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvPhanHoi.Columns[e.ColumnIndex].Name == "Trạng_Thái" && e.Value != null)
+            string colName = dgvPhanHoi.Columns[e.ColumnIndex].Name;
+            if (!IsAnyOf(colName, "TrangThai", "Trạng_Thái", "Trang_Thai") || e.Value == null)
             {
-                if (e.Value.ToString() == "Chưa đọc")
+                return;
+            }
+
+            if (e.Value.ToString() == "Chưa đọc")
+            {
+                e.CellStyle.ForeColor = Color.Red;
+                e.CellStyle.Font = new Font(dgvPhanHoi.Font, FontStyle.Bold);
+            }
+            else
+            {
+                e.CellStyle.ForeColor = Color.Green;
+            }
+        }
+
+        private static DataGridViewColumn GetColumn(DataGridView grid, params string[] names)
+        {
+            foreach (string name in names)
+            {
+                if (grid.Columns.Contains(name))
                 {
-                    e.CellStyle.ForeColor = Color.Red;
-                    e.CellStyle.Font = new Font(dgvPhanHoi.Font, FontStyle.Bold);
+                    return grid.Columns[name];
                 }
-                else
+            }
+
+            return null;
+        }
+
+        private static void SetHeaderText(DataGridView grid, string headerText, params string[] names)
+        {
+            DataGridViewColumn column = GetColumn(grid, names);
+            if (column != null)
+            {
+                column.HeaderText = headerText;
+            }
+        }
+
+        private static void NormalizeHeaderUnderscoreToSpace(DataGridView grid)
+        {
+            foreach (DataGridViewColumn column in grid.Columns)
+            {
+                if (!string.IsNullOrEmpty(column.HeaderText) && column.HeaderText.Contains("_"))
                 {
-                    e.CellStyle.ForeColor = Color.Green;
+                    column.HeaderText = column.HeaderText.Replace("_", " ");
                 }
             }
         }
 
-        private void dgvLichSu_CellClick(object sender, DataGridViewCellEventArgs e)
+        private static object GetCellValue(DataGridViewRow row, params string[] names)
         {
+            if (row == null || row.DataGridView == null)
+            {
+                return null;
+            }
+
+            foreach (string name in names)
+            {
+                if (row.DataGridView.Columns.Contains(name))
+                {
+                    return row.Cells[name].Value;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsAnyOf(string value, params string[] candidates)
+        {
+            foreach (string candidate in candidates)
+            {
+                if (string.Equals(value, candidate, StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void ApplyTheme()

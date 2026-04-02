@@ -11,6 +11,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private readonly HoiVienBUS hvBUS = new HoiVienBUS();
         private bool isThemeApplied;
         private bool isLayoutHooked;
+        private const string SearchPlaceholder = "Nhập từ khóa tìm kiếm";
+        private bool isSearchPlaceholderHooked;
 
         public ucQuanLyHoiVien()
         {
@@ -174,7 +176,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             int btnY = top + 56;
             int btnWidth = 130;
             int btnSpacing = 14;
-            int totalBtnWidth = (btnWidth * 4) + (btnSpacing * 3);
+            int totalBtnWidth = (btnWidth * 3) + (btnSpacing * 2);
             int btnStart = left + (contentWidth - totalBtnWidth) / 2;
 
             btnThem.SetBounds(btnStart, btnY, btnWidth, 34);
@@ -182,24 +184,26 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             btnLamMoi.SetBounds(btnSua.Right + btnSpacing, btnY, btnWidth, 34);
 
             // Search row
-            int searchY = btnThem.Bottom + 18;
+            int searchY = btnThem.Bottom + 16;
             int searchInputWidth = 280;
             int searchBtnWidth = 120;
+            int searchLabelWidth = label6.PreferredWidth;
 
-            int searchTotal = 70 + 10 + searchInputWidth + 14 + searchBtnWidth;
+            int searchTotal = searchLabelWidth + 10 + searchInputWidth + 14 + searchBtnWidth;
             int searchStart = left + (contentWidth - searchTotal) / 2;
 
             label6.Left = searchStart;
-            label6.Top = searchY + 8;
-
             txtTimKiem.Left = label6.Right + 10;
-            txtTimKiem.Top = searchY;
             txtTimKiem.Width = searchInputWidth;
+            btnTimKiem.SetBounds(txtTimKiem.Right + 14, 0, searchBtnWidth, 34);
 
-            btnTimKiem.SetBounds(txtTimKiem.Right + 14, searchY, searchBtnWidth, 34);
+            int searchRowHeight = Math.Max(Math.Max(label6.Height, txtTimKiem.Height), btnTimKiem.Height);
+            label6.Top = searchY + (searchRowHeight - label6.Height) / 2;
+            txtTimKiem.Top = searchY + (searchRowHeight - txtTimKiem.Height) / 2;
+            btnTimKiem.Top = searchY + (searchRowHeight - btnTimKiem.Height) / 2;
 
-            // Grid
-            int gridTop = txtTimKiem.Bottom + 18;
+            // Grid (giảm khoảng cách nhỏ với hàng tìm kiếm)
+            int gridTop = Math.Max(txtTimKiem.Bottom, btnTimKiem.Bottom) + 10;
             int gridHeight = ClientSize.Height - gridTop - 24;
             if (gridHeight < 220)
             {
@@ -234,6 +238,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void ucQuanLyHoiVien_Load(object sender, EventArgs e)
         {
             ApplyTheme();
+            SetupSearchPlaceholder();
             LoadData();
 
             if (!isLayoutHooked)
@@ -257,7 +262,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtSDT.Clear();
             cboGioiTinh.SelectedIndex = -1;
             dtpNgaySinh.Value = DateTime.Now;
-            txtTimKiem.Clear();
+            SetSearchPlaceholder();
 
             txtMaHoiVien.Enabled = true;
             txtMaHoiVien.Focus();
@@ -359,7 +364,50 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            LoadData(txtTimKiem.Text.Trim());
+            string tuKhoa = txtTimKiem.Text.Trim();
+            if (tuKhoa == SearchPlaceholder)
+            {
+                tuKhoa = "";
+            }
+
+            LoadData(tuKhoa);
+        }
+
+        private void SetupSearchPlaceholder()
+        {
+            if (isSearchPlaceholderHooked)
+            {
+                return;
+            }
+
+            txtTimKiem.Enter += txtTimKiem_Enter;
+            txtTimKiem.Leave += txtTimKiem_Leave;
+            isSearchPlaceholderHooked = true;
+
+            SetSearchPlaceholder();
+        }
+
+        private void SetSearchPlaceholder()
+        {
+            txtTimKiem.Text = SearchPlaceholder;
+            txtTimKiem.ForeColor = Color.Gray;
+        }
+
+        private void txtTimKiem_Enter(object sender, EventArgs e)
+        {
+            if (txtTimKiem.Text == SearchPlaceholder)
+            {
+                txtTimKiem.Text = "";
+                txtTimKiem.ForeColor = Color.FromArgb(44, 62, 80);
+            }
+        }
+
+        private void txtTimKiem_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
+            {
+                SetSearchPlaceholder();
+            }
         }
     }
 }

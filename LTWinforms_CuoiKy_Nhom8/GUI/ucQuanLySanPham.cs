@@ -159,10 +159,18 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void LoadData()
         {
             dgvSanPham.DataSource = spBUS.LayDanhSachSanPhamAdmin();
+
             if (dgvSanPham.Columns.Count > 0)
             {
-                dgvSanPham.Columns["MaSP"].Visible = false;
-                dgvSanPham.Columns["GiaTien"].DefaultCellStyle.Format = "N0";
+                if (dgvSanPham.Columns.Contains("MaSP")) dgvSanPham.Columns["MaSP"].Visible = false;
+                if (dgvSanPham.Columns.Contains("TenSP")) dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
+                if (dgvSanPham.Columns.Contains("GiaTien"))
+                {
+                    dgvSanPham.Columns["GiaTien"].HeaderText = "Giá tiền (VNĐ)";
+                    dgvSanPham.Columns["GiaTien"].DefaultCellStyle.Format = "N0";
+                }
+                if (dgvSanPham.Columns.Contains("TrangThai")) dgvSanPham.Columns["TrangThai"].HeaderText = "Trạng thái";
+
                 dgvSanPham.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }

@@ -90,7 +90,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = true;
             MinimizeBox = true;
-            MinimumSize = new Size(1024, 640);
+
+            // Tăng min-height để sidebar không che/mất nút khi cửa sổ bị kéo nhỏ
+            MinimumSize = new Size(1200, 900);
+
             MaximumSize = Size.Empty;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "SPORTIFY - Hệ thống quản lý";
