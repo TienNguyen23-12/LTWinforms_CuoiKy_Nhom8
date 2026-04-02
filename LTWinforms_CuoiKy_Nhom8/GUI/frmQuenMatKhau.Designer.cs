@@ -39,11 +39,10 @@
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 3;
-            this.tableLayoutPanelMain.RowStyles.Clear();
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 360F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(500, 460);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(430, 500);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // pnlCard
@@ -57,10 +56,10 @@
             this.pnlCard.Controls.Add(this.label1);
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard.Location = new System.Drawing.Point(93, 63);
+            this.pnlCard.Location = new System.Drawing.Point(58, 73);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(20);
-            this.pnlCard.Size = new System.Drawing.Size(314, 334);
+            this.pnlCard.Size = new System.Drawing.Size(314, 354);
             this.pnlCard.TabIndex = 0;
             // 
             // btnLayLaiMatKhau
@@ -79,13 +78,14 @@
             this.txtSoDienThoai.Name = "txtSoDienThoai";
             this.txtSoDienThoai.Size = new System.Drawing.Size(258, 22);
             this.txtSoDienThoai.TabIndex = 4;
+            this.txtSoDienThoai.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSoDienThoai_KeyDown);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(28, 198);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 16);
+            this.label2.Size = new System.Drawing.Size(46, 16);
             this.label2.TabIndex = 3;
             this.label2.Text = "Phone";
             // 
@@ -101,7 +101,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(28, 146);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 16);
+            this.label1.Size = new System.Drawing.Size(41, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Email";
             // 
@@ -110,7 +110,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Location = new System.Drawing.Point(28, 98);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(108, 16);
+            this.lblTitle.Size = new System.Drawing.Size(105, 16);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Reset password";
             // 
@@ -118,7 +118,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(221, 226, 243);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(226)))), ((int)(((byte)(243)))));
             this.ClientSize = new System.Drawing.Size(430, 500);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

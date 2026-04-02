@@ -184,5 +184,14 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             frmMainContainer.Instance.LoadUserControl(new ucDangNhap());
         }
+
+        private void txtConfirmPass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnDangKy.PerformClick();
+            }
+        }
     }
 }

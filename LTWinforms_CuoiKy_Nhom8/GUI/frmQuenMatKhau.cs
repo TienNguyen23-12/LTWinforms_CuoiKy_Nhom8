@@ -173,5 +173,14 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 ModernMessageBox.Show(kq, "Lỗi bảo mật", ModernMessageType.Error);
             }
         }
+
+        private void txtSoDienThoai_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnLayLaiMatKhau.PerformClick();
+            }
+        }
     }
 }

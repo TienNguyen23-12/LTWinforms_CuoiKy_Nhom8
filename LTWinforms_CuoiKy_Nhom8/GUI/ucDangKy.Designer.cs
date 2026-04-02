@@ -42,11 +42,10 @@
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 3;
-            this.tableLayoutPanelMain.RowStyles.Clear();
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 450F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(760, 520);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(430, 540);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // pnlCard
@@ -63,10 +62,10 @@
             this.pnlCard.Controls.Add(this.label1);
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard.Location = new System.Drawing.Point(223, 13);
+            this.pnlCard.Location = new System.Drawing.Point(48, 48);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(20);
-            this.pnlCard.Size = new System.Drawing.Size(314, 494);
+            this.pnlCard.Size = new System.Drawing.Size(334, 444);
             this.pnlCard.TabIndex = 0;
             // 
             // linkLabelDangNhap
@@ -74,7 +73,7 @@
             this.linkLabelDangNhap.AutoSize = true;
             this.linkLabelDangNhap.Location = new System.Drawing.Point(102, 454);
             this.linkLabelDangNhap.Name = "linkLabelDangNhap";
-            this.linkLabelDangNhap.Size = new System.Drawing.Size(79, 16);
+            this.linkLabelDangNhap.Size = new System.Drawing.Size(88, 16);
             this.linkLabelDangNhap.TabIndex = 8;
             this.linkLabelDangNhap.TabStop = true;
             this.linkLabelDangNhap.Text = "Back to Login";
@@ -87,13 +86,14 @@
             this.txtConfirmPass.PasswordChar = '*';
             this.txtConfirmPass.Size = new System.Drawing.Size(258, 22);
             this.txtConfirmPass.TabIndex = 6;
+            this.txtConfirmPass.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtConfirmPass_KeyDown);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(28, 290);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(103, 16);
+            this.label3.Size = new System.Drawing.Size(115, 16);
             this.label3.TabIndex = 5;
             this.label3.Text = "Confirm Password";
             // 
@@ -127,7 +127,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(28, 236);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 16);
+            this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 3;
             this.label2.Text = "Password";
             // 
@@ -136,7 +136,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(28, 182);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 16);
+            this.label1.Size = new System.Drawing.Size(41, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Email";
             // 
@@ -145,7 +145,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Location = new System.Drawing.Point(28, 128);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(95, 16);
+            this.lblTitle.Size = new System.Drawing.Size(97, 16);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Create account";
             // 
@@ -161,6 +161,7 @@
             this.pnlCard.ResumeLayout(false);
             this.pnlCard.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
