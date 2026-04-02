@@ -56,7 +56,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             tabControl1.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
 
-            // Quan trọng: tránh nền tab mặc định gây góc đen khi paint rounded button
             tpGoiTap.UseVisualStyleBackColor = false;
             tpLopHoc.UseVisualStyleBackColor = false;
             tpLichSu.UseVisualStyleBackColor = false;
@@ -79,6 +78,10 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             StyleModernButton(btnDangKyLop, Color.FromArgb(46, 134, 222));
             StyleModernButton(btnLoc, Color.FromArgb(52, 73, 94));
             StyleModernButton(btnGuiPhanHoi, Color.FromArgb(46, 134, 222));
+
+            // In đậm đúng 2 nút theo yêu cầu
+            btnDangKyGoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnGuiPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             txtPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
             txtPhanHoi.BorderStyle = BorderStyle.FixedSingle;
@@ -208,6 +211,26 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         {
             dgvLopHoc.DataSource = lopBUS.LayDanhSachLopHoc("", maHLV, tuNgay, denNgay);
             FormatGrid(dgvLopHoc, "MaLop");
+
+            if (dgvLopHoc.Columns.Count > 0)
+            {
+                if (dgvLopHoc.Columns.Contains("MaLop")) dgvLopHoc.Columns["MaLop"].HeaderText = "Mã lớp";
+                if (dgvLopHoc.Columns.Contains("TenLop")) dgvLopHoc.Columns["TenLop"].HeaderText = "Tên lớp học";
+                if (dgvLopHoc.Columns.Contains("TenHLV")) dgvLopHoc.Columns["TenHLV"].HeaderText = "Huấn luyện viên";
+                if (dgvLopHoc.Columns.Contains("ThoiGian")) dgvLopHoc.Columns["ThoiGian"].HeaderText = "Thời gian";
+                if (dgvLopHoc.Columns.Contains("PhongTap")) dgvLopHoc.Columns["PhongTap"].HeaderText = "Phòng tập";
+                if (dgvLopHoc.Columns.Contains("GiaTien")) dgvLopHoc.Columns["GiaTien"].HeaderText = "Giá tiền (VNĐ)";
+                if (dgvLopHoc.Columns.Contains("SoLuongToiDa")) dgvLopHoc.Columns["SoLuongToiDa"].HeaderText = "Sĩ số tối đa";
+                if (dgvLopHoc.Columns.Contains("SoBuoi")) dgvLopHoc.Columns["SoBuoi"].HeaderText = "Số buổi";
+                if (dgvLopHoc.Columns.Contains("NgayBatDau"))
+                {
+                    dgvLopHoc.Columns["NgayBatDau"].HeaderText = "Ngày bắt đầu";
+                    dgvLopHoc.Columns["NgayBatDau"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+                if (dgvLopHoc.Columns.Contains("TrangThai")) dgvLopHoc.Columns["TrangThai"].HeaderText = "Trạng thái";
+                if (dgvLopHoc.Columns.Contains("SiSo")) dgvLopHoc.Columns["SiSo"].HeaderText = "Sĩ số";
+                if (dgvLopHoc.Columns.Contains("SlotCon")) dgvLopHoc.Columns["SlotCon"].HeaderText = "Chỗ còn lại";
+            }
         }
 
         private void LoadLichSu()
@@ -218,6 +241,14 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 if (dgvLichSu.Columns.Contains("MaLop")) dgvLichSu.Columns["MaLop"].Visible = false;
                 if (dgvLichSu.Columns.Contains("IdDangKy")) dgvLichSu.Columns["IdDangKy"].Visible = false;
+
+                if (dgvLichSu.Columns.Contains("TenLop")) dgvLichSu.Columns["TenLop"].HeaderText = "Tên lớp";
+                if (dgvLichSu.Columns.Contains("TenGoi")) dgvLichSu.Columns["TenGoi"].HeaderText = "Tên gói tập";
+                if (dgvLichSu.Columns.Contains("TenDichVu")) dgvLichSu.Columns["TenDichVu"].HeaderText = "Tên dịch vụ";
+                if (dgvLichSu.Columns.Contains("LoaiDichVu")) dgvLichSu.Columns["LoaiDichVu"].HeaderText = "Loại dịch vụ";
+                if (dgvLichSu.Columns.Contains("TrangThaiThanhToan")) dgvLichSu.Columns["TrangThaiThanhToan"].HeaderText = "Trạng thái thanh toán";
+                if (dgvLichSu.Columns.Contains("NgayDky")) dgvLichSu.Columns["NgayDky"].HeaderText = "Ngày đăng ký";
+                if (dgvLichSu.Columns.Contains("SoTien")) dgvLichSu.Columns["SoTien"].HeaderText = "Số tiền (VNĐ)";
 
                 if (dgvLichSu.Columns.Contains("SoTien"))
                     dgvLichSu.Columns["SoTien"].DefaultCellStyle.Format = "N0";

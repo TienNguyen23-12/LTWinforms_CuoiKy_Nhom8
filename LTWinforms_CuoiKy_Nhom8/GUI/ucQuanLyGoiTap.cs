@@ -11,6 +11,8 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private readonly GoiTapBUS gtBUS = new GoiTapBUS();
         private bool isThemeApplied;
         private bool isLayoutHooked;
+        private const string SearchPlaceholder = "Nhập từ khóa tìm kiếm";
+        private bool isSearchPlaceholderHooked;
 
         public ucQuanLyGoiTap()
         {
@@ -170,24 +172,26 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             btnLamMoi.SetBounds(btnKhoa.Right + btnSpacing, btnY, btnWidth, 34);
 
             // Search row
-            int searchY = btnThem.Bottom + 18;
+            int searchY = btnThem.Bottom + 16;
             int searchInputWidth = 280;
             int searchBtnWidth = 120;
+            int searchLabelWidth = label7.PreferredWidth;
 
-            int searchTotal = 70 + 10 + searchInputWidth + 14 + searchBtnWidth;
+            int searchTotal = searchLabelWidth + 10 + searchInputWidth + 14 + searchBtnWidth;
             int searchStart = left + (contentWidth - searchTotal) / 2;
 
             label7.Left = searchStart;
-            label7.Top = searchY + 8;
-
             txtTimKiem.Left = label7.Right + 10;
-            txtTimKiem.Top = searchY;
             txtTimKiem.Width = searchInputWidth;
+            btnTimKiem.SetBounds(txtTimKiem.Right + 14, 0, searchBtnWidth, 34);
 
-            btnTimKiem.SetBounds(txtTimKiem.Right + 14, searchY, searchBtnWidth, 34);
+            int searchRowHeight = Math.Max(Math.Max(label7.Height, txtTimKiem.Height), btnTimKiem.Height);
+            label7.Top = searchY + (searchRowHeight - label7.Height) / 2;
+            txtTimKiem.Top = searchY + (searchRowHeight - txtTimKiem.Height) / 2;
+            btnTimKiem.Top = searchY + (searchRowHeight - btnTimKiem.Height) / 2;
 
-            // Grid
-            int gridTop = txtTimKiem.Bottom + 18;
+            // Grid (cách hàng search 1 khoảng nhỏ)
+            int gridTop = Math.Max(txtTimKiem.Bottom, btnTimKiem.Bottom) + 10;
             int gridHeight = ClientSize.Height - gridTop - 24;
             if (gridHeight < 220)
             {
@@ -216,6 +220,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void ucQuanLyGoiTap_Load(object sender, EventArgs e)
         {
             ApplyTheme();
+            SetupSearchPlaceholder();
             LoadData();
 
             if (!isLayoutHooked)
@@ -235,45 +240,45 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void btnThem_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaGoi.Text.Trim()) || string.IsNullOrEmpty(txtTenGoi.Text.Trim()) || string.IsNullOrEmpty(txtThoiHan.Text.Trim()) || string.IsNullOrEmpty(txtGiaTien.Text.Trim()))
-    {
-        ModernMessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", ModernMessageType.Warning);
-        return;
-    }
+{
+    ModernMessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Cảnh báo", ModernMessageType.Warning);
+    return;
+}
 
-    int thoiHan;
-    decimal giaTien;
+int thoiHan;
+decimal giaTien;
 
-    if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
-    {
-        ModernMessageBox.Show("Thời hạn phải là số nguyên.", "Lỗi", ModernMessageType.Error);
-        return;
-    }
+if (!int.TryParse(txtThoiHan.Text.Trim(), out thoiHan))
+{
+    ModernMessageBox.Show("Thời hạn phải là số nguyên.", "Lỗi", ModernMessageType.Error);
+    return;
+}
 
-    if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
-    {
-        ModernMessageBox.Show("Giá tiền không hợp lệ.", "Lỗi", ModernMessageType.Error);
-        return;
-    }
+if (!decimal.TryParse(txtGiaTien.Text.Trim(), out giaTien))
+{
+    ModernMessageBox.Show("Giá tiền không hợp lệ.", "Lỗi", ModernMessageType.Error);
+    return;
+}
 
-    GoiTap gt = new GoiTap()
-    {
-        MaGoi = txtMaGoi.Text.Trim(),
-        TenGoi = txtTenGoi.Text.Trim(),
-        ThoiHanThang = thoiHan,
-        GiaTien = giaTien,
-        IsActive = true
-    };
+GoiTap gt = new GoiTap()
+{
+    MaGoi = txtMaGoi.Text.Trim(),
+    TenGoi = txtTenGoi.Text.Trim(),
+    ThoiHanThang = thoiHan,
+    GiaTien = giaTien,
+    IsActive = true
+};
 
-    string kq = gtBUS.ThemGoiTap(gt);
-    if (kq == "")
-    {
-        ModernMessageBox.Show("Thêm thành công.", "Thành công", ModernMessageType.Success);
-        btnLamMoi_Click(sender, e);
-    }
-    else
-    {
-        ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
-    }
+string kq = gtBUS.ThemGoiTap(gt);
+if (kq == "")
+{
+    ModernMessageBox.Show("Thêm thành công.", "Thành công", ModernMessageType.Success);
+    btnLamMoi_Click(sender, e);
+}
+else
+{
+    ModernMessageBox.Show(kq, "Lỗi", ModernMessageType.Error);
+}
 }
 
 private void btnSua_Click(object sender, EventArgs e)
@@ -336,7 +341,7 @@ private void btnLamMoi_Click(object sender, EventArgs e)
     txtTenGoi.Clear();
     txtThoiHan.Clear();
     txtGiaTien.Clear();
-    txtTimKiem.Clear();
+    SetSearchPlaceholder();
 
     txtMaGoi.Enabled = true;
     txtMaGoi.Focus();
@@ -345,7 +350,13 @@ private void btnLamMoi_Click(object sender, EventArgs e)
 
 private void btnTimKiem_Click(object sender, EventArgs e)
 {
-    LoadData(txtTimKiem.Text.Trim());
+    string tuKhoa = txtTimKiem.Text.Trim();
+    if (tuKhoa == SearchPlaceholder)
+    {
+        tuKhoa = "";
+    }
+
+    LoadData(tuKhoa);
 }
 
 private void dgvGoiTap_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -367,6 +378,43 @@ private void dgvGoiTap_CellClick(object sender, DataGridViewCellEventArgs e)
         }
 
         txtMaGoi.Enabled = false;
+    }
+}
+
+private void SetupSearchPlaceholder()
+{
+    if (isSearchPlaceholderHooked)
+    {
+        return;
+    }
+
+    txtTimKiem.Enter += txtTimKiem_Enter;
+    txtTimKiem.Leave += txtTimKiem_Leave;
+    isSearchPlaceholderHooked = true;
+
+    SetSearchPlaceholder();
+}
+
+private void SetSearchPlaceholder()
+{
+    txtTimKiem.Text = SearchPlaceholder;
+    txtTimKiem.ForeColor = Color.Gray;
+}
+
+private void txtTimKiem_Enter(object sender, EventArgs e)
+{
+    if (txtTimKiem.Text == SearchPlaceholder)
+    {
+        txtTimKiem.Text = "";
+        txtTimKiem.ForeColor = Color.FromArgb(44, 62, 80);
+    }
+}
+
+private void txtTimKiem_Leave(object sender, EventArgs e)
+{
+    if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
+    {
+        SetSearchPlaceholder();
     }
 }
     }

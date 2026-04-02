@@ -145,41 +145,94 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             DateTime tuNgay = dtpTuNgay.Value.Date;
             DateTime denNgay = dtpDenNgay.Value.Date;
 
-            if (Session.Role == 1) 
+            if (Session.Role == 1)
             {
                 dgvBangLuong.DataSource = nsBUS.TinhBangLuongChiTiet(tuNgay, denNgay);
             }
-            else 
+            else
             {
                 dgvBangLuong.DataSource = nsBUS.TinhLuongCaNhan(Session.IdTaiKhoan, Session.Role, tuNgay, denNgay);
             }
 
             if (dgvBangLuong.Columns.Count > 0)
             {
-                dgvBangLuong.Columns["MaNhanSu"].HeaderText = "Mã NS";
-                dgvBangLuong.Columns["HoTen"].HeaderText = "Họ và Tên";
-                dgvBangLuong.Columns["VaiTro"].HeaderText = "Vai Trò";
-                if (dgvBangLuong.Columns.Contains("SoNgayLam")) dgvBangLuong.Columns["SoNgayLam"].HeaderText = "Số Công / Buổi";
-                if (dgvBangLuong.Columns.Contains("Thuong"))
+                SetHeaderText(dgvBangLuong, "Mã nhân sự", "MaNhanSu", "Ma_NS");
+                SetHeaderText(dgvBangLuong, "Họ và tên", "HoTen", "Ho_Ten");
+                SetHeaderText(dgvBangLuong, "Vai trò", "VaiTro", "Vai_Tro");
+                SetHeaderText(dgvBangLuong, "Số công / buổi", "SoNgayLam", "SoNgay_Lam", "So_Cong");
+                SetHeaderText(dgvBangLuong, "Lương theo công (VNĐ)", "Luong1Ngay", "Luong_1_Ngay");
+                SetHeaderText(dgvBangLuong, "Lương cơ bản (VNĐ)", "LuongCoBan", "Luong_Co_Ban");
+                SetHeaderText(dgvBangLuong, "Thưởng (VNĐ)", "Thuong", "Thuong_VND");
+                SetHeaderText(dgvBangLuong, "Bị phạt (VNĐ)", "TienPhat", "Tien_Phat");
+                SetHeaderText(dgvBangLuong, "Thực lãnh (VNĐ)", "ThucLanh", "Thuc_Lanh");
+
+                FormatCurrencyColumn(dgvBangLuong, "Luong1Ngay", "Luong_1_Ngay");
+                FormatCurrencyColumn(dgvBangLuong, "LuongCoBan", "Luong_Co_Ban");
+                FormatCurrencyColumn(dgvBangLuong, "Thuong", "Thuong_VND");
+                FormatCurrencyColumn(dgvBangLuong, "TienPhat", "Tien_Phat");
+                FormatCurrencyColumn(dgvBangLuong, "ThucLanh", "Thuc_Lanh");
+
+                DataGridViewColumn colTienPhat = GetColumn(dgvBangLuong, "TienPhat", "Tien_Phat");
+                if (colTienPhat != null)
                 {
-                    dgvBangLuong.Columns["Thuong"].HeaderText = "Thưởng";
-                    dgvBangLuong.Columns["Thuong"].DefaultCellStyle.Format = "N0";
+                    colTienPhat.DefaultCellStyle.ForeColor = Color.Red;
                 }
 
-                dgvBangLuong.Columns["TienPhat"].HeaderText = "Bị Phạt (VNĐ)";
-                dgvBangLuong.Columns["TienPhat"].DefaultCellStyle.Format = "N0";
-                dgvBangLuong.Columns["TienPhat"].DefaultCellStyle.ForeColor = Color.Red;
+                DataGridViewColumn colThucLanh = GetColumn(dgvBangLuong, "ThucLanh", "Thuc_Lanh");
+                if (colThucLanh != null)
+                {
+                    colThucLanh.DefaultCellStyle.ForeColor = Color.Green;
+                    colThucLanh.DefaultCellStyle.Font = new Font(dgvBangLuong.Font, FontStyle.Regular);
+                }
 
-                dgvBangLuong.Columns["ThucLanh"].HeaderText = "Thực Lãnh (VNĐ)";
-                dgvBangLuong.Columns["ThucLanh"].DefaultCellStyle.Format = "N0";
-                dgvBangLuong.Columns["ThucLanh"].DefaultCellStyle.ForeColor = Color.Green;
-                dgvBangLuong.Columns["ThucLanh"].DefaultCellStyle.Font = new Font(dgvBangLuong.Font, FontStyle.Regular);
-
+                NormalizeHeaderUnderscoreToSpace(dgvBangLuong);
                 dgvBangLuong.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvBangLuong.RowHeadersVisible = false;
             }
 
             TinhTongLuong();
+        }
+
+        private static DataGridViewColumn GetColumn(DataGridView grid, params string[] names)
+        {
+            foreach (string name in names)
+            {
+                if (grid.Columns.Contains(name))
+                {
+                    return grid.Columns[name];
+                }
+            }
+
+            return null;
+        }
+
+        private static void SetHeaderText(DataGridView grid, string headerText, params string[] names)
+        {
+            DataGridViewColumn column = GetColumn(grid, names);
+            if (column != null)
+            {
+                column.HeaderText = headerText;
+            }
+        }
+
+        private static void FormatCurrencyColumn(DataGridView grid, params string[] names)
+        {
+            DataGridViewColumn column = GetColumn(grid, names);
+            if (column != null)
+            {
+                column.DefaultCellStyle.Format = "N0";
+            }
+        }
+
+        private static void NormalizeHeaderUnderscoreToSpace(DataGridView grid)
+        {
+            foreach (DataGridViewColumn column in grid.Columns)
+            {
+                if (!string.IsNullOrEmpty(column.HeaderText) && column.HeaderText.Contains("_"))
+                {
+                    column.HeaderText = column.HeaderText.Replace("_", " ");
+                }
+            }
         }
 
         private void TinhTongLuong()
