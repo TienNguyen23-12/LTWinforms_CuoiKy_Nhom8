@@ -81,10 +81,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             }
         }
 
-        // Centralized commission rate provider to avoid default parameter initializers
         private decimal GetCommissionRate()
         {
-            // According to formula: 10% commission for HLV
             return 0.10m;
         }
 
@@ -112,15 +110,16 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 decimal luong1Ngay = (nv.Luong ?? 0) / 26m;
                 decimal luongThucLanh = (luong1Ngay * soCong) - tienPhat;
 
-                if (luongThucLanh < 0) luongThucLanh = 0;
-
                 result.Add(new
                 {
                     MaNhanSu = nv.MaNhanVien,
                     HoTen = nv.HoTen,
                     VaiTro = "Nhân viên",
                     SoNgayLam = soCong,
+                    LuongCoBan = Math.Round(nv.Luong ?? 0, 0), 
+                    Luong1Ngay = Math.Round(luong1Ngay, 0),
                     TienPhat = tienPhat,
+                    Thuong = 0m,
                     ThucLanh = Math.Round(luongThucLanh, 0)
                 });
             }
@@ -157,6 +156,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     HoTen = hlv.TenHLV,
                     VaiTro = "Huấn luyện viên",
                     SoNgayLam = soBuoi,
+                    LuongCoBan = Math.Round(luongCoBan, 0), // monthly basic salary for HLV
+                    Luong1Ngay = Math.Round(luongTheoCong, 0),
                     TienPhat = tienPhat,
                     Thuong = Math.Round(commissionTotal, 0),
                     ThucLanh = Math.Round(tongLuong, 0)
@@ -199,6 +200,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         VaiTro = "Nhân viên",
                         SoNgayLam = soBuoiCoMat,
                         Luong1Ngay = Math.Round(luong1Ngay,0),
+                        LuongCoBan = Math.Round(nv.Luong ?? 0, 0),
                         TienPhat = tienPhat,
                         ThucLanh = Math.Round(luongThucLanh, 0)
                     });
@@ -228,7 +230,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     }
 
                     decimal tongLuong = luongTheoCong + commissionTotal - tienPhat;
-                    Console.WriteLine($"Luong theo cong: {luongTheoCong}, Commission: {commissionTotal}, Tien phat: {tienPhat}, Tong luong: {tongLuong}");
+                    if (tongLuong < 0) tongLuong = 0;
 
                     result.Add(new
                     {
@@ -236,6 +238,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                         HoTen = hlv.TenHLV,
                         VaiTro = "Huấn luyện viên",
                         SoNgayLam = soBuoiCoMat,
+                        Luong1Ngay = Math.Round(luongTheoCong,0),
+                        LuongCoBan = Math.Round(luongCoBan, 0),
                         TienPhat = tienPhat,
                         Thuong = Math.Round(commissionTotal, 0),
                         ThucLanh = Math.Round(tongLuong, 0)

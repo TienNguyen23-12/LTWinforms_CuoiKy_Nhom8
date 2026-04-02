@@ -44,10 +44,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.dgvThongKe = new System.Windows.Forms.DataGridView();
             this.btnIn = new System.Windows.Forms.Button();
+            this.dgvHLV = new System.Windows.Forms.DataGridView();
+            this.lblTitleThongKe = new System.Windows.Forms.Label();
+            this.lblTitleNhanSu = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvThongKe)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHLV)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -180,7 +184,7 @@
             // dgvThongKe
             // 
             this.dgvThongKe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvThongKe.Location = new System.Drawing.Point(75, 306);
+            this.dgvThongKe.Location = new System.Drawing.Point(75, 314);
             this.dgvThongKe.Name = "dgvThongKe";
             this.dgvThongKe.RowHeadersWidth = 51;
             this.dgvThongKe.RowTemplate.Height = 24;
@@ -197,10 +201,43 @@
             this.btnIn.UseVisualStyleBackColor = true;
             this.btnIn.Click += new System.EventHandler(this.btnIn_Click);
             // 
+            // dgvHLV
+            // 
+            this.dgvHLV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvHLV.Location = new System.Drawing.Point(75, 620);
+            this.dgvHLV.Name = "dgvHLV";
+            this.dgvHLV.RowHeadersWidth = 51;
+            this.dgvHLV.RowTemplate.Height = 24;
+            this.dgvHLV.Size = new System.Drawing.Size(810, 269);
+            this.dgvHLV.TabIndex = 9;
+            // 
+            // lblTitleThongKe
+            // 
+            this.lblTitleThongKe.AutoSize = false;
+            this.lblTitleThongKe.Location = new System.Drawing.Point(75, 280);
+            this.lblTitleThongKe.Name = "lblTitleThongKe";
+            this.lblTitleThongKe.Size = new System.Drawing.Size(810, 24);
+            this.lblTitleThongKe.TabIndex = 9;
+            this.lblTitleThongKe.Text = "Báo cáo dịch vụ / lớp học";
+            this.lblTitleThongKe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblTitleNhanSu
+            // 
+            this.lblTitleNhanSu.AutoSize = false;
+            this.lblTitleNhanSu.Location = new System.Drawing.Point(75, 496);
+            this.lblTitleNhanSu.Name = "lblTitleNhanSu";
+            this.lblTitleNhanSu.Size = new System.Drawing.Size(810, 24);
+            this.lblTitleNhanSu.TabIndex = 10;
+            this.lblTitleNhanSu.Text = "Bảng lương nhân sự (Nhân viên + HLV)";
+            this.lblTitleNhanSu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // ucThongKeDoanhThu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblTitleNhanSu);
+            this.Controls.Add(this.lblTitleThongKe);
+            this.Controls.Add(this.dgvHLV);
             this.Controls.Add(this.btnIn);
             this.Controls.Add(this.dgvThongKe);
             this.Controls.Add(this.panel3);
@@ -221,6 +258,7 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvThongKe)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHLV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,5 +282,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView dgvThongKe;
         private System.Windows.Forms.Button btnIn;
+        private System.Windows.Forms.DataGridView dgvHLV;
+        private System.Windows.Forms.Label lblTitleThongKe;
+        private System.Windows.Forms.Label lblTitleNhanSu;
     }
 }

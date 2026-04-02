@@ -36,6 +36,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             ModernTheme.StyleLabel(label6);
             ModernTheme.StyleLabel(label8);
 
+            ModernTheme.StyleLabel(lblTitleThongKe);
+            ModernTheme.StyleLabel(lblTitleNhanSu);
+            lblTitleThongKe.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTitleNhanSu.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+
             label3.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             label6.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             label8.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
@@ -59,6 +64,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             ModernTheme.StyleButton(btnIn, Color.FromArgb(53, 73, 95), Color.White);
 
             ModernTheme.StyleGrid(dgvThongKe);
+            ModernTheme.StyleGrid(dgvHLV);
 
             isThemeApplied = true;
         }
@@ -169,8 +175,21 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             AlignSummaryCard(panel3, label8, txtLoiNhuan);
 
             int gridTop = panel1.Bottom + 16;
-            int gridHeight = Math.Max(220, ClientSize.Height - gridTop - 20);
-            dgvThongKe.SetBounds(left, gridTop, contentWidth, gridHeight);
+            int totalGridHeight = Math.Max(460, ClientSize.Height - gridTop - 20);
+
+            // split into two grids: top for services, bottom for staff
+            int topGridHeight = Math.Max(220, (totalGridHeight - gap) / 2);
+            int bottomGridHeight = totalGridHeight - topGridHeight - gap;
+
+            // Title above top grid
+            int titleHeight = 28;
+            lblTitleThongKe.SetBounds(left, gridTop - titleHeight, contentWidth, titleHeight);
+
+            dgvThongKe.SetBounds(left, gridTop, contentWidth, topGridHeight);
+
+            // Title above bottom grid
+            lblTitleNhanSu.SetBounds(left, dgvThongKe.Bottom + gap - titleHeight, contentWidth, titleHeight);
+            dgvHLV.SetBounds(left, dgvThongKe.Bottom + gap, contentWidth, bottomGridHeight);
         }
 
         private void UpdateBaoCao(DateTime tuNgay, DateTime denNgay)
@@ -205,6 +224,72 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtDoanhThu.Text = doanhThu.ToString("N0") + " VNĐ";
             txtChiLuong.Text = chiLuong.ToString("N0") + " VNĐ";
             txtLoiNhuan.Text = loiNhuan.ToString("N0") + " VNĐ";
+
+            try
+            {
+                NhanSuBUS nhanSuBUS = new NhanSuBUS();
+                IEnumerable<dynamic> rawLuong = (IEnumerable<dynamic>)nhanSuBUS.TinhBangLuongChiTiet(tuNgay, denNgay);
+
+                var nhanSuStats = rawLuong
+                    .Select(x => new
+                    {
+                        Ma = x.MaNhanSu,
+                        Ten = x.HoTen,
+                        VaiTro = (x.VaiTro ?? "").ToString(),
+                        SoNgayLam = (int)(x.SoNgayLam ?? 0),
+                        LuongCoBan = Convert.ToDecimal(x.LuongCoBan ?? 0m),
+                        Luong1Ngay = Convert.ToDecimal(x.Luong1Ngay ?? 0m),
+                        TienPhat = Convert.ToDecimal(x.TienPhat ?? 0m),
+                        Thuong = Convert.ToDecimal(x.Thuong ?? 0m),
+                        ThucLanh = Convert.ToDecimal(x.ThucLanh ?? 0m)
+                    })
+                    .ToList();
+
+                dgvHLV.DataSource = nhanSuStats;
+
+                if (dgvHLV.Columns.Count > 0)
+                {
+                    if (dgvHLV.Columns.Contains("Ma"))
+                        dgvHLV.Columns["Ma"].HeaderText = "Mã";
+                    if (dgvHLV.Columns.Contains("Ten"))
+                        dgvHLV.Columns["Ten"].HeaderText = "Họ & Tên";
+                    if (dgvHLV.Columns.Contains("VaiTro"))
+                        dgvHLV.Columns["VaiTro"].HeaderText = "Vai Trò";
+                    if (dgvHLV.Columns.Contains("SoNgayLam"))
+                        dgvHLV.Columns["SoNgayLam"].HeaderText = "Số Ngày / Buổi";
+                    if (dgvHLV.Columns.Contains("LuongCoBan"))
+                    {
+                        dgvHLV.Columns["LuongCoBan"].HeaderText = "Lương Cơ Bản (VNĐ)";
+                        dgvHLV.Columns["LuongCoBan"].DefaultCellStyle.Format = "N0";
+                    }
+                    if (dgvHLV.Columns.Contains("Luong1Ngay"))
+                    {
+                        dgvHLV.Columns["Luong1Ngay"].HeaderText = "Lương theo công (VNĐ)";
+                        dgvHLV.Columns["Luong1Ngay"].DefaultCellStyle.Format = "N0";
+                    }
+                    if (dgvHLV.Columns.Contains("TienPhat"))
+                    {
+                        dgvHLV.Columns["TienPhat"].HeaderText = "Tiền Phạt (VNĐ)";
+                        dgvHLV.Columns["TienPhat"].DefaultCellStyle.Format = "N0";
+                    }
+                    if (dgvHLV.Columns.Contains("Thuong"))
+                    {
+                        dgvHLV.Columns["Thuong"].HeaderText = "Thưởng (VNĐ)";
+                        dgvHLV.Columns["Thuong"].DefaultCellStyle.Format = "N0";
+                    }
+                    if (dgvHLV.Columns.Contains("ThucLanh"))
+                    {
+                        dgvHLV.Columns["ThucLanh"].HeaderText = "Thực Lãnh (VNĐ)";
+                        dgvHLV.Columns["ThucLanh"].DefaultCellStyle.Format = "N0";
+                    }
+
+                    dgvHLV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu nhân sự: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void ucThongKeDoanhThu_Load(object sender, EventArgs e)
