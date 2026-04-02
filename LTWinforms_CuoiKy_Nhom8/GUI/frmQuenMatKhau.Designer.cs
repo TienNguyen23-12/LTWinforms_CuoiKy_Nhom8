@@ -16,6 +16,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmQuenMatKhau));
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCard = new System.Windows.Forms.Panel();
             this.btnLayLaiMatKhau = new System.Windows.Forms.Button();
@@ -37,7 +38,7 @@
             this.tableLayoutPanelMain.Controls.Add(this.pnlCard, 1, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 3;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -58,7 +59,7 @@
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCard.Location = new System.Drawing.Point(43, 59);
-            this.pnlCard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlCard.Margin = new System.Windows.Forms.Padding(2);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(15, 16, 15, 16);
             this.pnlCard.Size = new System.Drawing.Size(236, 288);
@@ -67,7 +68,7 @@
             // btnLayLaiMatKhau
             // 
             this.btnLayLaiMatKhau.Location = new System.Drawing.Point(84, 203);
-            this.btnLayLaiMatKhau.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLayLaiMatKhau.Margin = new System.Windows.Forms.Padding(2);
             this.btnLayLaiMatKhau.Name = "btnLayLaiMatKhau";
             this.btnLayLaiMatKhau.Size = new System.Drawing.Size(68, 24);
             this.btnLayLaiMatKhau.TabIndex = 5;
@@ -78,7 +79,7 @@
             // txtSoDienThoai
             // 
             this.txtSoDienThoai.Location = new System.Drawing.Point(21, 177);
-            this.txtSoDienThoai.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSoDienThoai.Margin = new System.Windows.Forms.Padding(2);
             this.txtSoDienThoai.Name = "txtSoDienThoai";
             this.txtSoDienThoai.Size = new System.Drawing.Size(194, 20);
             this.txtSoDienThoai.TabIndex = 4;
@@ -97,7 +98,7 @@
             // txtUsername
             // 
             this.txtUsername.Location = new System.Drawing.Point(21, 135);
-            this.txtUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtUsername.Margin = new System.Windows.Forms.Padding(2);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(194, 20);
             this.txtUsername.TabIndex = 2;
@@ -130,7 +131,8 @@
             this.ClientSize = new System.Drawing.Size(322, 406);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmQuenMatKhau";

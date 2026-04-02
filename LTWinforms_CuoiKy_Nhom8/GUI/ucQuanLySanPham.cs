@@ -22,8 +22,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             ApplyTheme();
             LoadData();
 
-            btnSua.Enabled = false;
-
             if (!isLayoutHooked)
             {
                 Resize += ucQuanLySanPham_Resize;
@@ -61,7 +59,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
             StylePrimaryButton(btnLuu);
             StyleSecondaryButton(btnThem);
-            StyleSecondaryButton(btnSua);
+            btnThem.Text = "Reset";
 
             StyleGrid(dgvSanPham);
 
@@ -149,7 +147,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             int btnY = y + 36;
             btnLuu.SetBounds(formLeft, btnY, 120, 34);
             btnThem.SetBounds(btnLuu.Right + 12, btnY, 120, 34);
-            btnSua.SetBounds(btnThem.Right + 12, btnY, 120, 34);
 
             int gridTop = btnLuu.Bottom + 16;
             int gridHeight = Math.Max(220, ClientSize.Height - gridTop - 20);
@@ -188,8 +185,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                 string trangThai = row.Cells["TrangThai"].Value.ToString();
                 chkDangBan.Checked = trangThai == "Đang bán";
-
-                btnSua.Enabled = true;
             }
         }
 
@@ -199,7 +194,6 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             txtTenSP.Clear();
             txtGiaTien.Text = "0";
             chkDangBan.Checked = true;
-            btnSua.Enabled = false;
             txtTenSP.Focus();
         }
 
@@ -224,52 +218,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             {
                 ModernMessageBox.Show("Đã lưu thông tin sản phẩm!", "Thông báo", ModernMessageType.Success);
                 LoadData();
-                btnSua.Enabled = false;
                 maSPDangChon = 0;
             }
             else
             {
                 ModernMessageBox.Show("Lỗi: " + kq, "Lỗi", ModernMessageType.Error);
-            }
-        }
-
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            if (maSPDangChon == 0)
-            {
-                ModernMessageBox.Show("Vui lòng chọn một sản phẩm từ danh sách trước khi sửa!", "Thông báo", ModernMessageType.Warning);
-                return;
-            }
-
-            string tenMoi = txtTenSP.Text.Trim();
-            if (string.IsNullOrEmpty(tenMoi))
-            {
-                ModernMessageBox.Show("Tên sản phẩm không được để trống!", "Cảnh báo", ModernMessageType.Warning);
-                return;
-            }
-
-            decimal giaMoi;
-            if (!decimal.TryParse(txtGiaTien.Text.Replace(",", ""), out giaMoi))
-            {
-                ModernMessageBox.Show("Giá tiền phải là số hợp lệ!", "Lỗi", ModernMessageType.Error);
-                return;
-            }
-
-            if (ModernMessageBox.Show("Bạn có chắc muốn cập nhật thông tin cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
-            {
-                string kq = spBUS.CapNhatSanPham(maSPDangChon, tenMoi, giaMoi, chkDangBan.Checked);
-
-                if (kq == "")
-                {
-                    ModernMessageBox.Show("Cập nhật sản phẩm thành công!", "Thành công", ModernMessageType.Success);
-                    LoadData();
-                    btnSua.Enabled = false;
-                    maSPDangChon = 0;
-                }
-                else
-                {
-                    ModernMessageBox.Show("Lỗi: " + kq, "Lỗi", ModernMessageType.Error);
-                }
             }
         }
     }
