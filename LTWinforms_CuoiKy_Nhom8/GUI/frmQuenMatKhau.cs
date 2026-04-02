@@ -80,7 +80,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             lblSubTitle.ForeColor = Color.FromArgb(145, 153, 179);
             lblSubTitle.AutoSize = true;
 
-            label1.Text = "Email";
+            label1.Text = "Username";
             label2.Text = "Số điện thoại";
             label1.ForeColor = Color.FromArgb(140, 146, 165);
             label2.ForeColor = Color.FromArgb(140, 146, 165);

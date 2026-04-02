@@ -32,17 +32,18 @@
             // 
             this.tableLayoutPanelMain.ColumnCount = 3;
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 320F));
+            this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 240F));
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelMain.Controls.Add(this.pnlCard, 1, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 3;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 360F));
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 292F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(430, 500);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(322, 406);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // pnlCard
@@ -56,17 +57,19 @@
             this.pnlCard.Controls.Add(this.label1);
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard.Location = new System.Drawing.Point(58, 73);
+            this.pnlCard.Location = new System.Drawing.Point(43, 59);
+            this.pnlCard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlCard.Name = "pnlCard";
-            this.pnlCard.Padding = new System.Windows.Forms.Padding(20);
-            this.pnlCard.Size = new System.Drawing.Size(314, 354);
+            this.pnlCard.Padding = new System.Windows.Forms.Padding(15, 16, 15, 16);
+            this.pnlCard.Size = new System.Drawing.Size(236, 288);
             this.pnlCard.TabIndex = 0;
             // 
             // btnLayLaiMatKhau
             // 
-            this.btnLayLaiMatKhau.Location = new System.Drawing.Point(112, 250);
+            this.btnLayLaiMatKhau.Location = new System.Drawing.Point(84, 203);
+            this.btnLayLaiMatKhau.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnLayLaiMatKhau.Name = "btnLayLaiMatKhau";
-            this.btnLayLaiMatKhau.Size = new System.Drawing.Size(90, 30);
+            this.btnLayLaiMatKhau.Size = new System.Drawing.Size(68, 24);
             this.btnLayLaiMatKhau.TabIndex = 5;
             this.btnLayLaiMatKhau.Text = "Send";
             this.btnLayLaiMatKhau.UseVisualStyleBackColor = true;
@@ -74,54 +77,60 @@
             // 
             // txtSoDienThoai
             // 
-            this.txtSoDienThoai.Location = new System.Drawing.Point(28, 218);
+            this.txtSoDienThoai.Location = new System.Drawing.Point(21, 177);
+            this.txtSoDienThoai.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSoDienThoai.Name = "txtSoDienThoai";
-            this.txtSoDienThoai.Size = new System.Drawing.Size(258, 22);
+            this.txtSoDienThoai.Size = new System.Drawing.Size(194, 20);
             this.txtSoDienThoai.TabIndex = 4;
             this.txtSoDienThoai.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSoDienThoai_KeyDown);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 198);
+            this.label2.Location = new System.Drawing.Point(21, 161);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 16);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Phone";
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(28, 166);
+            this.txtUsername.Location = new System.Drawing.Point(21, 135);
+            this.txtUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(258, 22);
+            this.txtUsername.Size = new System.Drawing.Size(194, 20);
             this.txtUsername.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 146);
+            this.label1.Location = new System.Drawing.Point(21, 119);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 16);
+            this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Email";
+            this.label1.Text = "Username";
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(28, 98);
+            this.lblTitle.Location = new System.Drawing.Point(21, 80);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(105, 16);
+            this.lblTitle.Size = new System.Drawing.Size(83, 13);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Reset password";
             // 
             // frmQuenMatKhau
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(226)))), ((int)(((byte)(243)))));
-            this.ClientSize = new System.Drawing.Size(430, 500);
+            this.ClientSize = new System.Drawing.Size(322, 406);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmQuenMatKhau";
