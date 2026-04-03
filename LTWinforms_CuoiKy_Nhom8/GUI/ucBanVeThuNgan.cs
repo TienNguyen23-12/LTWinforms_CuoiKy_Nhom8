@@ -261,7 +261,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             else if (radLopHoc.Checked)
             {
                 int idDangKy = Convert.ToInt32(cboDichVu.SelectedValue);
-                if (MessageBox.Show("Xác nhận thu tiền lớp học này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Xác nhận thu tiền lớp học này?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = dkBUS.XacNhanThuTien(idDangKy, Session.IdTaiKhoan);
                     if (kq == "")
@@ -281,7 +281,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 string tenSP = cboDichVu.Text;
                 decimal giaTien = Convert.ToDecimal(txtSoTien.Text.Replace(" VNĐ", "").Replace(",", ""));
 
-                if (MessageBox.Show("Xác nhận bán [" + tenSP + "] cho khách " + cboHoiVien.Text + "?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (ModernMessageBox.Show("Xác nhận bán [" + tenSP + "] cho khách " + cboHoiVien.Text + "?", "Xác nhận", MessageBoxButtons.YesNo, ModernMessageType.Question) == DialogResult.Yes)
                 {
                     string kq = hdBUS.BanSanPhamTaiQuay(maHV, tenSP, giaTien, Session.IdTaiKhoan);
                     if (kq == "")
