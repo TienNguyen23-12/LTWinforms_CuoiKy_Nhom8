@@ -204,6 +204,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                     rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
                     rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.Date.ToString("dd/MM/yyyy"));
+                    rpt.SetParameterValue("pMaHV", maHoiVienCuaToi);
                     rpt.SetParameterValue("pTenNguoiDung", tenKhachHang);
 
                     frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
