@@ -340,7 +340,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 {
                     // BƯỚC 1: LẤY DỮ LIỆU TỔNG THU (Từ Database)
                     var rawThu = db.HoaDons
-                        .Where(hd => hd.NgayThanhToan >= tuNgay && hd.NgayThanhToan <= denNgay)
+                        .Where(hd => hd.NgayThanhToan >= tuNgay && hd.NgayThanhToan <= denNgay && hd.TrangThai == "Đã thanh toán")
                         .ToList();
 
                     var lstThu = rawThu.Select(hd => new
