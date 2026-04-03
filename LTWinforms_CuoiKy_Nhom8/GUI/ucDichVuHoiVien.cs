@@ -79,9 +79,9 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             StyleModernButton(btnLoc, Color.FromArgb(52, 73, 94));
             StyleModernButton(btnGuiPhanHoi, Color.FromArgb(46, 134, 222));
 
-            // UI nút hủy
-            StyleModernButton(btnHuyDangKy, Color.FromArgb(231, 76, 60));
-            btnHuyDangKy.Text = "Hủy";
+            // In đậm đúng 2 nút theo yêu cầu
+            btnDangKyGoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnGuiPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             txtPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
             txtPhanHoi.BorderStyle = BorderStyle.FixedSingle;

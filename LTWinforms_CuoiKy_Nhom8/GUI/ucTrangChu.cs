@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -256,14 +257,40 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             pnlSurface.BackColor = Color.White;
             pnlSurface.BorderStyle = BorderStyle.FixedSingle;
 
-            Label lblWelcome = new Label();
-            lblWelcome.Dock = DockStyle.Fill;
-            lblWelcome.TextAlign = ContentAlignment.MiddleCenter;
-            lblWelcome.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblWelcome.ForeColor = Color.FromArgb(44, 62, 80);
-            lblWelcome.Text = "Chào mừng đến với SPORTIFY\r\nHãy chọn chức năng từ thanh bên trái.";
+            PictureBox picBackground = new PictureBox();
+            picBackground.Dock = DockStyle.Fill;
+            picBackground.BackColor = Color.White;
+            picBackground.SizeMode = PictureBoxSizeMode.Zoom;
 
-            pnlSurface.Controls.Add(lblWelcome);
+            using (Image source = LoadWelcomeBackgroundFromAssets())
+            {
+                if (source != null)
+                {
+                    picBackground.Image = CreateFadedImage(source, 0.1f); // độ mờ nền
+                }
+            }
+
+            Label lblWelcome = new Label();
+            lblWelcome.AutoSize = true;
+            lblWelcome.TextAlign = ContentAlignment.MiddleCenter;
+            lblWelcome.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblWelcome.ForeColor = Color.FromArgb(17, 17, 132);
+            lblWelcome.BackColor = Color.Transparent;
+            lblWelcome.Text = "Chào mừng đến với SPORTIFY\r\nHãy chọn chức năng từ thanh bên trái";
+
+            EventHandler updateWelcomePosition = delegate
+            {
+                Size textSize = TextRenderer.MeasureText(lblWelcome.Text, lblWelcome.Font);
+                int x = (picBackground.ClientSize.Width - textSize.Width) / 2 + 15;
+                int y = (picBackground.ClientSize.Height - textSize.Height) / 2 - 55; // đẩy lên cao thêm
+                lblWelcome.Location = new Point(Math.Max(0, x), Math.Max(0, y));
+            };
+
+            picBackground.Controls.Add(lblWelcome);
+            picBackground.Resize += updateWelcomePosition;
+            updateWelcomePosition(picBackground, EventArgs.Empty);
+
+            pnlSurface.Controls.Add(picBackground);
             pnlWrapper.Controls.Add(pnlSurface);
             pnlNoiDungChinh.Controls.Add(pnlWrapper);
 
@@ -822,6 +849,58 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
                 return owner.TryHandleMainMenuWheel(ref m);
             }
+        }
+
+        private Image LoadWelcomeBackgroundFromAssets()
+        {
+            string[] candidateFiles =
+            {
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Assets\bg.png")),
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\Assets\bg.png")),
+                Path.GetFullPath(Path.Combine(Application.StartupPath, @"Assets\bg.png"))
+            };
+
+            foreach (string filePath in candidateFiles)
+            {
+                if (!File.Exists(filePath))
+                {
+                    continue;
+                }
+
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (Image img = Image.FromStream(fs))
+                {
+                    return new Bitmap(img);
+                }
+            }
+
+            return null;
+        }
+
+        private Bitmap CreateFadedImage(Image source, float opacity)
+        {
+            Bitmap faded = new Bitmap(source.Width, source.Height);
+
+            using (Graphics g = Graphics.FromImage(faded))
+            using (ImageAttributes imageAttributes = new ImageAttributes())
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = Math.Max(0f, Math.Min(1f, opacity));
+                imageAttributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage(
+                    source,
+                    new Rectangle(0, 0, faded.Width, faded.Height),
+                    0,
+                    0,
+                    source.Width,
+                    source.Height,
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+            }
+
+            return faded;
         }
     }
 }
