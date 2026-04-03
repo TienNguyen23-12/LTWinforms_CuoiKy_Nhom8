@@ -79,6 +79,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             StyleModernButton(btnLoc, Color.FromArgb(52, 73, 94));
             StyleModernButton(btnGuiPhanHoi, Color.FromArgb(46, 134, 222));
 
+            // Nút hủy: màu đỏ để nổi bật hành động hủy
+            StyleModernButton(btnHuyDangKy, Color.FromArgb(231, 76, 60));
+            btnHuyDangKy.Text = "Hủy";
+            btnHuyDangKy.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+
             // In đậm đúng 2 nút theo yêu cầu
             btnDangKyGoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuiPhanHoi.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
@@ -207,7 +212,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             if (dgvGoiTap.Columns.Contains("TenGoi")) dgvGoiTap.Columns["TenGoi"].HeaderText = "Tên Gói Tập";
             if (dgvGoiTap.Columns.Contains("GiaTien")) dgvGoiTap.Columns["GiaTien"].HeaderText = "Giá Tiền";
             if (dgvGoiTap.Columns.Contains("ThoiHan")) dgvGoiTap.Columns["ThoiHan"].HeaderText = "Thời Hạn";
-            if (dgvGoiTap.Columns.Contains("PhongGym")) dgvGoiTap.Columns["PhongGym"].HeaderText = "Phòng Gym";
+            if (dgvGoiTap.Columns.Contains("PhongGym")) dgvGoiTap.Columns["PhongGym"].HeaderText = "Ghi chú";
         }
 
         private void LoadDuLieuLop(string maHLV = "", DateTime? tuNgay = null, DateTime? denNgay = null)
@@ -248,8 +253,13 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
                 if (dgvLichSu.Columns.Contains("TenLop")) dgvLichSu.Columns["TenLop"].HeaderText = "Tên lớp";
                 if (dgvLichSu.Columns.Contains("TenGoi")) dgvLichSu.Columns["TenGoi"].HeaderText = "Tên gói tập";
                 if (dgvLichSu.Columns.Contains("TenDichVu")) dgvLichSu.Columns["TenDichVu"].HeaderText = "Tên dịch vụ";
-                if (dgvLichSu.Columns.Contains("LoaiDichVu")) dgvLichSu.Columns["LoaiDichVu"].HeaderText = "Loại dịch vụ";
-                if (dgvLichSu.Columns.Contains("TrangThaiThanhToan")) dgvLichSu.Columns["TrangThaiThanhToan"].HeaderText = "Trạng thái thanh toán";
+
+                if (dgvLichSu.Columns.Contains("Loai")) dgvLichSu.Columns["Loai"].HeaderText = "Loại";
+                if (dgvLichSu.Columns.Contains("LoaiDichVu")) dgvLichSu.Columns["LoaiDichVu"].HeaderText = "Loại";
+
+                if (dgvLichSu.Columns.Contains("TrangThai")) dgvLichSu.Columns["TrangThai"].HeaderText = "Trạng Thái";
+                if (dgvLichSu.Columns.Contains("TrangThaiThanhToan")) dgvLichSu.Columns["TrangThaiThanhToan"].HeaderText = "Trạng Thái";
+
                 if (dgvLichSu.Columns.Contains("NgayDky")) dgvLichSu.Columns["NgayDky"].HeaderText = "Ngày đăng ký";
                 if (dgvLichSu.Columns.Contains("SoTien")) dgvLichSu.Columns["SoTien"].HeaderText = "Số tiền (VNĐ)";
 

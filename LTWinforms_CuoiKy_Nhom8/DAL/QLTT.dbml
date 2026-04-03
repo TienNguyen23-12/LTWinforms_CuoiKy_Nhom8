@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="QLTT_TheThao" Class="QLTTDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=QLTT_TheThao;Integrated Security=True;Encrypt=True;Trust Server Certificate=True" SettingsObjectName="LTWinforms_CuoiKy_Nhom8.Properties.Settings" SettingsPropertyName="QLTT_TheThaoConnectionString5" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=thiennhan\sqlexpress;Initial Catalog=QLTT_TheThao;Integrated Security=True;Encrypt=True;Trust Server Certificate=True" SettingsObjectName="LTWinforms_CuoiKy_Nhom8.Properties.Settings" SettingsPropertyName="QLTT_TheThaoConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.ChamCong" Member="ChamCongs">
     <Type Name="ChamCong">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -9,16 +9,15 @@
       <Association Name="TaiKhoan_ChamCong" Member="TaiKhoan" ThisKey="IdTaiKhoan" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TinNhan" Member="TinNhans">
-    <Type Name="TinNhan">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IdSender" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="IdReceiver" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="ThoiGian" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="DaDoc" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="TaiKhoan_TinNhan" Member="TaiKhoan" ThisKey="IdReceiver" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
-      <Association Name="TaiKhoan_TinNhan1" Member="TaiKhoan1" ThisKey="IdSender" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
+  <Table Name="dbo.VeVangLai" Member="VeVangLais">
+    <Type Name="VeVangLai">
+      <Column Name="MaVe" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TenKhach" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="LoaiDichVu" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="GiaVe" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="NgayBanVe" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IdNhanVien" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="TaiKhoan_VeVangLai" Member="TaiKhoan" ThisKey="IdNhanVien" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DangKyLop" Member="DangKyLops">
@@ -169,8 +168,7 @@
       <Column Name="FailedLogin" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="LastLogin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="TaiKhoan_ChamCong" Member="ChamCongs" ThisKey="Id" OtherKey="IdTaiKhoan" Type="ChamCong" />
-      <Association Name="TaiKhoan_TinNhan" Member="TinNhans" ThisKey="Id" OtherKey="IdReceiver" Type="TinNhan" />
-      <Association Name="TaiKhoan_TinNhan1" Member="TinNhans1" ThisKey="Id" OtherKey="IdSender" Type="TinNhan" />
+      <Association Name="TaiKhoan_VeVangLai" Member="VeVangLais" ThisKey="Id" OtherKey="IdNhanVien" Type="VeVangLai" />
       <Association Name="TaiKhoan_HoaDon" Member="HoaDons" ThisKey="Id" OtherKey="IdNhanVien" Type="HoaDon" />
       <Association Name="TaiKhoan_HoiVien" Member="HoiViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="HoiVien" />
       <Association Name="TaiKhoan_HuanLuyenVien" Member="HuanLuyenViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="HuanLuyenVien" />
@@ -178,6 +176,20 @@
       <Association Name="TaiKhoan_NhanVien" Member="NhanViens" ThisKey="Id" OtherKey="IdTaiKhoan" Type="NhanVien" />
       <Association Name="TaiKhoan_PhanHoi" Member="PhanHois" ThisKey="Id" OtherKey="IdTaiKhoan" Type="PhanHoi" />
       <Association Name="TaiKhoan_PhongTap" Member="PhongTaps" ThisKey="Id" OtherKey="IdNguoiPhuTrach" Type="PhongTap" />
+      <Association Name="TaiKhoan_TinNhan" Member="TinNhans" ThisKey="Id" OtherKey="IdReceiver" Type="TinNhan" />
+      <Association Name="TaiKhoan_TinNhan1" Member="TinNhans1" ThisKey="Id" OtherKey="IdSender" Type="TinNhan" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TinNhan" Member="TinNhans">
+    <Type Name="TinNhan">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdSender" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdReceiver" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ThoiGian" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DaDoc" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="TaiKhoan_TinNhan" Member="TaiKhoan" ThisKey="IdReceiver" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
+      <Association Name="TaiKhoan_TinNhan1" Member="TaiKhoan1" ThisKey="IdSender" OtherKey="Id" Type="TaiKhoan" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
