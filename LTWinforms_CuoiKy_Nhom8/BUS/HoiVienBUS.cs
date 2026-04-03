@@ -39,7 +39,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 }
                 TaiKhoan tkMoi = new TaiKhoan();
                 tkMoi.Username = hvMoi.MaHoiVien; 
-                tkMoi.Password = "123456";       
+                tkMoi.Password = SecurityHelper.HashPassword("123456");       
                 tkMoi.Role = 3;
                 tkMoi.IsActive = true;
                 tkMoi.FailedLogin = 0;
