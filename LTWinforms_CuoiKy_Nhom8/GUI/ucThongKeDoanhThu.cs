@@ -330,89 +330,62 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
 
         private void btnIn_Click(object sender, EventArgs e)
         {
-            frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
             DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddSeconds(-1);
+            DateTime denNgay = dtpDenNgay.Value.Date;
+
+            if (tuNgay > denNgay)
+            {
+                MessageBox.Show("Từ ngày không được lớn hơn Đến ngày!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             try
             {
-                using (QLTTDataContext db = new QLTTDataContext())
+                // BƯỚC 2: CẬP NHẬT TEXTBOX VÀ LẤY SỐ LỢI NHUẬN (Sử dụng tkBUS đã khai báo ở đầu class)
+                // Gọi hàm ThongKeTaiChinh để lấy các con số tổng
+                var dataTaiChinh = ((IEnumerable<dynamic>)tkBUS.ThongKeTaiChinh(tuNgay, denNgay)).FirstOrDefault();
+
+                string loiNhuanText = "0 VNĐ"; // Biến lưu trữ để truyền vào tham số của máy in
+
+                if (dataTaiChinh != null)
                 {
-                    // BƯỚC 1: LẤY DỮ LIỆU TỔNG THU (Từ Database)
-                    var rawThu = db.HoaDons
-                        .Where(hd => hd.NgayThanhToan >= tuNgay && hd.NgayThanhToan <= denNgay && hd.TrangThai == "Đã thanh toán")
-                        .ToList();
+                    // Cập nhật giao diện mượt mà
+                    txtDoanhThu.Text = dataTaiChinh.Doanh_Thu.ToString("N0") + " VNĐ";
+                    txtChiLuong.Text = dataTaiChinh.Tong_Chi_Luong.ToString("N0") + " VNĐ";
 
-                    var lstThu = rawThu.Select(hd => new
-                    {
-                        NgayThang = Convert.ToDateTime(hd.NgayThanhToan),
-                        MaChungTu = hd.MaHoaDon.ToString(),
-                        // Tích hợp logic xử lý Ghi chú thông minh
-                        DienGiai = string.IsNullOrEmpty(hd.GhiChu)
-                                   ? "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")"
-                                   : hd.GhiChu,
-                        LoaiGiaoDich = "1. TỔNG DOANH THU",
-                        SoTien = Convert.ToDecimal(hd.SoTien)
-                    }).ToList();
-
-                    // BƯỚC 2: LẤY DỮ LIỆU TỔNG CHI (Gọi từ tầng BUS)
-                    NhanSuBUS nhanSuBUS = new NhanSuBUS();
-                    IEnumerable<dynamic> rawChi = (IEnumerable<dynamic>)nhanSuBUS.TinhBangLuongChiTiet(tuNgay, denNgay);
-
-                    // Thêm các lệnh ép kiểu (string) và (decimal) để đồng bộ cấu trúc với lstThu
-                    var lstChi = rawChi.Select(x => new
-                    {
-                        NgayThang = denNgay.Date,
-
-                        // Ép kiểu cứng về string
-                        MaChungTu = (string)("L_" + x.MaNhanSu.ToString()),
-
-                        // Ép kiểu cứng về string
-                        DienGiai = (string)("Thanh toán lương " + x.VaiTro.ToString().ToLower() + ": " + x.HoTen),
-
-                        LoaiGiaoDich = "2. TỔNG CHI LƯƠNG",
-
-                        // Ép kiểu cứng về decimal
-                        SoTien = (decimal)x.ThucLanh
-
-                    }).ToList();
-
-                    // BƯỚC 3: GỘP DỮ LIỆU VÀ SẮP XẾP
-                    var lstBaoCao = lstThu.Concat(lstChi)
-                                          .OrderBy(x => x.LoaiGiaoDich)
-                                          .ThenBy(x => x.NgayThang)
-                                          .ToList();
-
-                    if (lstBaoCao.Count == 0)
-                    {
-                        MessageBox.Show("Không có dữ liệu thu chi nào trong khoảng thời gian này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    // BƯỚC 4: TÍNH TOÁN LỢI NHUẬN RÒNG ĐỂ ĐẨY LÊN GIAO DIỆN
-                    decimal tongThu = lstThu.Sum(x => x.SoTien);
-                    decimal tongChi = lstChi.Sum(x => x.SoTien);
-                    decimal loiNhuanRong = tongThu - tongChi;
-
-                    txtDoanhThu.Text = tongThu.ToString("#,##0") + " VNĐ";
-                    txtChiLuong.Text = tongChi.ToString("#,##0") + " VNĐ";
-                    txtLoiNhuan.Text = loiNhuanRong.ToString("#,##0") + " VNĐ";
-
-                    // BƯỚC 5: ĐẨY DỮ LIỆU VÀO CRYSTAL REPORTS
-                    rptDoanhThu rpt = new rptDoanhThu();
-                    rpt.SetDataSource(lstBaoCao);
-
-                    rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
-                    rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.Date.ToString("dd/MM/yyyy"));
-                    rpt.SetParameterValue("pLoiNhuanRong", loiNhuanRong.ToString("#,##0") + " VNĐ");
-
-                    frmBaoCao.HienThiBaoCao(rpt);
-                    frmBaoCao.ShowDialog();
+                    loiNhuanText = dataTaiChinh.Loi_Nhuan_Thuc.ToString("N0") + " VNĐ";
+                    txtLoiNhuan.Text = loiNhuanText;
                 }
+
+                // BƯỚC 3: LẤY DANH SÁCH CHI TIẾT ĐỂ ĐỔ VÀO BÁO CÁO
+                // Thay vì viết lại LINQ, ta gọi thẳng hàm LayChiTietThuChi từ BUS
+                var lstBaoCao = ((IEnumerable<dynamic>)tkBUS.LayChiTietThuChi(tuNgay, denNgay)).ToList();
+
+                // Chốt chặn an toàn: Ngăn chặn in ra tờ giấy trắng
+                if (lstBaoCao.Count == 0)
+                {
+                    MessageBox.Show("Không có dữ liệu thu chi nào trong khoảng thời gian đã chọn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // BƯỚC 4: ĐẨY DỮ LIỆU VÀO CRYSTAL REPORTS
+                frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
+                rptDoanhThu rpt = new rptDoanhThu();
+
+                rpt.SetDataSource(lstBaoCao);
+
+                // Truyền Parameter
+                rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pDenNgay", denNgay.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pLoiNhuanRong", loiNhuanText);
+
+                // Hiển thị Form báo cáo
+                frmBaoCao.HienThiBaoCao(rpt);
+                frmBaoCao.ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi hệ thống khi in báo cáo: \n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã xảy ra lỗi hệ thống khi xuất báo cáo: \n" + ex.Message, "Lỗi bảo mật/Hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -233,5 +233,61 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
             return result;
         }
+
+        public object LayChiTietThuChi(DateTime tuNgay, DateTime denNgay)
+        {
+            DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
+
+            // 1. LUỒNG THU TỪ HÓA ĐƠN (GÓI TẬP VÀ SẢN PHẨM)
+            var rawThu = db.HoaDons
+                .Where(hd => hd.NgayThanhToan >= tuNgay.Date && hd.NgayThanhToan <= denNgayEnd
+                          && hd.TrangThai == "Đã thanh toán")
+                .ToList();
+
+            var lstThu = rawThu.Select(hd => new
+            {
+                NgayThang = Convert.ToDateTime(hd.NgayThanhToan),
+                MaChungTu = (string)hd.MaHoaDon.ToString(),
+                DienGiai = (string)(string.IsNullOrEmpty(hd.GhiChu) ? "Thu tiền gói tập (Mã gói: " + hd.MaGoi + ")" : hd.GhiChu),
+                LoaiGiaoDich = "1. TỔNG DOANH THU",
+                SoTien = (decimal)Convert.ToDecimal(hd.SoTien)
+            }).ToList();
+
+            // 2. LUỒNG THU TỪ LỚP HỌC (YOGA, TENNIS)
+            var rawThuLop = (from dk in db.DangKyLops
+                             join lop in db.LopHocs on dk.MaLop equals lop.MaLop
+                             where dk.NgayDangKy >= tuNgay.Date && dk.NgayDangKy <= denNgayEnd
+                                && dk.TrangThaiThanhToan == "Đã thanh toán"
+                             select new { dk.NgayDangKy, dk.MaLop, lop.TenLop, lop.GiaTien }).ToList();
+
+            var lstThuLop = rawThuLop.Select(x => new
+            {
+                NgayThang = Convert.ToDateTime(x.NgayDangKy),
+                MaChungTu = (string)("DK_" + x.MaLop.ToString()),
+                DienGiai = (string)("Đăng ký lớp học: " + x.TenLop),
+                LoaiGiaoDich = "1. TỔNG DOANH THU",
+                SoTien = (decimal)(x.GiaTien ?? 0m)
+            }).ToList();
+
+            // 3. LUỒNG CHI LƯƠNG (Gọi chéo sang NhanSuBUS)
+            NhanSuBUS nhanSuBUS = new NhanSuBUS();
+            IEnumerable<dynamic> rawChi = (IEnumerable<dynamic>)nhanSuBUS.TinhBangLuongChiTiet(tuNgay, denNgay);
+
+            var lstChi = rawChi.Select(x => new
+            {
+                NgayThang = denNgay.Date, // Quy ước xuất hóa đơn chi lương vào ngày cuối kỳ
+                MaChungTu = (string)("L_" + x.MaNhanSu.ToString()),
+                DienGiai = (string)("Thanh toán lương " + x.VaiTro.ToString().ToLower() + ": " + x.HoTen),
+                LoaiGiaoDich = "2. TỔNG CHI LƯƠNG",
+                SoTien = (decimal)x.ThucLanh
+            }).ToList();
+
+            // 4. GỘP 3 DANH SÁCH VÀ TRẢ VỀ CHO FORM GIAO DIỆN IN
+            return lstThu.Concat(lstThuLop)
+                         .Concat(lstChi)
+                         .OrderBy(x => x.LoaiGiaoDich)
+                         .ThenBy(x => x.NgayThang)
+                         .ToList();
+        }
     }
 }
