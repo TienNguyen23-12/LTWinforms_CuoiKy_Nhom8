@@ -160,6 +160,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 hdMoi.NgayThanhToan = DateTime.Now;
                 hdMoi.MaGoi = null;
                 hdMoi.GhiChu = "Thanh toán lớp học: " + dk.MaLop;
+                hdMoi.TrangThai = "Đã thanh toán";
 
                 db.HoaDons.InsertOnSubmit(hdMoi); 
 
