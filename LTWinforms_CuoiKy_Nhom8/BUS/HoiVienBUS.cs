@@ -10,11 +10,16 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
 
         public object LayDanhSachHoiVien(string tuKhoa = "")
         {
-            var query = db.HoiViens.Where(x => x.IsActive == true);
+            var query = from hv in db.HoiViens
+                        where hv.IsActive == true
+                              && db.TaiKhoans.Any(tk => tk.Id == hv.IdTaiKhoan && tk.IsActive == true)
+                        select hv;
 
             if (!string.IsNullOrEmpty(tuKhoa))
             {
-                query = query.Where(x => x.HoTen.Contains(tuKhoa) || x.SDT.Contains(tuKhoa) || x.MaHoiVien.Contains(tuKhoa));
+                query = query.Where(x => (x.HoTen ?? "").Contains(tuKhoa)
+                                      || (x.SDT ?? "").Contains(tuKhoa)
+                                      || (x.MaHoiVien ?? "").Contains(tuKhoa));
             }
 
             return query.Select(x => new
