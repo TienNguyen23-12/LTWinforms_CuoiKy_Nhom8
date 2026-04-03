@@ -83,30 +83,47 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 return null;
             }
 
-            var listDaThanhToan = db.HoaDons.Where(x => x.MaHoiVien == hv.MaHoiVien)
-                             .Select(x => new {
-                                 MaHoaDon = x.MaHoaDon.ToString(),
-                                 TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
-                                 SoTien = x.SoTien,
-                                 NgayThanhToan = x.NgayThanhToan,
-                                 TrangThai = x.TrangThai ?? "Đã thanh toán"
-                             }).ToList();
+            var listDaThanhToan = db.HoaDons
+                .Where(x => x.MaHoiVien == hv.MaHoiVien && (x.TrangThai ?? "") == "Đã thanh toán")
+                .Select(x => new
+                {
+                    MaHoaDon = x.MaHoaDon.ToString(),
+                    TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
+                    SoTien = x.SoTien,
+                    NgayThanhToan = x.NgayThanhToan,
+                    TrangThai = x.TrangThai ?? "Đã thanh toán"
+                }).ToList();
+
+            var listGoiChoThanhToan = db.HoaDons
+                .Where(x => x.MaHoiVien == hv.MaHoiVien 
+                            && (x.TrangThai ?? "") == "Chờ thanh toán" 
+                            && x.MaGoi != null && x.MaGoi != "")
+                .Select(x => new
+                {
+                    MaHoaDon = x.MaHoaDon.ToString(),
+                    TenGoi = x.GoiTap != null ? x.GoiTap.TenGoi : x.GhiChu,
+                    SoTien = x.SoTien,
+                    NgayThanhToan = x.NgayThanhToan,
+                    TrangThai = x.TrangThai ?? "Chờ thanh toán"
+                }).ToList();
 
             var listDangNo = (from dk in db.DangKyLops
                               join lop in db.LopHocs on dk.MaLop equals lop.MaLop
-                              where dk.MaHoiVien == hv.MaHoiVien && dk.TrangThaiThanhToan == "Chờ thanh toán"
+                              where dk.MaHoiVien == hv.MaHoiVien && (dk.TrangThaiThanhToan ?? "") == "Chờ thanh toán"
                               select new
                               {
-                                  MaHoaDon = "---",
+                                  MaHoaDon = ("DK_" + dk.Id.ToString()),
                                   TenGoi = "Chưa đóng học phí: " + lop.TenLop,
                                   SoTien = lop.GiaTien ?? 0,
                                   NgayThanhToan = dk.NgayDangKy,
                                   TrangThai = dk.TrangThaiThanhToan
                               }).ToList();
 
-            var lichSuTongHop = listDaThanhToan.Concat(listDangNo)
-                                               .OrderByDescending(x => x.NgayThanhToan)
-                                               .ToList();
+            var lichSuTongHop = listDaThanhToan
+                .Concat(listGoiChoThanhToan)
+                .Concat(listDangNo)
+                .OrderByDescending(x => x.NgayThanhToan)
+                .ToList();
 
             return lichSuTongHop;
         }
