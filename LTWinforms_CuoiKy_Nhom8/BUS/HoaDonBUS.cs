@@ -8,6 +8,9 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
     {
         QLTTDataContext db = new QLTTDataContext();
 
+        // =======================================================================
+        // CÁC HÀM CŨ CỦA BẠN (GIỮ NGUYÊN HOÀN TOÀN)
+        // =======================================================================
         public object LayLichSuGiaoDich()
         {
             var query = from hd in db.HoaDons
@@ -95,8 +98,8 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 }).ToList();
 
             var listGoiChoThanhToan = db.HoaDons
-                .Where(x => x.MaHoiVien == hv.MaHoiVien 
-                            && (x.TrangThai ?? "") == "Chờ thanh toán" 
+                .Where(x => x.MaHoiVien == hv.MaHoiVien
+                            && (x.TrangThai ?? "") == "Chờ thanh toán"
                             && x.MaGoi != null && x.MaGoi != "")
                 .Select(x => new
                 {
@@ -200,6 +203,82 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             {
                 return "Lỗi khi lưu Database: " + ex.Message;
             }
+        }
+
+        // =======================================================================
+        // CÁC HÀM THÊM MỚI (DÀNH CHO CRYSTAL REPORTS)
+        // =======================================================================
+
+        // Hàm 1: Lấy thông tin cá nhân in lên Header (Đã fix lỗi MaHV và Ten)
+        public object LayThongTinHoiVien(int idTaiKhoan)
+        {
+            var thongTin = db.HoiViens
+                             .Where(x => x.IdTaiKhoan == idTaiKhoan)
+                             .Select(x => new
+                             {
+                                 MaHV = x.MaHoiVien,  // Đã khớp với biến MaHV ở Report
+                                 Ten = x.HoTen,       // Đã khớp với biến Ten ở Report
+                                 SoDienThoai = x.SDT,
+                                 GioiTinh = x.GioiTinh
+                             })
+                             .FirstOrDefault();
+
+            return thongTin;
+        }
+
+        // Hàm 2: Lấy chi tiết lịch sử để đổ vào bảng (Đã fix lỗi thiếu return và lỗi LINQ)
+        public object LayChiTietLichSuCuaKhachHang(int idTaiKhoan, DateTime tuNgay, DateTime denNgay)
+        {
+            DateTime denNgayEnd = denNgay.Date.AddDays(1).AddSeconds(-1);
+
+            var hv = db.HoiViens.FirstOrDefault(x => x.IdTaiKhoan == idTaiKhoan);
+            if (hv == null) return null;
+
+            string maHV = hv.MaHoiVien;
+
+            var rawLichSuHD = (from hd in db.HoaDons
+                               where hd.NgayThanhToan >= tuNgay.Date && hd.NgayThanhToan <= denNgayEnd
+                                  && hd.MaHoiVien == maHV && hd.TrangThai == "Đã thanh toán"
+                               join gt in db.GoiTaps on hd.MaGoi equals gt.MaGoi into bangGoi
+                               from khopGoi in bangGoi.DefaultIfEmpty()
+                               select new
+                               {
+                                   NgayGiaoDich = hd.NgayThanhToan,
+                                   MaHoaDonGoc = hd.MaHoaDon,
+                                   TenGoiGoc = khopGoi != null ? khopGoi.TenGoi : null,
+                                   GhiChuGoc = hd.GhiChu,
+                                   SoTien = hd.SoTien
+                               }).ToList();
+
+            var rawLichSuLop = (from dk in db.DangKyLops
+                                where dk.NgayDangKy >= tuNgay.Date && dk.NgayDangKy <= denNgayEnd
+                                   && dk.MaHoiVien == maHV && dk.TrangThaiThanhToan == "Đã thanh toán"
+                                join lop in db.LopHocs on dk.MaLop equals lop.MaLop
+                                select new
+                                {
+                                    NgayGiaoDich = dk.NgayDangKy,
+                                    MaHoaDonGoc = dk.Id,
+                                    TenLopGoc = lop.TenLop,
+                                    SoTien = lop.GiaTien ?? 0m
+                                }).ToList();
+
+            var lstHD = rawLichSuHD.Select(x => new
+            {
+                NgayGiaoDich = Convert.ToDateTime(x.NgayGiaoDich),
+                MaHoaDon = x.MaHoaDonGoc.ToString(),
+                NoiDung = x.TenGoiGoc != null ? "Thanh toán gói: " + x.TenGoiGoc : (string.IsNullOrEmpty(x.GhiChuGoc) ? "Dịch vụ khác" : x.GhiChuGoc),
+                SoTien = (decimal)x.SoTien
+            });
+
+            var lstLop = rawLichSuLop.Select(x => new
+            {
+                NgayGiaoDich = Convert.ToDateTime(x.NgayGiaoDich),
+                MaHoaDon = "DK_" + x.MaHoaDonGoc.ToString(),
+                NoiDung = "Đăng ký lớp học: " + x.TenLopGoc,
+                SoTien = (decimal)x.SoTien
+            });
+
+            return lstHD.Concat(lstLop).OrderByDescending(x => x.NgayGiaoDich).ToList();
         }
     }
 }

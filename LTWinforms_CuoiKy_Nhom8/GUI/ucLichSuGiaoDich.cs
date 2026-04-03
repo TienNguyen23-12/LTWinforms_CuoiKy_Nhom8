@@ -152,69 +152,54 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void btnXuat_Click(object sender, EventArgs e)
         {
             DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddSeconds(-1);
+            DateTime denNgay = dtpDenNgay.Value.Date;
+            // Lưu ý: Không cần .AddDays(1) ở đây nữa vì hàm dưới BUS của chúng ta đã xử lý ép giờ đến 23:59:59 rồi
 
             int idTaiKhoanHienTai = Session.IdTaiKhoan;
 
             try
             {
-                using (QLTTDataContext db = new QLTTDataContext())
+                // 1. GỌI TẦNG BUS ĐỂ LẤY THÔNG TIN HEADER
+                dynamic thongTin = hdBUS.LayThongTinHoiVien(idTaiKhoanHienTai);
+                if (thongTin == null)
                 {
-                    var hoiVien = db.HoiViens.FirstOrDefault(hv => hv.IdTaiKhoan == idTaiKhoanHienTai);
-
-                    if (hoiVien == null)
-                    {
-                        ModernMessageBox.Show("Lỗi: Tài khoản này chưa được liên kết với hồ sơ Hội viên nào!", "Lỗi hệ thống", ModernMessageType.Error);
-                        return;
-                    }
-
-                    string maHoiVienCuaToi = hoiVien.MaHoiVien;
-                    string tenKhachHang = hoiVien.HoTen;
-
-                    var rawLichSu = (from hd in db.HoaDons
-                                     where hd.NgayThanhToan >= tuNgay
-                                        && hd.NgayThanhToan <= denNgay
-                                        && hd.MaHoiVien == maHoiVienCuaToi
-                                     join gt in db.GoiTaps on hd.MaGoi equals gt.MaGoi into bangGoiTap
-                                     from khopGoiTap in bangGoiTap.DefaultIfEmpty()
-                                     select new
-                                     {
-                                         NgayThanhToan = hd.NgayThanhToan,
-                                         MaHoaDon = hd.MaHoaDon,
-                                         NoiDung = khopGoiTap != null ? "Thanh toán gói: " + khopGoiTap.TenGoi : hd.GhiChu,
-                                         SoTien = hd.SoTien
-                                     }).ToList();
-
-                    if (rawLichSu.Count == 0)
-                    {
-                        ModernMessageBox.Show("Bạn không có giao dịch thanh toán nào trong khoảng thời gian này!", "Thông báo", ModernMessageType.Info);
-                        return;
-                    }
-
-                    var lstLichSu = rawLichSu.Select(x => new
-                    {
-                        NgayGiaoDich = Convert.ToDateTime(x.NgayThanhToan),
-                        MaHoaDon = x.MaHoaDon.ToString(),
-                        NoiDung = x.NoiDung,
-                        SoTien = Convert.ToDecimal(x.SoTien)
-                    }).OrderByDescending(x => x.NgayGiaoDich).ToList();
-
-                    rptLichSuGiaoDich rpt = new rptLichSuGiaoDich();
-                    rpt.SetDataSource(lstLichSu);
-
-                    rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
-                    rpt.SetParameterValue("pDenNgay", dtpDenNgay.Value.Date.ToString("dd/MM/yyyy"));
-                    rpt.SetParameterValue("pMaHV", maHoiVienCuaToi);
-                    rpt.SetParameterValue("pTenNguoiDung", tenKhachHang);
-
-                    frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
-                    frmBaoCao.HienThiBaoCao(rpt);
-                    frmBaoCao.ShowDialog();
+                    ModernMessageBox.Show("Lỗi: Tài khoản này chưa được liên kết với hồ sơ Hội viên nào!", "Lỗi hệ thống", ModernMessageType.Error);
+                    return;
                 }
+
+                // 2. GỌI TẦNG BUS ĐỂ LẤY DANH SÁCH GIAO DỊCH (Đã được lọc sạch "Chờ thanh toán" và gộp chung Lớp Học)
+                var lstLichSu = hdBUS.LayChiTietLichSuCuaKhachHang(idTaiKhoanHienTai, tuNgay, denNgay);
+
+                // Kiểm tra xem danh sách có rỗng hay không (Ép kiểu về IList để đếm Count)
+                var danhSachKiemTra = lstLichSu as System.Collections.IList;
+                if (danhSachKiemTra == null || danhSachKiemTra.Count == 0)
+                {
+                    ModernMessageBox.Show("Bạn không có giao dịch thanh toán nào trong khoảng thời gian này!", "Thông báo", ModernMessageType.Info);
+                    return;
+                }
+
+                // 3. ĐỔ DỮ LIỆU VÀO CRYSTAL REPORTS
+                rptLichSuGiaoDich rpt = new rptLichSuGiaoDich();
+
+                // Đổ Data Source cho bảng chi tiết
+                rpt.SetDataSource(lstLichSu);
+
+                // Gán Parameter cho Header
+                rpt.SetParameterValue("pTuNgay", tuNgay.ToString("dd/MM/yyyy"));
+                rpt.SetParameterValue("pDenNgay", denNgay.ToString("dd/MM/yyyy"));
+
+                // Sử dụng thongTin.MaHV và thongTin.Ten từ hàm BUS trả về
+                rpt.SetParameterValue("pMaHV", thongTin.MaHV);
+                rpt.SetParameterValue("pTenNguoiDung", thongTin.Ten);
+
+                // 4. HIỂN THỊ BÁO CÁO
+                frmCR_BaoCao frmBaoCao = new frmCR_BaoCao();
+                frmBaoCao.HienThiBaoCao(rpt);
+                frmBaoCao.ShowDialog();
             }
             catch (Exception ex)
             {
-                ModernMessageBox.Show("Đã xảy ra lỗi: \n" + ex.Message, "Lỗi", ModernMessageType.Error);
+                ModernMessageBox.Show("Đã xảy ra lỗi khi xuất báo cáo: \n" + ex.Message, "Lỗi", ModernMessageType.Error);
             }
         }
     }
