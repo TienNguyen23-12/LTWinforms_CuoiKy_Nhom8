@@ -117,7 +117,7 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
         private void StyleModernButton(Button button, Color backColor)
         {
             ModernTheme.StyleButton(button, backColor, Color.White);
-            button.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            button.Font = new Font("Segoe UI", 10F, FontStyle.Bold); // chữ in đậm
             button.Size = new Size(150, 40);
             button.TextAlign = ContentAlignment.MiddleCenter;
             button.Padding = new Padding(0);
@@ -182,8 +182,11 @@ namespace LTWinforms_CuoiKy_Nhom8.GUI
             int lsGridWidth = Math.Max(700, pageWidth - 80);
             int lsGridLeft = (pageWidth - lsGridWidth) / 2;
             int lsGridTop = 16;
-            int lsGridHeight = Math.Max(180, pageHeight - 32);
+            int lsGridHeight = Math.Max(145, pageHeight - 86);
             dgvLichSu.SetBounds(lsGridLeft, lsGridTop, lsGridWidth, lsGridHeight);
+
+            int huyLeft = (pageWidth - btnHuyDangKy.Width) / 2;
+            btnHuyDangKy.SetBounds(huyLeft, dgvLichSu.Bottom + 8, btnHuyDangKy.Width, btnHuyDangKy.Height);
 
             // ===== Khu phản hồi =====
             int phTop = tabControl1.Bottom + 18;
