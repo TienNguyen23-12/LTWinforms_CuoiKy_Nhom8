@@ -19,8 +19,7 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
             {
                 query = query.Where(x =>
                     x.MaLop.Contains(tuKhoa) ||
-                    x.TenLop.Contains(tuKhoa) ||
-                    x.ThoiGian.Contains(tuKhoa));
+                    x.TenLop.Contains(tuKhoa));
             }
 
             if (!string.IsNullOrEmpty(maHLV) && maHLV != "ALL")
