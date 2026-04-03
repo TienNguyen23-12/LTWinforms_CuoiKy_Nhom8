@@ -191,7 +191,6 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                 {
                     decimal luong1Ngay = (nv.Luong ?? 0) / 26m;
                     decimal luongThucLanh = (luong1Ngay * soBuoiCoMat) - tienPhat;
-                    if (luongThucLanh < 0) luongThucLanh = 0;
 
                     result.Add(new
                     {
@@ -230,7 +229,6 @@ namespace LTWinforms_CuoiKy_Nhom8.BUS
                     }
 
                     decimal tongLuong = luongTheoCong + commissionTotal - tienPhat;
-                    if (tongLuong < 0) tongLuong = 0;
 
                     result.Add(new
                     {
